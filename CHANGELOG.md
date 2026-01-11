@@ -268,6 +268,28 @@ CREATE TABLE user_profiles (
 
 ---
 
+## [0.3.1] - 2026-01-11
+
+### ✨ Sistema de Backups (Importar/Exportar)
+
+**Fecha**: 2026-01-11
+
+#### Cambios
+- Sistema completo de exportación e importación de datos en formato JSON.
+- Nueva sección "Gestión de Datos" en Configuración.
+- Endpoints de API seguros para volcar y restaurar la base de datos (excluyendo datos estáticos de cartas).
+- Validación de versión en archivos de backup.
+
+#### Archivos Nuevos/Modificados
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `src/app/api/backup/export/route.ts` | Nuevo | Endpoint generación backup |
+| `src/app/api/backup/import/route.ts` | Nuevo | Endpoint restauración backup |
+| `src/app/settings/page.tsx` | Modificado | UI para Download/Upload |
+| `src/app/layout.tsx` | Modificado | Integración preliminar de ThemeProvider |
+
+---
+
 ## [0.3.0] - 2026-01-11
 
 ### ✨ Dockerización y Despliegue

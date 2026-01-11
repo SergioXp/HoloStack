@@ -257,6 +257,14 @@
             "cardLanguage": "Default card language",
             "cardLanguageHint": "This will be the default language when downloading card info and creating new collections."
         },
+        "data": {
+            "title": "Data Management",
+            "description": "Securely export and import your entire collection",
+            "export": "Download Backup",
+            "import": "Restore Backup",
+            "warning": "Restoring will delete your current data. Make sure you have a backup.",
+            "importing": "Restoring data..."
+        },
         "saveChanges": "Save changes",
         "saving": "Saving...",
         "saved": "Changes saved successfully"

@@ -257,6 +257,14 @@
             "cardLanguage": "Idioma predeterminado para cartas",
             "cardLanguageHint": "Este será el idioma por defecto al descargar información de cartas y crear nuevas colecciones."
         },
+        "data": {
+            "title": "Gestión de Datos",
+            "description": "Exporta e importa tu colección completa de manera segura",
+            "export": "Descargar Backup",
+            "import": "Restaurar Backup",
+            "warning": "Restaurar eliminará tus datos actuales. Asegúrate de tener un backup.",
+            "importing": "Restaurando datos..."
+        },
         "saveChanges": "Guardar cambios",
         "saving": "Guardando...",
         "saved": "Cambios guardados correctamente"

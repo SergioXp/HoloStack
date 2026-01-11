@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,11 @@ import {
     ShoppingBag,
     Save,
     Check,
-    Languages
+    Languages,
+    Database,
+    Download,
+    Upload,
+    AlertTriangle
 } from "lucide-react";
 import { useI18n, APP_LANGUAGES, CARD_LANGUAGES, type Locale, type CardLanguage } from "@/lib/i18n";
 
@@ -45,6 +49,8 @@ export default function SettingsPage() {
     const [cardmarketUsername, setCardmarketUsername] = useState("");
     const [tcgplayerUsername, setTcgplayerUsername] = useState("");
     const [ebayUsername, setEbayUsername] = useState("");
+    const [isImporting, setIsImporting] = useState(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Load profile
     useEffect(() => {
@@ -99,6 +105,62 @@ export default function SettingsPage() {
             console.error("Error saving profile:", error);
         } finally {
             setIsSaving(false);
+        }
+    };
+
+    const handleExport = async () => {
+        try {
+            const res = await fetch("/api/backup/export");
+            if (!res.ok) throw new Error("Export failed");
+
+            const blob = await res.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `holostack-backup-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        } catch (error) {
+            console.error("Error exporting data:", error);
+            // Aquí idealmente mostraríamos un toast de error
+        }
+    };
+
+    const handleImportClick = () => {
+        if (confirm(t("settings.data.warning"))) {
+            fileInputRef.current?.click();
+        }
+    };
+
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setIsImporting(true);
+        try {
+            const text = await file.text();
+            const json = JSON.parse(text);
+
+            const res = await fetch("/api/backup/import", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(json),
+            });
+
+            if (res.ok) {
+                window.location.reload();
+            } else {
+                throw new Error("Import failed");
+            }
+        } catch (error) {
+            console.error("Error importing data:", error);
+            alert("Error importing data. Check console for details.");
+            setIsImporting(false);
+        } finally {
+            // Reset input
+            if (fileInputRef.current) fileInputRef.current.value = "";
         }
     };
 
@@ -189,8 +251,8 @@ export default function SettingsPage() {
                                                 key={lang.code}
                                                 onClick={() => setSelectedAppLang(lang.code)}
                                                 className={`p-4 rounded-xl border-2 transition-all text-left ${selectedAppLang === lang.code
-                                                        ? "border-purple-500 bg-purple-500/10"
-                                                        : "border-slate-700 bg-slate-800/50 hover:border-slate-600"
+                                                    ? "border-purple-500 bg-purple-500/10"
+                                                    : "border-slate-700 bg-slate-800/50 hover:border-slate-600"
                                                     }`}
                                             >
                                                 <div className="flex items-center justify-between">
@@ -213,8 +275,8 @@ export default function SettingsPage() {
                                                 key={lang.code}
                                                 onClick={() => setSelectedCardLang(lang.code)}
                                                 className={`p-3 rounded-xl border transition-all text-center text-sm ${selectedCardLang === lang.code
-                                                        ? "border-purple-500 bg-purple-500/10 text-white"
-                                                        : "border-slate-700 bg-slate-800/50 hover:border-slate-600 text-slate-400"
+                                                    ? "border-purple-500 bg-purple-500/10 text-white"
+                                                    : "border-slate-700 bg-slate-800/50 hover:border-slate-600 text-slate-400"
                                                     }`}
                                             >
                                                 {lang.name}
@@ -279,6 +341,66 @@ export default function SettingsPage() {
                                         placeholder={t("settings.marketplace.ebayPlaceholder")}
                                         className="bg-slate-800 border-slate-700 text-white h-11 rounded-xl"
                                     />
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        {/* Data Management Section */}
+                        <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-800 text-white overflow-hidden">
+                            <CardHeader className="border-b border-slate-800">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center">
+                                        <Database className="h-5 w-5 text-indigo-400" />
+                                    </div>
+                                    <div>
+                                        <CardTitle className="text-lg">{t("settings.data.title")}</CardTitle>
+                                        <CardDescription className="text-slate-400">{t("settings.data.description")}</CardDescription>
+                                    </div>
+                                </div>
+                            </CardHeader>
+                            <CardContent className="pt-6 space-y-4">
+                                <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 flex gap-3 text-amber-200 mb-4">
+                                    <AlertTriangle className="h-5 w-5 shrink-0" />
+                                    <p className="text-sm">{t("settings.data.warning")}</p>
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <Button
+                                        variant="outline"
+                                        onClick={handleExport}
+                                        className="h-12 border-slate-700 hover:bg-slate-800 text-slate-200 hover:text-white"
+                                    >
+                                        <Download className="h-4 w-4 mr-2" />
+                                        {t("settings.data.export")}
+                                    </Button>
+
+                                    <div className="relative">
+                                        <input
+                                            type="file"
+                                            ref={fileInputRef}
+                                            onChange={handleFileChange}
+                                            accept=".json"
+                                            className="hidden"
+                                        />
+                                        <Button
+                                            variant="outline"
+                                            onClick={handleImportClick}
+                                            disabled={isImporting}
+                                            className="w-full h-12 border-slate-700 hover:bg-slate-800 text-slate-200 hover:text-white"
+                                        >
+                                            {isImporting ? (
+                                                <div className="flex items-center">
+                                                    <div className="w-4 h-4 border-2 border-slate-400 border-t-transparent rounded-full animate-spin mr-2" />
+                                                    {t("settings.data.importing")}
+                                                </div>
+                                            ) : (
+                                                <div className="flex items-center">
+                                                    <Upload className="h-4 w-4 mr-2" />
+                                                    {t("settings.data.import")}
+                                                </div>
+                                            )}
+                                        </Button>
+                                    </div>
                                 </div>
                             </CardContent>
                         </Card>
