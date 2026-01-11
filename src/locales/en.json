@@ -1,0 +1,422 @@
+{
+    "common": {
+        "back": "Back",
+        "backToHome": "Back to Home",
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "edit": "Edit",
+        "create": "Create",
+        "creating": "Creating...",
+        "search": "Search",
+        "loading": "Loading...",
+        "error": "Error",
+        "success": "Success",
+        "confirm": "Confirm",
+        "yes": "Yes",
+        "no": "No",
+        "all": "All",
+        "none": "None",
+        "reset": "Reset",
+        "cards": "Cards",
+        "card": "Card",
+        "sets": "Sets",
+        "set": "Set",
+        "collection": "Collection",
+        "collections": "Collections",
+        "settings": "Settings",
+        "profile": "Profile",
+        "language": "Language",
+        "spanish": "Spanish",
+        "english": "English",
+        "french": "French",
+        "german": "German",
+        "italian": "Italian",
+        "portuguese": "Portuguese",
+        "japanese": "Japanese",
+        "korean": "Korean",
+        "chinese": "Chinese"
+    },
+    "nav": {
+        "home": "Home",
+        "explorer": "Explorer",
+        "collections": "Collections",
+        "budgets": "Budgets",
+        "settings": "Settings",
+        "sync": "Sync",
+        "syncing": "Syncing"
+    },
+    "home": {
+        "title": "HoloStack",
+        "subtitle": "Your ultimate companion to manage and track your Pokémon Trading Card Game collection",
+        "description": "Explore every era, manage your collection and keep track of the value of your favorite cards.",
+        "exploreButton": "Explore Cards",
+        "collectionsButton": "My Collections",
+        "features": {
+            "title": "Everything you need",
+            "subtitle": "Powerful tools for serious collectors",
+            "explore": {
+                "title": "Explore the TCG",
+                "description": "Browse through 100+ expansions and thousands of cards from Base Set to present day."
+            },
+            "track": {
+                "title": "Track your Collection",
+                "description": "Mark the cards you own with multiple variants and detailed quantities."
+            },
+            "value": {
+                "title": "Know your Value",
+                "description": "Updated prices from TCGPlayer and Cardmarket integrated."
+            },
+            "cta": "Explore now",
+            "viewCollections": "View collections",
+            "autoUpdate": "Automatic update"
+        },
+        "howItWorks": {
+            "title": "How It Works",
+            "subtitle": "Three simple steps to start",
+            "step1": {
+                "title": "Sync",
+                "description": "Download the card database"
+            },
+            "step2": {
+                "title": "Explore",
+                "description": "Browse sets and eras"
+            },
+            "step3": {
+                "title": "Collect",
+                "description": "Mark your cards"
+            }
+        },
+        "stats": {
+            "cardsIndexed": "cards indexed",
+            "setsAvailable": "sets available",
+            "inCollection": "in your collection",
+            "collections": "collections"
+        },
+        "footer": {
+            "apiData": "Data from TCGdex API",
+            "pricesData": "Prices from TCGPlayer & Cardmarket",
+            "copyright": "© {year} HoloStack by SergioXp • Made with ❤️ for collectors"
+        }
+    },
+    "explorer": {
+        "title": "TCG Explorer",
+        "subtitle": "Browse through all eras and expansions",
+        "eras": "Eras",
+        "syncedSets": "Synced Sets",
+        "viewExpansions": "View expansions",
+        "expansionsInEra": "expansions in this era",
+        "emptyState": {
+            "title": "Empty database",
+            "description": "Use the 'Sync' button in the navigation bar to download the complete card database."
+        },
+        "set": {
+            "cards": "cards",
+            "complete": "Complete",
+            "notDownloaded": "Not downloaded",
+            "notFound": "Set not found",
+            "backToExplorer": "Back to explorer",
+            "backToSeries": "Back to {series}",
+            "cardsCount": "{count} of {total} cards",
+            "noCards": {
+                "title": "No cards downloaded",
+                "description": "Cards are automatically downloaded when you visit each set for the first time."
+            }
+        },
+        "backToEras": "Back to Eras",
+        "noLogo": "No logo",
+        "noSetsFound": "No sets found for this era."
+    },
+    "collections": {
+        "title": "My Collections",
+        "subtitle": "Manage and track your progress",
+        "newCollection": "New Collection",
+        "uniqueCards": "unique cards",
+        "emptyState": {
+            "title": "Your journey begins here",
+            "description": "Create your first collection to start tracking your progress and managing your favorite cards."
+        },
+        "createFirst": "Create my first collection",
+        "createdOn": "Created on",
+        "progress": "Progress",
+        "completed": "Completed",
+        "totalCopies": "Total Copies",
+        "auto": "Automatic",
+        "manual": "Manual"
+    },
+    "collectionForm": {
+        "title": "New Collection",
+        "subtitle": "Create a collection to organize your cards",
+        "nameLabel": "Collection Name",
+        "namePlaceholder": "Ex: My Base Set Holos",
+        "typeLabel": "Collection Type",
+        "manual": {
+            "title": "Manual",
+            "description": "Add cards one by one manually."
+        },
+        "auto": {
+            "title": "Automatic",
+            "description": "Define filters and it fills automatically.",
+            "recommended": "Recommended"
+        },
+        "filterBySet": "By Set",
+        "filterByName": "Name",
+        "filterByType": "Type",
+        "filterByRarity": "Rarity",
+        "selectSet": "Select a set...",
+        "selectRarity": "Rarity (Optional)",
+        "anyRarity": "Any",
+        "pokemonName": "Pokémon Name",
+        "searchName": "Search a name...",
+        "autocompleteBased": "Autocomplete based on your database.",
+        "supertype": "Supertype",
+        "select": "Select...",
+        "globalRarity": "Global Rarity",
+        "manyCardsWarning": "This may include thousands of cards.",
+        "createButton": "Create Collection",
+        "creating": "Creating...",
+        "languageLabel": "Card language",
+        "useProfileDefault": "Use profile language"
+    },
+    "collectionDetail": {
+        "backToCollections": "Back to My Collections",
+        "cards": "Cards",
+        "completed": "Completed!",
+        "progress": "Progress",
+        "emptyManual": {
+            "title": "Empty collection",
+            "description": "Add cards from the explorer to start your collection."
+        },
+        "progressByRarity": "Progress by Rarity",
+        "searchCard": "Search card...",
+        "allSets": "All Sets",
+        "showAll": "All",
+        "showOwned": "Owned",
+        "showMissing": "Missing",
+        "showing": "Showing",
+        "clearFilters": "Clear filters",
+        "noResults": {
+            "title": "No results",
+            "description": "Try adjusting your search filters."
+        }
+    },
+    "cardDetail": {
+        "evolvesFrom": "Evolves from",
+        "number": "Number",
+        "rarity": "Rarity",
+        "artist": "Artist",
+        "types": "Types",
+        "unknown": "Unknown",
+        "marketPrices": "Market Prices",
+        "marketPrice": "Market Price",
+        "market": "Market",
+        "trend": "Trend",
+        "noPrices": "No price information available.",
+        "viewOnTCGPlayer": "View on TCGPlayer",
+        "addToCollection": "Add to Collection",
+        "priceHistory": "Price History",
+        "min": "Min",
+        "max": "Max",
+        "source": "Source",
+        "records": "{count} records",
+        "noHistory": "No price history available",
+        "historyUpdate": "Prices are updated periodically",
+        "date": "Date",
+        "price": "Price"
+    },
+    "cardItem": {
+        "noImage": "No image",
+        "manageVariants": "Manage all variants",
+        "total": "Total",
+        "copies": "copies"
+    },
+    "settings": {
+        "title": "Settings",
+        "subtitle": "Customize your experience",
+        "profile": {
+            "title": "Profile",
+            "description": "Your personal information",
+            "displayName": "Display name",
+            "displayNamePlaceholder": "Your name or nickname",
+            "email": "Email"
+        },
+        "marketplace": {
+            "title": "Marketplace Accounts",
+            "description": "Connect your card trading accounts",
+            "cardmarket": "Cardmarket username",
+            "cardmarketPlaceholder": "your_cardmarket_username",
+            "tcgplayer": "TCGPlayer username",
+            "tcgplayerPlaceholder": "your_tcgplayer_username",
+            "ebay": "eBay username",
+            "ebayPlaceholder": "your_ebay_username"
+        },
+        "language": {
+            "title": "Language",
+            "description": "Configure application and card language",
+            "appLanguage": "Application language",
+            "cardLanguage": "Default card language",
+            "cardLanguageHint": "This will be the default language when downloading card info and creating new collections."
+        },
+        "saveChanges": "Save changes",
+        "saving": "Saving...",
+        "saved": "Changes saved successfully"
+    },
+    "sync": {
+        "title": "Global Sync",
+        "description": "Download the complete Pokémon TCG card database.",
+        "warning": "This process may take several minutes depending on your connection.",
+        "start": "Start Sync",
+        "inProgress": "Sync in progress...",
+        "complete": "Sync complete"
+    },
+    "budgets": {
+        "title": "Budgets",
+        "subtitle": "Manage your card expenses",
+        "new": "New Budget",
+        "create": "Create Budget",
+        "monthSummary": "Month Summary",
+        "total": "Total Budget",
+        "spent": "Spent",
+        "remaining": "Remaining",
+        "empty": {
+            "title": "No budgets",
+            "description": "Create your first budget to start tracking your card expenses."
+        },
+        "status": {
+            "exceeded": "Exceeded",
+            "limit": "Near Limit",
+            "ok": "Under Control"
+        },
+        "period": {
+            "monthly": "Monthly",
+            "yearly": "Yearly",
+            "oneTime": "One-time"
+        },
+        "of": "of",
+        "backToBudgets": "Back to Budgets",
+        "createDescription": "Setup a budget to track your expenses",
+        "form": {
+            "name": "Name",
+            "namePlaceholder": "Ex: Monthly Purchases...",
+            "type": "Budget Type",
+            "collection": "Collection",
+            "selectCollection": "Select collection...",
+            "amount": "Amount",
+            "currency": "Currency",
+            "period": "Period",
+            "parentBudget": "Include in global budget (optional)",
+            "parentBudgetDesc": "This budget will count towards the limit of the selected global budgets."
+        },
+        "type": {
+            "global": "Global",
+            "globalDesc": "For all general expenses",
+            "collection": "By Collection",
+            "collectionDesc": "Linked to a specific collection"
+        },
+        "notFound": "Budget not found",
+        "per": {
+            "monthly": "mo",
+            "yearly": "yr",
+            "oneTime": "total"
+        },
+        "stats": {
+            "totalSpent": "Spent (total)",
+            "available": "Available this month",
+            "operations": "Operations",
+            "carryOver": "Carry Over"
+        },
+        "history": {
+            "title": "Monthly History",
+            "current": "Current",
+            "operationsCount": "operations",
+            "carryOver": "carry over",
+            "empty": {
+                "title": "No history",
+                "description": "Add your first expense to start seeing history."
+            }
+        },
+        "settings": {
+            "button": "Configure",
+            "title": "Budget Settings",
+            "description": "Modify your budget settings",
+            "tabs": {
+                "general": "General",
+                "advanced": "Options",
+                "danger": "Danger"
+            },
+            "readOnly": "Read-only",
+            "linkedCollection": "Linked Collection",
+            "noCollection": "No collection",
+            "linkedCollectionDesc": "Expenses in this budget will be associated with this collection",
+            "infoTitle": "Information",
+            "info1": "Carry over is calculated automatically between months",
+            "info2": "You can add expenses to past months",
+            "info3": "Amount changes affect all months",
+            "dangerZone": "Danger Zone",
+            "dangerZoneDesc": "The following actions are irreversible. Proceed with caution.",
+            "deleteBudget": "Delete budget",
+            "deleteBudgetDesc": "Delete this budget and all its registered expenses",
+            "deleteConfirmTitle": "Delete budget?",
+            "deleteConfirmDesc": "This action will delete the budget \"{name}\" and all its registered expenses. This action cannot be undone.",
+            "deleteForever": "Delete permanently",
+            "unsavedChanges": "Unsaved changes",
+            "saveChanges": "Save changes"
+        },
+        "expenseTable": {
+            "columns": {
+                "date": "Date",
+                "description": "Description",
+                "category": "Category",
+                "amount": "Amount",
+                "packCount": "# Packs",
+                "pricePerPack": "Price/Pack",
+                "seller": "Seller",
+                "platform": "Platform"
+            },
+            "placeholders": {
+                "description": "Description...",
+                "seller": "Seller"
+            },
+            "categories": {
+                "single_card": "Single Card",
+                "sealed": "Sealed",
+                "etb": "ETB",
+                "booster": "Booster",
+                "accessory": "Accessory",
+                "other": "Other"
+            },
+            "platforms": {
+                "cardmarket": "Cardmarket",
+                "tcgplayer": "TCGPlayer",
+                "ebay": "eBay",
+                "tiktokshop": "TikTok Shop",
+                "amazon": "Amazon",
+                "lgs": "Local Shop",
+                "other": "Other"
+            },
+            "help": {
+                "tab": "Tab next field",
+                "enter": "Enter save",
+                "esc": "Esc cancel",
+                "clickToEdit": "Click row to edit"
+            }
+        }
+    },
+    "auth": {
+        "login": {
+            "title": "Login",
+            "description": "Enter your credentials to access",
+            "email": "Email",
+            "password": "Password",
+            "submit": "Sign In",
+            "submitting": "Signing in...",
+            "error": {
+                "credentials": "Invalid credentials",
+                "generic": "An error occurred"
+            },
+            "placeholder": {
+                "email": "you@email.com"
+            }
+        }
+    }
+}

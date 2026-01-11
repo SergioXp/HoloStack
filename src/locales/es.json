@@ -1,0 +1,422 @@
+{
+    "common": {
+        "back": "Volver",
+        "backToHome": "Volver al Inicio",
+        "save": "Guardar",
+        "cancel": "Cancelar",
+        "creating": "Creando...",
+        "delete": "Eliminar",
+        "edit": "Editar",
+        "create": "Crear",
+        "search": "Buscar",
+        "loading": "Cargando...",
+        "error": "Error",
+        "success": "Éxito",
+        "confirm": "Confirmar",
+        "yes": "Sí",
+        "no": "No",
+        "all": "Todas",
+        "none": "Ninguna",
+        "reset": "Resetear",
+        "cards": "Cartas",
+        "card": "Carta",
+        "sets": "Sets",
+        "set": "Set",
+        "collection": "Colección",
+        "collections": "Colecciones",
+        "settings": "Configuración",
+        "profile": "Perfil",
+        "language": "Idioma",
+        "spanish": "Español",
+        "english": "Inglés",
+        "french": "Francés",
+        "german": "Alemán",
+        "italian": "Italiano",
+        "portuguese": "Portugués",
+        "japanese": "Japonés",
+        "korean": "Coreano",
+        "chinese": "Chino"
+    },
+    "nav": {
+        "home": "Inicio",
+        "explorer": "Explorador",
+        "collections": "Colecciones",
+        "budgets": "Presupuestos",
+        "settings": "Configuración",
+        "sync": "Sincronizar",
+        "syncing": "Sincronizando"
+    },
+    "home": {
+        "title": "HoloStack",
+        "subtitle": "Tu compañero definitivo para gestionar y trackear tu colección de cartas Pokémon Trading Card Game",
+        "description": "Explora cada era, gestiona tu colección y mantén un seguimiento del valor de tus cartas favoritas.",
+        "exploreButton": "Explorar Cartas",
+        "collectionsButton": "Mis Colecciones",
+        "features": {
+            "title": "Todo lo que necesitas",
+            "subtitle": "Una suite completa de herramientas para el coleccionista moderno de Pokémon TCG",
+            "explore": {
+                "title": "Explorador Completo",
+                "description": "Navega por todas las eras y expansiones del TCG. Desde Base Set hasta las últimas expansiones."
+            },
+            "track": {
+                "title": "Gestión de Colección",
+                "description": "Crea colecciones personalizadas, trackea tu progreso y ve exactamente qué cartas te faltan."
+            },
+            "value": {
+                "title": "Precios en Tiempo Real",
+                "description": "Datos actualizados de TCGPlayer y Cardmarket para conocer el valor real de tus cartas."
+            },
+            "cta": "Explorar ahora",
+            "viewCollections": "Ver colecciones",
+            "autoUpdate": "Actualización automática"
+        },
+        "howItWorks": {
+            "title": "Cómo Funciona",
+            "subtitle": "Tres simples pasos para empezar",
+            "step1": {
+                "title": "Indexa la Base de Datos",
+                "description": "Usa el botón \"Indexar Todo\" para descargar información de más de 18,000 cartas."
+            },
+            "step2": {
+                "title": "Crea tu Colección",
+                "description": "Elige un set específico o crea colecciones por rareza, tipo o nombre."
+            },
+            "step3": {
+                "title": "Añade tus Cartas",
+                "description": "Marca las cartas que tienes y observa tu progreso hacia el 100%."
+            }
+        },
+        "stats": {
+            "cardsIndexed": "cartas indexadas",
+            "setsAvailable": "sets disponibles",
+            "inCollection": "en tu colección",
+            "collections": "colecciones"
+        },
+        "footer": {
+            "apiData": "Datos de TCGdex API",
+            "pricesData": "Precios de TCGPlayer & Cardmarket",
+            "copyright": "© {year} HoloStack by SergioXp • Hecho con ❤️ para coleccionistas"
+        }
+    },
+    "explorer": {
+        "title": "Explorador TCG",
+        "subtitle": "Navega por todas las eras y expansiones",
+        "eras": "Eras",
+        "syncedSets": "Sets Sincronizados",
+        "viewExpansions": "Ver expansiones",
+        "expansionsInEra": "expansiones en esta era",
+        "emptyState": {
+            "title": "Base de datos vacía",
+            "description": "Usa el botón 'Sincronizar' en la barra de navegación para descargar la base de datos completa de cartas."
+        },
+        "set": {
+            "cards": "cartas",
+            "complete": "Completo",
+            "notDownloaded": "Sin descargar",
+            "notFound": "Set no encontrado",
+            "backToExplorer": "Volver al explorador",
+            "backToSeries": "Volver a {series}",
+            "cardsCount": "{count} de {total} cartas",
+            "noCards": {
+                "title": "Sin cartas descargadas",
+                "description": "Las cartas se descargan automáticamente al visitar cada set por primera vez."
+            }
+        },
+        "backToEras": "Volver a Eras",
+        "noLogo": "Sin logo",
+        "noSetsFound": "No se encontraron sets para esta era."
+    },
+    "collections": {
+        "title": "Mis Colecciones",
+        "subtitle": "Gestiona y trackea tu progreso",
+        "newCollection": "Nueva Colección",
+        "uniqueCards": "cartas únicas",
+        "emptyState": {
+            "title": "Tu viaje comienza aquí",
+            "description": "Crea tu primera colección para empezar a trackear tu progreso y gestionar tus cartas favoritas."
+        },
+        "createFirst": "Crear mi primera colección",
+        "createdOn": "Creada el",
+        "progress": "Progreso",
+        "completed": "Completado",
+        "totalCopies": "Total Copias",
+        "auto": "Automática",
+        "manual": "Manual"
+    },
+    "collectionForm": {
+        "title": "Nueva Colección",
+        "subtitle": "Crea una colección para organizar tus cartas",
+        "nameLabel": "Nombre de la Colección",
+        "namePlaceholder": "Ej: Mis Holos de Base Set",
+        "typeLabel": "Tipo de Colección",
+        "manual": {
+            "title": "Manual",
+            "description": "Añade cartas una a una manualmente."
+        },
+        "auto": {
+            "title": "Automática",
+            "description": "Define filters y se llena automáticamente.",
+            "recommended": "Recomendado"
+        },
+        "filterBySet": "Por Set",
+        "filterByName": "Nombre",
+        "filterByType": "Tipo",
+        "filterByRarity": "Rareza",
+        "selectSet": "Selecciona un set...",
+        "selectRarity": "Rareza (Opcional)",
+        "anyRarity": "Cualquiera",
+        "pokemonName": "Nombre del Pokémon",
+        "searchName": "Busca un nombre...",
+        "autocompleteBased": "Autocompletado basado en tu base de datos.",
+        "supertype": "Supertype",
+        "select": "Selecciona...",
+        "globalRarity": "Rareza Global",
+        "manyCardsWarning": "Esto puede incluir miles de cartas.",
+        "createButton": "Crear Colección",
+        "creating": "Creando...",
+        "languageLabel": "Idioma de las cartas",
+        "useProfileDefault": "Usar idioma del perfil"
+    },
+    "collectionDetail": {
+        "backToCollections": "Volver a Mis Colecciones",
+        "cards": "Cartas",
+        "completed": "¡Completado!",
+        "progress": "Progreso",
+        "emptyManual": {
+            "title": "Colección vacía",
+            "description": "Añade cartas desde el explorador para empezar tu colección."
+        },
+        "progressByRarity": "Progreso por Rareza",
+        "searchCard": "Buscar carta...",
+        "allSets": "Todos los Sets",
+        "showAll": "Todas",
+        "showOwned": "Tengo",
+        "showMissing": "Faltan",
+        "showing": "Mostrando",
+        "clearFilters": "Limpiar filtros",
+        "noResults": {
+            "title": "Sin resultados",
+            "description": "Intenta ajustar los filtros de búsqueda."
+        }
+    },
+    "cardDetail": {
+        "evolvesFrom": "Evoluciona de",
+        "number": "Número",
+        "rarity": "Rareza",
+        "artist": "Artista",
+        "types": "Tipos",
+        "unknown": "Desconocido",
+        "marketPrices": "Precios de Mercado",
+        "marketPrice": "Precio de Mercado",
+        "market": "Mercado",
+        "trend": "Tendencia",
+        "noPrices": "No hay información de precios disponible.",
+        "viewOnTCGPlayer": "Ver en TCGPlayer",
+        "addToCollection": "Añadir a Colección",
+        "priceHistory": "Evolución del Precio",
+        "min": "Mín",
+        "max": "Máx",
+        "source": "Fuente",
+        "records": "{count} registros",
+        "noHistory": "No hay historial de precios disponible",
+        "historyUpdate": "Los precios se actualizan periódicamente",
+        "date": "Fecha",
+        "price": "Precio"
+    },
+    "cardItem": {
+        "noImage": "Sin imagen",
+        "manageVariants": "Gestionar todas las variantes",
+        "total": "Total",
+        "copies": "copias"
+    },
+    "settings": {
+        "title": "Configuración",
+        "subtitle": "Personaliza tu experiencia",
+        "profile": {
+            "title": "Perfil",
+            "description": "Tu información personal",
+            "displayName": "Nombre para mostrar",
+            "displayNamePlaceholder": "Tu nombre o apodo",
+            "email": "Email"
+        },
+        "marketplace": {
+            "title": "Cuentas de Marketplaces",
+            "description": "Conecta tus cuentas de intercambio de cartas",
+            "cardmarket": "Usuario de Cardmarket",
+            "cardmarketPlaceholder": "tu_usuario_cardmarket",
+            "tcgplayer": "Usuario de TCGPlayer",
+            "tcgplayerPlaceholder": "tu_usuario_tcgplayer",
+            "ebay": "Usuario de eBay",
+            "ebayPlaceholder": "tu_usuario_ebay"
+        },
+        "language": {
+            "title": "Idioma",
+            "description": "Configura el idioma de la aplicación y las cartas",
+            "appLanguage": "Idioma de la aplicación",
+            "cardLanguage": "Idioma predeterminado para cartas",
+            "cardLanguageHint": "Este será el idioma por defecto al descargar información de cartas y crear nuevas colecciones."
+        },
+        "saveChanges": "Guardar cambios",
+        "saving": "Guardando...",
+        "saved": "Cambios guardados correctamente"
+    },
+    "sync": {
+        "title": "Sincronización Global",
+        "description": "Descarga la base de datos completa de cartas Pokémon TCG.",
+        "warning": "Este proceso puede tardar varios minutos dependiendo de tu conexión.",
+        "start": "Iniciar Sincronización",
+        "inProgress": "Sincronización en progreso...",
+        "complete": "Sincronización completada"
+    },
+    "budgets": {
+        "title": "Presupuestos",
+        "subtitle": "Gestiona tus gastos en cartas",
+        "new": "Nuevo Presupuesto",
+        "create": "Crear Presupuesto",
+        "monthSummary": "Resumen del Mes",
+        "total": "Presupuesto Total",
+        "spent": "Gastado",
+        "remaining": "Restante",
+        "empty": {
+            "title": "Sin presupuestos",
+            "description": "Crea tu primer presupuesto para empezar a controlar tus gastos en cartas."
+        },
+        "status": {
+            "exceeded": "Excedido",
+            "limit": "Cerca del límite",
+            "ok": "Bajo control"
+        },
+        "period": {
+            "monthly": "Mensual",
+            "yearly": "Anual",
+            "oneTime": "Único"
+        },
+        "of": "de",
+        "backToBudgets": "Volver a Presupuestos",
+        "createDescription": "Configura un presupuesto para controlar tus gastos",
+        "form": {
+            "name": "Nombre",
+            "namePlaceholder": "Ej: Presupuesto Pikachus, Compras Mensuales...",
+            "type": "Tipo de Presupuesto",
+            "collection": "Colección",
+            "selectCollection": "Seleccionar colección...",
+            "amount": "Cantidad",
+            "currency": "Moneda",
+            "period": "Período",
+            "parentBudget": "Incluir en presupuesto global (opcional)",
+            "parentBudgetDesc": "Este presupuesto contará dentro del límite de los presupuestos globales seleccionados."
+        },
+        "type": {
+            "global": "Global",
+            "globalDesc": "Para todos los gastos generales",
+            "collection": "Por Colección",
+            "collectionDesc": "Vinculado a una colección específica"
+        },
+        "notFound": "Presupuesto no encontrado",
+        "per": {
+            "monthly": "mes",
+            "yearly": "año",
+            "oneTime": "total"
+        },
+        "stats": {
+            "totalSpent": "Gastado (total)",
+            "available": "Disponible este mes",
+            "operations": "Operaciones",
+            "carryOver": "Arrastre"
+        },
+        "history": {
+            "title": "Histórico por Meses",
+            "current": "Actual",
+            "operationsCount": "operaciones",
+            "carryOver": "arrastre",
+            "empty": {
+                "title": "Sin historial",
+                "description": "Añade tu primer gasto para empezar a ver el historial."
+            }
+        },
+        "settings": {
+            "button": "Configurar",
+            "title": "Configuración del Presupuesto",
+            "description": "Modifica los ajustes de tu presupuesto",
+            "tabs": {
+                "general": "General",
+                "advanced": "Opciones",
+                "danger": "Peligro"
+            },
+            "readOnly": "No modificable",
+            "linkedCollection": "Colección vinculada",
+            "noCollection": "Sin colección",
+            "linkedCollectionDesc": "Los gastos de este presupuesto se asociarán a esta colección",
+            "infoTitle": "Información",
+            "info1": "El arrastre se calcula automáticamente entre meses",
+            "info2": "Puedes añadir gastos a meses pasados",
+            "info3": "Los cambios de cantidad afectan a todos los meses",
+            "dangerZone": "Zona de peligro",
+            "dangerZoneDesc": "Las siguientes acciones son irreversibles. Procede con precaución.",
+            "deleteBudget": "Eliminar presupuesto",
+            "deleteBudgetDesc": "Elimina este presupuesto y todos sus gastos registrados",
+            "deleteConfirmTitle": "¿Eliminar presupuesto?",
+            "deleteConfirmDesc": "Esta acción eliminará el presupuesto \"{name}\" y todos sus gastos registrados. Esta acción no se puede deshacer.",
+            "deleteForever": "Eliminar permanentemente",
+            "unsavedChanges": "Cambios sin guardar",
+            "saveChanges": "Guardar cambios"
+        },
+        "expenseTable": {
+            "columns": {
+                "date": "Fecha",
+                "description": "Descripción",
+                "category": "Categoría",
+                "amount": "Importe",
+                "packCount": "# Sobres",
+                "pricePerPack": "€/Sobre",
+                "seller": "Vendedor",
+                "platform": "Plataforma"
+            },
+            "placeholders": {
+                "description": "Descripción...",
+                "seller": "Vendedor"
+            },
+            "categories": {
+                "single_card": "Carta Suelta",
+                "sealed": "Sellado",
+                "etb": "ETB",
+                "booster": "Booster",
+                "accessory": "Accesorio",
+                "other": "Otro"
+            },
+            "platforms": {
+                "cardmarket": "Cardmarket",
+                "tcgplayer": "TCGPlayer",
+                "ebay": "eBay",
+                "tiktokshop": "TikTok Shop",
+                "amazon": "Amazon",
+                "lgs": "Tienda Local",
+                "other": "Otro"
+            },
+            "help": {
+                "tab": "Tab siguiente campo",
+                "enter": "Enter guardar",
+                "esc": "Esc cancelar",
+                "clickToEdit": "Clic en fila para editar"
+            }
+        }
+    },
+    "auth": {
+        "login": {
+            "title": "Iniciar Sesión",
+            "description": "Ingresa tus credenciales para acceder",
+            "email": "Email",
+            "password": "Contraseña",
+            "submit": "Iniciar Sesión",
+            "submitting": "Iniciando sesión...",
+            "error": {
+                "credentials": "Credenciales inválidas",
+                "generic": "Ha ocurrido un error"
+            },
+            "placeholder": {
+                "email": "tu@email.com"
+            }
+        }
+    }
+}

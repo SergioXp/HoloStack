@@ -1,0 +1,20 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1767954220879,
+      "tag": "0000_certain_frightful_four",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1768088412850,
+      "tag": "0001_free_vertigo",
+      "breakpoints": true
+    }
+  ]
+}
