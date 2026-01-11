@@ -129,7 +129,7 @@ export default function CreateCollectionForm({ availableSets }: CreateCollection
         <div className="min-h-screen bg-slate-950 relative overflow-hidden">
             {/* Background Effects */}
             <div className="fixed inset-0 z-0">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-900/10 via-slate-950 to-blue-900/10" />
+                <div className="absolute inset-0 bg-linear-to-br from-purple-900/10 via-slate-950 to-blue-900/10" />
                 <div className="absolute top-20 right-20 w-96 h-96 bg-purple-600/5 rounded-full blur-3xl" />
                 <div className="absolute bottom-20 left-20 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl" />
             </div>
@@ -145,11 +145,11 @@ export default function CreateCollectionForm({ availableSets }: CreateCollection
                     </div>
 
                     <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-800 text-white overflow-hidden shadow-2xl">
-                        <div className="h-1 w-full bg-gradient-to-r from-purple-500 to-pink-500" />
+                        <div className="h-1 w-full bg-linear-to-r from-purple-500 to-pink-500" />
 
                         <CardHeader className="pb-4">
                             <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
+                                <div className="w-12 h-12 rounded-xl bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
                                     <Library className="h-6 w-6 text-white" />
                                 </div>
                                 <div>
@@ -210,7 +210,7 @@ export default function CreateCollectionForm({ availableSets }: CreateCollection
                                                     : "border-slate-700 bg-slate-800/50 hover:border-slate-600"
                                             )}
                                         >
-                                            <Badge className="absolute -top-2 right-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 text-[10px]">
+                                            <Badge className="absolute -top-2 right-3 bg-linear-to-r from-purple-500 to-pink-500 text-white border-0 text-[10px]">
                                                 {t("collectionForm.auto.recommended")}
                                             </Badge>
                                             <div className="flex items-center gap-3 mb-2">
@@ -237,19 +237,19 @@ export default function CreateCollectionForm({ availableSets }: CreateCollection
                                             <TabsList className="bg-slate-900 p-1 border border-slate-700 w-full grid grid-cols-4 rounded-xl h-auto">
                                                 <TabsTrigger
                                                     value="set"
-                                                    className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white text-slate-400 hover:text-slate-200 rounded-lg py-2"
+                                                    className="data-[state=active]:bg-linear-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white text-slate-400 hover:text-slate-200 rounded-lg py-2"
                                                 >{t("collectionForm.filterBySet")}</TabsTrigger>
                                                 <TabsTrigger
                                                     value="name"
-                                                    className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white text-slate-400 hover:text-slate-200 rounded-lg py-2"
+                                                    className="data-[state=active]:bg-linear-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white text-slate-400 hover:text-slate-200 rounded-lg py-2"
                                                 >{t("collectionForm.filterByName")}</TabsTrigger>
                                                 <TabsTrigger
                                                     value="supertype"
-                                                    className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white text-slate-400 hover:text-slate-200 rounded-lg py-2"
+                                                    className="data-[state=active]:bg-linear-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white text-slate-400 hover:text-slate-200 rounded-lg py-2"
                                                 >{t("collectionForm.filterByType")}</TabsTrigger>
                                                 <TabsTrigger
                                                     value="rarity"
-                                                    className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white text-slate-400 hover:text-slate-200 rounded-lg py-2"
+                                                    className="data-[state=active]:bg-linear-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white text-slate-400 hover:text-slate-200 rounded-lg py-2"
                                                 >{t("collectionForm.filterByRarity")}</TabsTrigger>
                                             </TabsList>
 
@@ -466,7 +466,7 @@ export default function CreateCollectionForm({ availableSets }: CreateCollection
                                 <Button
                                     type="submit"
                                     disabled={isLoading || !name || (mode === "auto" && autoModeType === "set" && !selectedSet)}
-                                    className="w-full h-14 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold text-lg rounded-xl shadow-lg shadow-purple-500/20 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
+                                    className="w-full h-14 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold text-lg rounded-xl shadow-lg shadow-purple-500/20 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
                                 >
                                     {isLoading ? (
                                         <span className="flex items-center gap-2">

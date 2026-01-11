@@ -11,6 +11,12 @@ vi.mock('@/lib/card-utils', () => ({
     getAvailableVariants: vi.fn(() => new Set(['normal', 'holofoil'])),
 }));
 
+vi.mock('@/lib/i18n', () => ({
+    useI18n: () => ({
+        t: (key: string) => key,
+    })
+}));
+
 const mockCard = {
     id: 'card-1',
     name: 'Pikachu',
@@ -27,7 +33,7 @@ describe('CollectionItemManager', () => {
             <CollectionItemManager
                 card={mockCard}
                 collectionId="col-1"
-                ownedVariants={new Map()}
+                ownedData={new Map()}
                 totalInSet={100}
             />
         );

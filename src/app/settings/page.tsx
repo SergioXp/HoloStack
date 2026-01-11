@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useTheme } from "next-themes";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,6 +17,7 @@ import {
     Save,
     Check,
     Languages,
+    Palette,
     Database,
     Download,
     Upload,
@@ -36,6 +38,7 @@ interface UserProfile {
 
 export default function SettingsPage() {
     const { t, locale, setLocale, cardLanguage, setCardLanguage } = useI18n();
+    const { theme, setTheme } = useTheme();
 
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [isLoading, setIsLoading] = useState(true);
@@ -173,57 +176,57 @@ export default function SettingsPage() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-950 relative overflow-hidden">
+        <div className="min-h-screen bg-background relative overflow-hidden transition-colors duration-300">
             {/* Background Effects */}
-            <div className="fixed inset-0 z-0">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-900/10 via-slate-950 to-blue-900/10" />
-                <div className="absolute top-20 right-20 w-96 h-96 bg-purple-600/5 rounded-full blur-3xl" />
-                <div className="absolute bottom-20 left-20 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl" />
+            <div className="fixed inset-0 z-0 pointer-events-none">
+                <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-background to-secondary/5" />
+                <div className="absolute top-20 right-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+                <div className="absolute bottom-20 left-20 w-96 h-96 bg-secondary/5 rounded-full blur-3xl" />
             </div>
 
             <div className="relative z-10 p-8">
                 <div className="max-w-2xl mx-auto">
                     {/* Header */}
                     <div className="mb-10">
-                        <Link href="/" className="inline-flex items-center text-slate-400 hover:text-white text-sm mb-6 transition-colors">
+                        <Link href="/" className="inline-flex items-center text-muted-foreground hover:text-foreground text-sm mb-6 transition-colors">
                             <ChevronRight className="h-4 w-4 mr-1 rotate-180" />
                             {t("common.back")}
                         </Link>
 
                         <div className="flex items-center gap-4">
-                            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
-                                <Settings className="h-7 w-7 text-white" />
+                            <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center shadow-lg shadow-primary/20 border border-primary/20">
+                                <Settings className="h-7 w-7 text-primary" />
                             </div>
                             <div>
-                                <h1 className="text-3xl font-bold text-white tracking-tight">{t("settings.title")}</h1>
-                                <p className="text-slate-400">{t("settings.subtitle")}</p>
+                                <h1 className="text-3xl font-bold text-foreground tracking-tight">{t("settings.title")}</h1>
+                                <p className="text-muted-foreground">{t("settings.subtitle")}</p>
                             </div>
                         </div>
                     </div>
 
                     <div className="space-y-6">
                         {/* Profile Section */}
-                        <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-800 text-white overflow-hidden">
-                            <CardHeader className="border-b border-slate-800">
+                        <Card className="bg-card backdrop-blur-sm border-border text-foreground overflow-hidden">
+                            <CardHeader className="border-b border-border">
                                 <div className="flex items-center gap-3">
                                     <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center">
                                         <User className="h-5 w-5 text-blue-400" />
                                     </div>
                                     <div>
                                         <CardTitle className="text-lg">{t("settings.profile.title")}</CardTitle>
-                                        <CardDescription className="text-slate-400">{t("settings.profile.description")}</CardDescription>
+                                        <CardDescription className="text-muted-foreground">{t("settings.profile.description")}</CardDescription>
                                     </div>
                                 </div>
                             </CardHeader>
                             <CardContent className="pt-6 space-y-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="displayName" className="text-sm text-slate-300">{t("settings.profile.displayName")}</Label>
+                                    <Label htmlFor="displayName" className="text-sm text-muted-foreground">{t("settings.profile.displayName")}</Label>
                                     <Input
                                         id="displayName"
                                         value={displayName}
                                         onChange={(e) => setDisplayName(e.target.value)}
                                         placeholder={t("settings.profile.displayNamePlaceholder")}
-                                        className="bg-slate-800 border-slate-700 text-white h-11 rounded-xl"
+                                        className="bg-muted/50 border-input text-foreground h-11 rounded-xl focus:ring-primary"
                                     />
                                 </div>
                             </CardContent>
@@ -251,14 +254,14 @@ export default function SettingsPage() {
                                                 key={lang.code}
                                                 onClick={() => setSelectedAppLang(lang.code)}
                                                 className={`p-4 rounded-xl border-2 transition-all text-left ${selectedAppLang === lang.code
-                                                    ? "border-purple-500 bg-purple-500/10"
-                                                    : "border-slate-700 bg-slate-800/50 hover:border-slate-600"
+                                                    ? "border-primary bg-primary/10"
+                                                    : "border-border bg-muted/30 hover:border-primary/50"
                                                     }`}
                                             >
                                                 <div className="flex items-center justify-between">
                                                     <span className="font-medium">{lang.name}</span>
                                                     {selectedAppLang === lang.code && (
-                                                        <Check className="h-4 w-4 text-purple-400" />
+                                                        <Check className="h-4 w-4 text-primary" />
                                                     )}
                                                 </div>
                                             </button>
@@ -283,6 +286,49 @@ export default function SettingsPage() {
                                             </button>
                                         ))}
                                     </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        {/* Appearance Section */}
+                        <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-800 text-white overflow-hidden">
+                            <CardHeader className="border-b border-slate-800">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                                        <Palette className="h-5 w-5 text-purple-400" />
+                                    </div>
+                                    <div>
+                                        <CardTitle className="text-lg">Apariencia</CardTitle>
+                                        <CardDescription className="text-slate-400">Personaliza el tema de HoloStack</CardDescription>
+                                    </div>
+                                </div>
+                            </CardHeader>
+                            <CardContent className="pt-6">
+                                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+                                    {[
+                                        { id: "dark", name: "Original", bg: "bg-slate-950", border: "border-slate-700" },
+                                        { id: "fire", name: "Fuego", bg: "bg-red-950", border: "border-red-700" },
+                                        { id: "water", name: "Agua", bg: "bg-blue-950", border: "border-blue-700" },
+                                        { id: "grass", name: "Planta", bg: "bg-green-950", border: "border-green-700" },
+                                        { id: "electric", name: "Eléctrico", bg: "bg-yellow-950", border: "border-yellow-700" },
+                                        { id: "psychic", name: "Psíquico", bg: "bg-fuchsia-950", border: "border-fuchsia-700" },
+                                    ].map((t) => (
+                                        <button
+                                            key={t.id}
+                                            onClick={() => setTheme(t.id)}
+                                            className={`relative h-20 rounded-xl border-2 transition-all ${t.bg} ${t.border} ${theme === t.id ? "ring-2 ring-white scale-105" : "hover:scale-105 opacity-80 hover:opacity-100"
+                                                }`}
+                                        >
+                                            <div className="absolute inset-0 flex items-center justify-center">
+                                                <span className="text-xs font-medium text-white/90">{t.name}</span>
+                                            </div>
+                                            {theme === t.id && (
+                                                <div className="absolute top-2 right-2 bg-white text-black rounded-full p-0.5">
+                                                    <Check className="h-3 w-3" />
+                                                </div>
+                                            )}
+                                        </button>
+                                    ))}
                                 </div>
                             </CardContent>
                         </Card>
@@ -417,7 +463,7 @@ export default function SettingsPage() {
                             <Button
                                 onClick={handleSave}
                                 disabled={isSaving}
-                                className="h-12 px-8 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-semibold rounded-xl shadow-lg shadow-purple-500/20"
+                                className="h-12 px-8 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-xl shadow-lg shadow-primary/20"
                             >
                                 {isSaving ? (
                                     <span className="flex items-center gap-2">
@@ -435,6 +481,6 @@ export default function SettingsPage() {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 }

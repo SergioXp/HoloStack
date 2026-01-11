@@ -1,57 +1,80 @@
 # HoloStack - Roadmap & Future Features 🚀
 
-Este documento detalla la visión ambiciosa para el futuro de HoloStack, transformándolo de un gestor de colecciones a la plataforma definitiva para el ecosistema de Pokémon TCG.
+Este documento detalla la visión del proyecto centrada exclusivamente en el **coleccionismo**, priorizando la organización, exhibición y valoración de cartas, sin elementos de juego competitivo.
 
-## 🌟 Fase 1: Core Experience (Q1 2026)
+## ✅ Fase 1: Core Experience (Completada Q1 2026)
 
-### 🌓 Modo Oscuro/Claro "Temático"
-- Implementación completa de temas (Light/Dark).
-- **Temas por Tipo**: Cambiar la paleta de toda la app según tu tipo favorito (Fuego = Rojo/Naranja, Agua = Azul/Cyan, Planta = Verde).
+### 🌓 Temas Personalizados
+- [x] Selector de temas basado en Tipos Pokémon.
+- [x] Variables CSS dinámicas.
 
-### 📱 PWA & Offline-First Real
-- Arquitectura Local-First real usando replicación (SQLite en navegador con OPFS).
-- Sincronización en segundo plano transparente.
-- Acceso total sin conexión y velocidad instantánea (0ms latency).
+### 📊 Estadísticas Básicas
+- [x] Dashboard gráfico con distribución por rareza y series.
+- [x] Visualización de valor total estimado.
 
-### 📊 Estadísticas Avanzadas
-- Gráficos interactivos de valor de colección en el tiempo.
-- Distribución por rareza, artista y año.
-- "Heatmap" de completitud de sets (estilo actividad de GitHub).
+### 📱 PWA & Instalación
+- [x] Soporte básico para instalación como App nativa.
 
 ---
 
-## 🚀 Fase 2: Inteligencia & Mercado (Q2 2026)
+## ✅ Fase 2: Gestión Avanzada (Completada Q2 2026)
 
-### 🤖 AI Price Prediction
-- Algoritmo de ML para predecir tendencias de mercado.
-- Alertas de "Buy the Dip" o "Sell High" personalizadas.
-- Análisis de oportunidades de arbitraje entre Cardmarket y TCGPlayer.
+### 🏷️ Sistema de Etiquetas Pro
+- [x] Etiquetas personalizadas globales y por item.
+- [x] Filtrado avanzado por etiquetas.
 
-### 📸 Escáner de Cartas (OCV)
-- Escaneo mediante cámara del móvil.
-- Reconocimiento automático de Set, Número y Variante.
-- Grading preliminar por AI (detectar bordes, centrado manual asistido).
+### ❤️ Lista de Deseos (Wishlist)
+- [x] Sistema de wishlist con prioridades.
+- [x] Integración en explorador.
 
-### 🏆 Deck Builder Competitivo
-- Integración con base de datos de torneos (LimitlessTCG).
-- "Can I Build It?": Analiza mazos meta y te dice qué te falta de tu colección.
-- Generador de proxies para playtesting de cartas que no tienes.
+### 📦 Herramientas de Gestión
+- [x] Acciones masivas (Bulk) para inventario.
+- [x] Importación/Exportación CSV.
+- [x] Generador de Proxies para impresión física (organización de huecos).
 
 ---
 
-## 💎 Fase 3: Social & Ecosistema (Q3-Q4 2026)
+## � Fase 2.5: Precisión y Datos (Prioridad Inmediata)
 
-### 🌍 HoloStack Social
-- Perfiles públicos de coleccionista (Showcase).
-- **Binder View 3D**: Visualizador realista de álbumes con físicas de cartas (Three.js).
-- Leaderboards de coleccionistas por Sets/Eras.
+*Objetivo: Asegurar que los datos financieros sean fiables antes de escalar.*
 
-### 🤝 P2P Trade Finder
-- Algoritmo de emparejamiento para intercambios.
-- "Yo tengo X y busco Y, tú tienes Y y buscas X".
-- Generador de propuestas de cambio justas basadas en valor de mercado.
+### 💰 Revisión Integral de Precios
+- [ ] Auditoría de fuentes de precios actuales (TCGDex/TCGPlayer).
+- [ ] Soporte multimoneda real (Conversión €/$ correcta y actualizada).
+- [ ] Diferenciación de precios por mercado (Cardmarket para Europa vs TCGPlayer para USA).
+- [ ] Histórico de ventas recientes (Last Sold) vs Precio Listado.
 
-### 📦 Gestión de Inventario para Vendedores
-- Modo "Tienda" para gestionar stock masivo.
-- Exportación directa a CSV de Cardmarket/TCGPlayer.
-- Seguimiento de beneficios (Profit/Loss) real por carta.
+---
+
+## �📒 Fase 3: La Experiencia de la Carpeta "Binder" (En proceso)
+
+*Objetivo: Replicar la satisfacción visual de hojear una carpeta física.*
+
+### 📖 Vista de Carpeta Virtual (Binder View)
+- [ ] Visualización en cuadrícula realista (3x3 o 4x3) paginada.
+- [ ] Drag & Drop: Posibilidad de ordenar las cartas manualmente dentro de la carpeta.
+- [ ] Espacios vacíos ("Placeholders") visuales para las cartas faltantes.
+
+### 📂 Colecciones Personalizadas
+- [ ] Crear colecciones transversales (ej: "Artistas", "Pokedex Nacional").
+
+---
+
+## 💎 Fase 4: Portfolio Global y Valoración (Q4 2026)
+
+*Objetivo: Gestión profesional de activos y finanzas.*
+
+### � Smart Portfolio (Cartera Global)
+- [ ] **Vista Unificada**: Lista de TODAS las cartas que posees en todas las colecciones.
+- [ ] **Análisis Financiero**:
+    - Valor total del portfolio en tiempo real.
+    - Gráficos de "Top Ganadores/Perdedores" (cartas que más han subido/bajado).
+    - Desglose de valor por Set, Rareza o Grado.
+- [ ] **Comparador de Mercados**: Ver el valor aproximado de tu carta en eBay, Cardmarket y TCGPlayer simultáneamente.
+
+### � Gestión de Estado y Grado (Grading)
+- [ ] Soporte nativo para cartas graduadas (Slabs: PSA, BGS, CGC).
+- [ ] Gestión de estado (Condition) detallada para valoración precisa.
+
+### 📤 Social Showcase
+- [ ] "Modo Quiosco" para tablets.

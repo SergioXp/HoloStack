@@ -170,7 +170,7 @@ export default function BudgetSettings({
             <DialogContent className="bg-slate-900 border-slate-700 text-white max-w-lg">
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2 text-xl">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center">
+                        <div className="w-10 h-10 rounded-xl bg-linear-to-br from-emerald-500 to-green-500 flex items-center justify-center">
                             <Wallet className="h-5 w-5 text-white" />
                         </div>
                         {t("budgets.settings.title")}

@@ -106,7 +106,7 @@ export default function NewBudgetPage() {
         <div className="min-h-screen bg-slate-950 relative overflow-hidden">
             {/* Background Effects */}
             <div className="fixed inset-0 z-0">
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/10 via-slate-950 to-blue-900/10" />
+                <div className="absolute inset-0 bg-linear-to-br from-emerald-900/10 via-slate-950 to-blue-900/10" />
                 <div className="absolute top-20 right-20 w-96 h-96 bg-emerald-600/5 rounded-full blur-3xl" />
                 <div className="absolute bottom-20 left-20 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl" />
             </div>
@@ -122,11 +122,11 @@ export default function NewBudgetPage() {
                     </div>
 
                     <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-800 text-white overflow-hidden shadow-2xl">
-                        <div className="h-1 w-full bg-gradient-to-r from-emerald-500 to-green-500" />
+                        <div className="h-1 w-full bg-linear-to-r from-emerald-500 to-green-500" />
 
                         <CardHeader className="pb-4">
                             <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                                <div className="w-12 h-12 rounded-xl bg-linear-to-br from-emerald-500 to-green-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
                                     <Wallet className="h-6 w-6 text-white" />
                                 </div>
                                 <div>
@@ -313,7 +313,7 @@ export default function NewBudgetPage() {
                                 <Button
                                     type="submit"
                                     disabled={isLoading || !name || !amount}
-                                    className="w-full h-14 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-semibold text-lg rounded-xl shadow-lg shadow-emerald-500/20 transition-all hover:scale-[1.02] disabled:opacity-50"
+                                    className="w-full h-14 bg-linear-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-semibold text-lg rounded-xl shadow-lg shadow-emerald-500/20 transition-all hover:scale-[1.02] disabled:opacity-50"
                                 >
                                     {isLoading ? (
                                         <span className="flex items-center gap-2">

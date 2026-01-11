@@ -21,10 +21,10 @@ export default function HomePageClient({ stats }: HomePageClientProps) {
         <div className="min-h-screen bg-slate-950 overflow-hidden">
             {/* Animated Background */}
             <div className="fixed inset-0 z-0">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-slate-950 to-blue-900/20" />
+                <div className="absolute inset-0 bg-linear-to-br from-purple-900/20 via-slate-950 to-blue-900/20" />
                 <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-600/10 rounded-full blur-3xl animate-pulse" />
                 <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl animate-pulse delay-1000" />
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-yellow-500/5 to-red-500/5 rounded-full blur-3xl" />
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-linear-to-r from-yellow-500/5 to-red-500/5 rounded-full blur-3xl" />
             </div>
 
             {/* Content */}
@@ -46,7 +46,7 @@ export default function HomePageClient({ stats }: HomePageClientProps) {
                     </div>
 
                     {/* Title */}
-                    <h1 className="text-6xl md:text-7xl lg:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 mb-6 tracking-tight">
+                    <h1 className="text-6xl md:text-7xl lg:text-8xl font-black text-transparent bg-clip-text bg-linear-to-r from-yellow-400 via-orange-500 to-red-500 mb-6 tracking-tight">
                         {t("home.title")}
                     </h1>
                     <p className="text-2xl md:text-3xl text-slate-300 mb-4 font-light">
@@ -59,7 +59,7 @@ export default function HomePageClient({ stats }: HomePageClientProps) {
                     {/* CTA Buttons */}
                     <div className="flex flex-col sm:flex-row gap-4 mb-16">
                         <Link href="/explorer">
-                            <Button size="lg" className="bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 hover:from-yellow-600 hover:via-orange-600 hover:to-red-600 text-black font-bold px-10 h-14 text-lg rounded-full shadow-xl shadow-orange-500/25 transition-all hover:scale-105 hover:shadow-orange-500/40">
+                            <Button size="lg" className="bg-linear-to-r from-yellow-500 via-orange-500 to-red-500 hover:from-yellow-600 hover:via-orange-600 hover:to-red-600 text-black font-bold px-10 h-14 text-lg rounded-full shadow-xl shadow-orange-500/25 transition-all hover:scale-105 hover:shadow-orange-500/40">
                                 🔍 {t("home.exploreButton")}
                             </Button>
                         </Link>
@@ -101,9 +101,9 @@ export default function HomePageClient({ stats }: HomePageClientProps) {
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             {/* Feature 1 */}
-                            <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-slate-700 overflow-hidden group hover:border-blue-500/50 transition-all duration-300">
+                            <Card className="bg-linear-to-br from-slate-900 to-slate-800 border-slate-700 overflow-hidden group hover:border-blue-500/50 transition-all duration-300">
                                 <CardContent className="p-8">
-                                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-blue-500/20">
+                                    <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-blue-500/20">
                                         📚
                                     </div>
                                     <h3 className="text-2xl font-bold text-white mb-3">{t("home.features.explore.title")}</h3>
@@ -118,9 +118,9 @@ export default function HomePageClient({ stats }: HomePageClientProps) {
                             </Card>
 
                             {/* Feature 2 */}
-                            <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-slate-700 overflow-hidden group hover:border-purple-500/50 transition-all duration-300">
+                            <Card className="bg-linear-to-br from-slate-900 to-slate-800 border-slate-700 overflow-hidden group hover:border-purple-500/50 transition-all duration-300">
                                 <CardContent className="p-8">
-                                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-purple-500/20">
+                                    <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-purple-500/20">
                                         ✨
                                     </div>
                                     <h3 className="text-2xl font-bold text-white mb-3">{t("home.features.track.title")}</h3>
@@ -135,9 +135,9 @@ export default function HomePageClient({ stats }: HomePageClientProps) {
                             </Card>
 
                             {/* Feature 3 */}
-                            <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-slate-700 overflow-hidden group hover:border-green-500/50 transition-all duration-300">
+                            <Card className="bg-linear-to-br from-slate-900 to-slate-800 border-slate-700 overflow-hidden group hover:border-green-500/50 transition-all duration-300">
                                 <CardContent className="p-8">
-                                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-green-500/20">
+                                    <div className="w-16 h-16 rounded-2xl bg-linear-to-br from-green-500 to-emerald-500 flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform shadow-lg shadow-green-500/20">
                                         💰
                                     </div>
                                     <h3 className="text-2xl font-bold text-white mb-3">{t("home.features.value.title")}</h3>
@@ -155,7 +155,7 @@ export default function HomePageClient({ stats }: HomePageClientProps) {
                 </section>
 
                 {/* How it Works */}
-                <section className="py-24 px-4 bg-gradient-to-b from-slate-950 to-slate-900">
+                <section className="py-24 px-4 bg-linear-to-b from-slate-950 to-slate-900">
                     <div className="max-w-5xl mx-auto">
                         <div className="text-center mb-16">
                             <h2 className="text-4xl font-bold text-white mb-4">{t("home.howItWorks.title")}</h2>
@@ -164,7 +164,7 @@ export default function HomePageClient({ stats }: HomePageClientProps) {
 
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                             <div className="text-center">
-                                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-yellow-500 to-orange-500 flex items-center justify-center text-4xl font-bold text-black mx-auto mb-6 shadow-xl shadow-yellow-500/20">
+                                <div className="w-20 h-20 rounded-full bg-linear-to-br from-yellow-500 to-orange-500 flex items-center justify-center text-4xl font-bold text-black mx-auto mb-6 shadow-xl shadow-yellow-500/20">
                                     1
                                 </div>
                                 <h3 className="text-xl font-bold text-white mb-2">{t("home.howItWorks.step1.title")}</h3>
@@ -174,7 +174,7 @@ export default function HomePageClient({ stats }: HomePageClientProps) {
                             </div>
 
                             <div className="text-center">
-                                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-4xl font-bold text-white mx-auto mb-6 shadow-xl shadow-purple-500/20">
+                                <div className="w-20 h-20 rounded-full bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center text-4xl font-bold text-white mx-auto mb-6 shadow-xl shadow-purple-500/20">
                                     2
                                 </div>
                                 <h3 className="text-xl font-bold text-white mb-2">{t("home.howItWorks.step2.title")}</h3>
@@ -184,7 +184,7 @@ export default function HomePageClient({ stats }: HomePageClientProps) {
                             </div>
 
                             <div className="text-center">
-                                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-4xl font-bold text-white mx-auto mb-6 shadow-xl shadow-emerald-500/20">
+                                <div className="w-20 h-20 rounded-full bg-linear-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-4xl font-bold text-white mx-auto mb-6 shadow-xl shadow-emerald-500/20">
                                     3
                                 </div>
                                 <h3 className="text-xl font-bold text-white mb-2">{t("home.howItWorks.step3.title")}</h3>

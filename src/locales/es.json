@@ -41,6 +41,8 @@
         "home": "Inicio",
         "explorer": "Explorador",
         "collections": "Colecciones",
+        "wishlist": "Lista de Deseos",
+        "stats": "Estadísticas",
         "budgets": "Presupuestos",
         "settings": "Configuración",
         "sync": "Sincronizar",
@@ -426,5 +428,27 @@
                 "email": "tu@email.com"
             }
         }
+    },
+    "tags": {
+        "title": "Etiquetas",
+        "create": "Nueva etiqueta",
+        "manage": "Gestionar etiquetas",
+        "placeholder": "Nombre...",
+        "noTags": "No hay etiquetas creadas",
+        "assigned": "Asignadas",
+        "assign": "Asignar etiqueta",
+        "delete": "Eliminar etiqueta",
+        "noMore": "No hay más etiquetas"
+    },
+    "proxies": {
+        "title": "Impresión de Cartas",
+        "selected": "{count} cartas seleccionadas",
+        "clear": "Limpiar",
+        "print": "Imprimir",
+        "searchPlaceholder": "Buscar carta...",
+        "noResults": "No se encontraron cartas",
+        "readyTitle": "Listo para imprimir",
+        "readyDesc": "Busca cartas en el panel izquierdo para añadirlas a tu hoja de impresión. Entran 9 cartas por página A4.",
+        "confirmClear": "¿Estás seguro de querer borrar todas las cartas?"
     }
 }

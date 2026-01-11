@@ -1,0 +1,22 @@
+{
+    "name": "HoloStack",
+    "short_name": "HoloStack",
+    "description": "Tu gestor de colección Pokémon TCG definitivo",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0f172a",
+    "theme_color": "#0f172a",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "/icon.svg",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        },
+        {
+            "src": "/favicon.ico",
+            "sizes": "64x64",
+            "type": "image/x-icon"
+        }
+    ]
+}

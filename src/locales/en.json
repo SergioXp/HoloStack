@@ -41,6 +41,8 @@
         "home": "Home",
         "explorer": "Explorer",
         "collections": "Collections",
+        "wishlist": "Wishlist",
+        "stats": "Stats",
         "budgets": "Budgets",
         "settings": "Settings",
         "sync": "Sync",
@@ -426,5 +428,27 @@
                 "email": "you@email.com"
             }
         }
+    },
+    "tags": {
+        "title": "Tags",
+        "create": "New Tag",
+        "manage": "Manage Tags",
+        "placeholder": "Name...",
+        "noTags": "No tags created",
+        "assigned": "Assigned",
+        "assign": "Assign Tag",
+        "delete": "Delete tag",
+        "noMore": "No more tags"
+    },
+    "proxies": {
+        "title": "Card Printing",
+        "selected": "{count} cards selected",
+        "clear": "Clear",
+        "print": "Print",
+        "searchPlaceholder": "Search card...",
+        "noResults": "No cards found",
+        "readyTitle": "Ready to print",
+        "readyDesc": "Search cards in the left panel to add them to your print sheet. Fits 9 cards per A4 page.",
+        "confirmClear": "Are you sure you want to clear all cards?"
     }
 }

@@ -25,7 +25,7 @@ import { getAvailableVariants } from "@/lib/card-utils";
 interface CollectionTableViewProps {
     cards: any[];
     collectionId: string;
-    ownershipData: Record<string, Record<string, number>>;
+    ownershipData: Record<string, Record<string, { quantity: number; id: string }>>;
     setNames: Record<string, string>;
     onDataImported: () => void;
 }
@@ -74,14 +74,14 @@ export default function CollectionTableView({
 
     // Helper para obtener cantidad de una variante
     const getVariantCount = useCallback((cardId: string, variant: string): number => {
-        return ownershipData[cardId]?.[variant] || 0;
+        return ownershipData[cardId]?.[variant]?.quantity || 0;
     }, [ownershipData]);
 
     // Helper para obtener total
     const getTotalOwned = useCallback((cardId: string): number => {
         const data = ownershipData[cardId];
         if (!data) return 0;
-        return Object.values(data).reduce((a, b) => a + b, 0);
+        return Object.values(data).reduce((a, b) => a + b.quantity, 0);
     }, [ownershipData]);
 
     // Actualizar cantidad de una variante (usando server action)
@@ -388,7 +388,7 @@ export default function CollectionTableView({
             {/* Header con acciones */}
             <div className="flex flex-col md:flex-row gap-4 items-start md:items-center justify-between">
                 <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-xl bg-linear-to-br from-emerald-500 to-green-500 flex items-center justify-center">
                         <Table className="h-5 w-5 text-white" />
                     </div>
                     <div>

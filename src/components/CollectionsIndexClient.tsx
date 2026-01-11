@@ -39,7 +39,7 @@ export default function CollectionsIndexClient({ collections, sets }: Collection
         <div className="min-h-screen bg-slate-950 relative overflow-hidden">
             {/* Background Effects */}
             <div className="fixed inset-0 z-0">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-900/10 via-slate-950 to-blue-900/10" />
+                <div className="absolute inset-0 bg-linear-to-br from-purple-900/10 via-slate-950 to-blue-900/10" />
                 <div className="absolute top-20 right-20 w-96 h-96 bg-purple-600/5 rounded-full blur-3xl" />
                 <div className="absolute bottom-20 left-20 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl" />
             </div>
@@ -50,7 +50,7 @@ export default function CollectionsIndexClient({ collections, sets }: Collection
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
                         <div>
                             <div className="flex items-center gap-4 mb-4">
-                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
+                                <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
                                     <Library className="h-7 w-7 text-white" />
                                 </div>
                                 <div>
@@ -76,7 +76,7 @@ export default function CollectionsIndexClient({ collections, sets }: Collection
 
                         {collections.length > 0 && (
                             <Link href="/collections/new">
-                                <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold px-6 h-12 rounded-xl shadow-lg shadow-purple-500/20 transition-all hover:scale-105">
+                                <Button className="bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold px-6 h-12 rounded-xl shadow-lg shadow-purple-500/20 transition-all hover:scale-105">
                                     <PlusIcon className="mr-2 h-5 w-5" />
                                     {t("collections.newCollection")}
                                 </Button>
@@ -87,7 +87,7 @@ export default function CollectionsIndexClient({ collections, sets }: Collection
                     {/* Content */}
                     {collections.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-24 px-4 border border-dashed border-slate-800 rounded-3xl bg-slate-900/30 backdrop-blur-sm">
-                            <div className="w-24 h-24 rounded-full bg-gradient-to-br from-slate-800 to-slate-700 flex items-center justify-center mb-8 shadow-xl">
+                            <div className="w-24 h-24 rounded-full bg-linear-to-br from-slate-800 to-slate-700 flex items-center justify-center mb-8 shadow-xl">
                                 <Sparkles className="w-12 h-12 text-slate-500" />
                             </div>
                             <h3 className="text-3xl font-bold text-white mb-4">{t("collections.emptyState.title")}</h3>
@@ -95,7 +95,7 @@ export default function CollectionsIndexClient({ collections, sets }: Collection
                                 {t("collections.emptyState.description")}
                             </p>
                             <Link href="/collections/new">
-                                <Button size="lg" className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white px-10 py-6 text-lg font-semibold shadow-xl shadow-purple-500/20 rounded-2xl transition-all hover:scale-105">
+                                <Button size="lg" className="bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white px-10 py-6 text-lg font-semibold shadow-xl shadow-purple-500/20 rounded-2xl transition-all hover:scale-105">
                                     <PlusIcon className="mr-2 h-5 w-5" />
                                     {t("collections.createFirst")}
                                 </Button>
@@ -133,8 +133,8 @@ export default function CollectionsIndexClient({ collections, sets }: Collection
                                         <Card className="bg-slate-900/50 border-slate-800 hover:border-slate-600 transition-all duration-300 h-full flex flex-col overflow-hidden relative backdrop-blur-sm group-hover:shadow-2xl group-hover:shadow-purple-900/10 group-hover:scale-[1.02]">
                                             {/* Top Gradient Bar */}
                                             <div className={`absolute top-0 left-0 w-full h-1 ${isComplete
-                                                ? "bg-gradient-to-r from-emerald-500 to-green-400"
-                                                : "bg-gradient-to-r from-purple-500 to-pink-500"
+                                                ? "bg-linear-to-r from-emerald-500 to-green-400"
+                                                : "bg-linear-to-r from-purple-500 to-pink-500"
                                                 } opacity-60 group-hover:opacity-100 transition-opacity`} />
 
                                             <CardHeader className="pb-3">
@@ -185,8 +185,8 @@ export default function CollectionsIndexClient({ collections, sets }: Collection
                                                         <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
                                                             <div
                                                                 className={`h-full rounded-full transition-all duration-700 ease-out ${isComplete
-                                                                    ? "bg-gradient-to-r from-emerald-500 to-green-400"
-                                                                    : "bg-gradient-to-r from-purple-500 to-pink-500"
+                                                                    ? "bg-linear-to-r from-emerald-500 to-green-400"
+                                                                    : "bg-linear-to-r from-purple-500 to-pink-500"
                                                                     }`}
                                                                 style={{ width: `${progress}%` }}
                                                             />

@@ -74,7 +74,7 @@ export default async function SetCardsPage({ params }: PageProps) {
 
     if (!set) {
         return (
-            <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 p-8 flex items-center justify-center">
+            <div className="min-h-screen bg-linear-to-b from-slate-900 to-slate-800 p-8 flex items-center justify-center">
                 <div className="text-center">
                     <p className="text-slate-400 mb-4">Set no encontrado</p>
                     <Link href="/explorer" className="text-blue-400 hover:text-blue-300">

@@ -110,7 +110,7 @@ export default function ExplorerPage() {
         <div className="min-h-screen bg-slate-950 relative overflow-hidden">
             {/* Background Effects */}
             <div className="fixed inset-0 z-0">
-                <div className="absolute inset-0 bg-gradient-to-b from-purple-900/10 via-slate-950 to-slate-950" />
+                <div className="absolute inset-0 bg-linear-to-b from-purple-900/10 via-slate-950 to-slate-950" />
                 <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl" />
                 <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-600/5 rounded-full blur-3xl" />
             </div>
@@ -125,7 +125,7 @@ export default function ExplorerPage() {
                         </Link>
 
                         <div className="flex items-center gap-4 mb-4">
-                            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
+                            <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-purple-500 to-blue-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
                                 <Layers className="h-7 w-7 text-white" />
                             </div>
                             <div>
@@ -176,7 +176,7 @@ export default function ExplorerPage() {
                                             className="group"
                                             style={{ animationDelay: `${index * 50}ms` }}
                                         >
-                                            <Card className={`bg-gradient-to-br ${colorClass} border hover:border-white/20 transition-all duration-300 cursor-pointer overflow-hidden group-hover:scale-[1.02] group-hover:shadow-xl`}>
+                                            <Card className={`bg-linear-to-br ${colorClass} border hover:border-white/20 transition-all duration-300 cursor-pointer overflow-hidden group-hover:scale-[1.02] group-hover:shadow-xl`}>
                                                 <CardHeader className="p-6">
                                                     <div className="flex items-start justify-between gap-4">
                                                         <div className="flex-1">

@@ -20,7 +20,7 @@ import { useI18n } from "@/lib/i18n";
 interface CollectionFilterProps {
     cards: any[];
     collectionId: string;
-    ownershipData: Record<string, Record<string, number>>;
+    ownershipData: Record<string, Record<string, { quantity: number; id: string }>>;
     totalCardsCount: number;
     isMultiSet: boolean;
     setNames: Record<string, string>;
@@ -61,11 +61,11 @@ export default function CollectionFilter({
             rarityTotal[r]++;
 
             const ownedVars = ownershipData[card.id];
-            const isOwned = ownedVars && Object.values(ownedVars).some(v => v > 0);
+            const isOwned = ownedVars && Object.values(ownedVars).some(v => v.quantity > 0);
 
-            if (isOwned) {
+            if (isOwned && ownedVars) {
                 ownedCount++;
-                totalOwnedItems += Object.values(ownedVars).reduce((a, b) => a + b, 0);
+                totalOwnedItems += Object.values(ownedVars).reduce((a, b) => a + b.quantity, 0);
                 if (!rarityOwned[r]) rarityOwned[r] = 0;
                 rarityOwned[r]++;
             }
@@ -103,7 +103,8 @@ export default function CollectionFilter({
             const matchesSet = selectedSet === null || card.setId === selectedSet;
 
             let matchesView = true;
-            const isOwned = ownershipData[card.id] && Object.values(ownershipData[card.id]).some(v => v > 0);
+            const ownedVars = ownershipData[card.id];
+            const isOwned = ownedVars && Object.values(ownedVars).some(v => v.quantity > 0);
 
             if (viewMode === "owned") matchesView = !!isOwned;
             if (viewMode === "missing") matchesView = !isOwned;
@@ -120,7 +121,7 @@ export default function CollectionFilter({
 
     const hasActiveFilters = searchQuery !== "" || selectedSet !== null || viewMode !== "all";
 
-    const getOwnedVariants = (cardId: string): Map<string, number> => {
+    const getOwnedVariants = (cardId: string): Map<string, { quantity: number; id: string }> => {
         const data = ownershipData[cardId];
         if (!data) return new Map();
         return new Map(Object.entries(data));
@@ -197,8 +198,8 @@ export default function CollectionFilter({
                                         <div className="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden mb-1">
                                             <div
                                                 className={`h-full rounded-full transition-all duration-500 ${rarityComplete
-                                                    ? "bg-gradient-to-r from-emerald-500 to-green-400"
-                                                    : "bg-gradient-to-r from-purple-500 to-blue-500"
+                                                    ? "bg-linear-to-r from-emerald-500 to-green-400"
+                                                    : "bg-linear-to-r from-purple-500 to-blue-500"
                                                     }`}
                                                 style={{ width: `${pct}%` }}
                                             />
@@ -263,7 +264,7 @@ export default function CollectionFilter({
                             key={m}
                             onClick={() => setViewMode(m)}
                             className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${viewMode === m
-                                ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg"
+                                ? "bg-linear-to-r from-purple-600 to-blue-600 text-white shadow-lg"
                                 : "text-slate-400 hover:text-white hover:bg-slate-800"
                                 }`}
                         >
@@ -355,7 +356,7 @@ export default function CollectionFilter({
                                     key={card.id}
                                     card={card}
                                     collectionId={collectionId}
-                                    ownedVariants={getOwnedVariants(card.id)}
+                                    ownedData={getOwnedVariants(card.id)}
                                     totalInSet={totalCardsCount}
                                     showSetInfo={isMultiSet}
                                     setName={setNames[card.setId] || card.setId}

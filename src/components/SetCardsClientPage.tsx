@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ChevronRight, Layers } from "lucide-react";
+import { ChevronRight, Layers, Heart } from "lucide-react";
 import {
     Dialog,
     DialogContent,
@@ -50,6 +50,47 @@ interface PageProps {
 export default function SetCardsClientPage({ setKeywords: set, cards }: PageProps) {
     const { t, locale } = useI18n();
     const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
+    const [wishlist, setWishlist] = useState<Set<string>>(new Set());
+
+    useEffect(() => {
+        fetch("/api/wishlist")
+            .then(res => res.json())
+            .then((data: any[]) => {
+                if (Array.isArray(data)) {
+                    setWishlist(new Set(data.map(item => item.cardId)));
+                }
+            })
+            .catch(console.error);
+    }, []);
+
+    const toggleWishlist = async (e: React.MouseEvent, cardId: string) => {
+        e.stopPropagation();
+        const isInWishlist = wishlist.has(cardId);
+
+        // Optimistic update
+        const newWishlist = new Set(wishlist);
+        if (isInWishlist) {
+            newWishlist.delete(cardId);
+        } else {
+            newWishlist.add(cardId);
+        }
+        setWishlist(newWishlist);
+
+        try {
+            if (isInWishlist) {
+                await fetch(`/api/wishlist?cardId=${cardId}`, { method: "DELETE" });
+            } else {
+                await fetch("/api/wishlist", {
+                    method: "POST",
+                    body: JSON.stringify({ cardId }),
+                });
+            }
+        } catch (error) {
+            console.error("Error toggling wishlist:", error);
+            // Revert on error
+            setWishlist(wishlist);
+        }
+    };
 
     const setImages = set.images ? JSON.parse(set.images) : null;
 
@@ -57,7 +98,7 @@ export default function SetCardsClientPage({ setKeywords: set, cards }: PageProp
         <div className="min-h-screen bg-slate-950 relative overflow-hidden">
             {/* Background Effects */}
             <div className="fixed inset-0 z-0">
-                <div className="absolute inset-0 bg-gradient-to-b from-purple-900/10 via-slate-950 to-slate-950" />
+                <div className="absolute inset-0 bg-linear-to-b from-purple-900/10 via-slate-950 to-slate-950" />
                 <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl" />
                 <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-600/5 rounded-full blur-3xl" />
             </div>
@@ -103,7 +144,7 @@ export default function SetCardsClientPage({ setKeywords: set, cards }: PageProp
 
                             <div className="flex-1">
                                 <div className="flex items-center gap-4 mb-2">
-                                    <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
+                                    <div className="w-12 h-12 rounded-xl bg-linear-to-br from-purple-500 to-blue-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
                                         <Layers className="h-6 w-6 text-white" />
                                     </div>
                                     <div>
@@ -187,6 +228,27 @@ export default function SetCardsClientPage({ setKeywords: set, cards }: PageProp
                                                     )}
                                                 </div>
                                             </div>
+                                            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 p-4">
+                                                <Button
+                                                    size="sm"
+                                                    className="w-full bg-white text-black hover:bg-slate-200"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setSelectedCard(card);
+                                                    }}
+                                                >
+                                                    Agregar a Colección
+                                                </Button>
+                                                <Button
+                                                    size="sm"
+                                                    variant="secondary"
+                                                    className={`w-full ${wishlist.has(card.id) ? 'bg-pink-500/20 text-pink-300 hover:bg-pink-500/30' : 'bg-slate-800/80 text-white hover:bg-slate-800'}`}
+                                                    onClick={(e) => toggleWishlist(e, card.id)}
+                                                >
+                                                    <Heart className={`h-4 w-4 mr-2 ${wishlist.has(card.id) ? "fill-pink-500 text-pink-500" : ""}`} />
+                                                    {wishlist.has(card.id) ? "En Wishlist" : "Wishlist"}
+                                                </Button>
+                                            </div>
                                         </CardContent>
                                     </Card>
                                 );
@@ -208,7 +270,7 @@ export default function SetCardsClientPage({ setKeywords: set, cards }: PageProp
                             {selectedCard && (
                                 <div className="flex flex-col md:flex-row max-h-[90vh]">
                                     {/* Left Column: Image */}
-                                    <div className="bg-gradient-to-br from-slate-900 via-slate-950 to-slate-900 p-8 flex items-center justify-center md:w-2/5 relative overflow-hidden">
+                                    <div className="bg-linear-to-br from-slate-900 via-slate-950 to-slate-900 p-8 flex items-center justify-center md:w-2/5 relative overflow-hidden">
                                         {/* Background Glow */}
                                         <div className="absolute inset-0 opacity-30">
                                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-purple-600/20 rounded-full blur-3xl" />
@@ -228,7 +290,7 @@ export default function SetCardsClientPage({ setKeywords: set, cards }: PageProp
                                                             priority
                                                         />
                                                     </div>
-                                                    <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-[80%] h-8 bg-gradient-to-t from-purple-500/10 to-transparent blur-xl" />
+                                                    <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-[80%] h-8 bg-linear-to-t from-purple-500/10 to-transparent blur-xl" />
                                                 </div>
                                             ) : (
                                                 <div className="h-[400px] w-[280px] bg-slate-800 flex items-center justify-center rounded-xl border border-slate-700">
@@ -287,7 +349,7 @@ export default function SetCardsClientPage({ setKeywords: set, cards }: PageProp
                                             <div className="bg-slate-800/40 rounded-xl p-4">
                                                 <h4 className="text-xs text-slate-500 uppercase tracking-wider mb-1">{t("cardDetail.rarity")}</h4>
                                                 {selectedCard.rarity ? (
-                                                    <Badge className="bg-gradient-to-r from-yellow-600/20 to-orange-600/20 text-yellow-300 border border-yellow-600/30">
+                                                    <Badge className="bg-linear-to-r from-yellow-600/20 to-orange-600/20 text-yellow-300 border border-yellow-600/30">
                                                         {selectedCard.rarity}
                                                     </Badge>
                                                 ) : <span className="text-slate-500">-</span>}
@@ -319,7 +381,7 @@ export default function SetCardsClientPage({ setKeywords: set, cards }: PageProp
                                                         return Object.entries(prices).map(([type, data]: [string, any]) => {
                                                             if (!data || !data.market) return null;
                                                             return (
-                                                                <div key={type} className="bg-gradient-to-r from-green-950/40 to-emerald-950/20 border border-green-700/30 p-4 rounded-xl flex items-center justify-between">
+                                                                <div key={type} className="bg-linear-to-r from-green-950/40 to-emerald-950/20 border border-green-700/30 p-4 rounded-xl flex items-center justify-between">
                                                                     <div className="flex items-center gap-3">
                                                                         <span className="text-green-400 font-bold">TCGPlayer</span>
                                                                         <Badge variant="outline" className="text-xs border-green-600/50 text-green-300/80 capitalize">
@@ -340,7 +402,7 @@ export default function SetCardsClientPage({ setKeywords: set, cards }: PageProp
                                                     try {
                                                         const prices = JSON.parse(selectedCard.cardmarketPrices);
                                                         return (
-                                                            <div className="bg-gradient-to-r from-blue-950/40 to-cyan-950/20 border border-blue-700/30 p-4 rounded-xl flex items-center justify-between">
+                                                            <div className="bg-linear-to-r from-blue-950/40 to-cyan-950/20 border border-blue-700/30 p-4 rounded-xl flex items-center justify-between">
                                                                 <div className="flex items-center gap-3">
                                                                     <span className="text-blue-400 font-bold">Cardmarket</span>
                                                                     <Badge variant="outline" className="text-xs border-blue-600/50 text-blue-300/80">
@@ -370,7 +432,7 @@ export default function SetCardsClientPage({ setKeywords: set, cards }: PageProp
                                                 <Button variant="outline" className="h-12 bg-slate-800/50 border-slate-700 hover:bg-slate-700 text-white rounded-xl">
                                                     🌐 {t("cardDetail.viewOnTCGPlayer")}
                                                 </Button>
-                                                <Button className="h-12 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-semibold rounded-xl">
+                                                <Button className="h-12 bg-linear-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-semibold rounded-xl">
                                                     ➕ {t("cardDetail.addToCollection")}
                                                 </Button>
                                             </div>

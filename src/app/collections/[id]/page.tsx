@@ -21,15 +21,20 @@ export default async function CollectionPage({ params }: { params: Promise<{ id:
         .from(collectionItems)
         .where(eq(collectionItems.collectionId, id));
 
-    const ownershipMap = new Map<string, Map<string, number>>();
+    const ownershipMap = new Map<string, Map<string, { quantity: number, id: string }>>();
 
     ownedItems.forEach(item => {
         if (!ownershipMap.has(item.cardId)) {
             ownershipMap.set(item.cardId, new Map());
         }
         const variantsMap = ownershipMap.get(item.cardId)!;
-        const currentQty = variantsMap.get(item.variant) || 0;
-        variantsMap.set(item.variant, currentQty + (item.quantity || 0));
+        const currentData = variantsMap.get(item.variant);
+        const newQuantity = (currentData?.quantity || 0) + (item.quantity || 0);
+
+        variantsMap.set(item.variant, {
+            quantity: newQuantity,
+            id: item.id
+        });
     });
 
     let displayCards: any[] = [];

@@ -20,7 +20,7 @@ interface CollectionDetailClientProps {
         filters: string | null;
     };
     displayCards: any[];
-    ownershipData: Record<string, Record<string, number>>;
+    ownershipData: Record<string, Record<string, { quantity: number; id: string }>>;
     totalCardsCount: number;
     uniqueOwnedCount: number;
     progress: number;
@@ -46,7 +46,7 @@ export default function CollectionDetailClient({
         <div className="min-h-screen bg-slate-950 relative overflow-hidden">
             {/* Background Effects */}
             <div className="fixed inset-0 z-0">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-900/10 via-slate-950 to-blue-900/10" />
+                <div className="absolute inset-0 bg-linear-to-br from-purple-900/10 via-slate-950 to-blue-900/10" />
                 <div className="absolute top-20 right-20 w-96 h-96 bg-purple-600/5 rounded-full blur-3xl" />
                 <div className="absolute bottom-20 left-20 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl" />
             </div>
@@ -64,8 +64,8 @@ export default function CollectionDetailClient({
                             <div className="flex-1">
                                 <div className="flex items-center gap-4 mb-4">
                                     <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg ${isComplete
-                                        ? "bg-gradient-to-br from-emerald-500 to-green-500 shadow-emerald-500/20"
-                                        : "bg-gradient-to-br from-purple-500 to-pink-500 shadow-purple-500/20"
+                                        ? "bg-linear-to-br from-emerald-500 to-green-500 shadow-emerald-500/20"
+                                        : "bg-linear-to-br from-purple-500 to-pink-500 shadow-purple-500/20"
                                         }`}>
                                         {isComplete ? (
                                             <Sparkles className="h-7 w-7 text-white" />
@@ -118,8 +118,8 @@ export default function CollectionDetailClient({
                                 <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
                                     <div
                                         className={`h-full rounded-full transition-all duration-700 ${isComplete
-                                            ? "bg-gradient-to-r from-emerald-500 to-green-400"
-                                            : "bg-gradient-to-r from-purple-500 to-pink-500"
+                                            ? "bg-linear-to-r from-emerald-500 to-green-400"
+                                            : "bg-linear-to-r from-purple-500 to-pink-500"
                                             }`}
                                         style={{ width: `${progress}%` }}
                                     />

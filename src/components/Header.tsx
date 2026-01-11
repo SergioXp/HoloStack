@@ -4,7 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { LayoutGrid, Layers, Library as LibraryIcon, Database, Sparkles, Settings, Wallet } from "lucide-react";
+import { LayoutGrid, Layers, Library as LibraryIcon, Database, Sparkles, Settings, Wallet, Heart, ChartBar, Printer } from "lucide-react";
+
 import { useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useI18n } from "@/lib/i18n";
@@ -58,7 +59,10 @@ export default function Header() {
         { name: t("nav.home"), href: "/", icon: LayoutGrid },
         { name: t("nav.explorer"), href: "/explorer", icon: Layers },
         { name: t("nav.collections"), href: "/collections", icon: LibraryIcon },
+        { name: t("nav.wishlist"), href: "/wishlist", icon: Heart },
+        { name: t("nav.stats"), href: "/stats", icon: ChartBar },
         { name: t("nav.budgets"), href: "/budgets", icon: Wallet },
+        { name: "Imprimir", href: "/proxies", icon: Printer },
     ];
 
     const isHome = pathname === "/";
@@ -67,17 +71,17 @@ export default function Header() {
         <header className={cn(
             "sticky top-0 z-50 w-full border-b backdrop-blur-xl transition-all duration-300",
             isHome
-                ? "border-transparent bg-gradient-to-b from-slate-950/80 via-slate-950/40 to-transparent"
-                : "border-slate-800/50 bg-slate-950/80"
+                ? "border-transparent bg-linear-to-b from-background/80 via-background/40 to-transparent"
+                : "border-border bg-background/80"
         )}>
             <div className="container flex h-16 items-center px-4 md:px-8">
                 {/* Logo */}
                 <Link href="/" className="mr-8 flex items-center space-x-3 group">
                     <div className="relative">
                         <span className="text-2xl group-hover:scale-110 transition-transform inline-block">🎴</span>
-                        <div className="absolute inset-0 bg-yellow-500/20 blur-xl rounded-full scale-150 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full scale-150 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
-                    <span className="font-bold text-lg text-white hidden sm:inline-block tracking-tight drop-shadow-md">
+                    <span className="font-bold text-lg text-foreground hidden sm:inline-block tracking-tight drop-shadow-md">
                         HoloStack
                     </span>
                 </Link>
@@ -93,10 +97,10 @@ export default function Header() {
                                 key={item.href}
                                 href={item.href}
                                 className={cn(
-                                    "flex items-center px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                                    "flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap",
                                     isActive
-                                        ? "bg-slate-800 text-white shadow-lg shadow-slate-900/50 ring-1 ring-slate-700"
-                                        : "text-slate-200 hover:text-white hover:bg-slate-800/50 drop-shadow-md"
+                                        ? "bg-primary/10 text-primary shadow-lg shadow-primary/5 ring-1 ring-primary/20"
+                                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50 drop-shadow-md"
                                 )}
                             >
                                 <item.icon className="h-4 w-4 mr-2" />
@@ -152,7 +156,7 @@ export default function Header() {
 
                             <div className="space-y-6 pt-4">
                                 {/* Info Card */}
-                                <div className="bg-gradient-to-r from-blue-950/50 to-purple-950/50 border border-blue-500/20 rounded-xl p-4">
+                                <div className="bg-linear-to-r from-blue-950/50 to-purple-950/50 border border-blue-500/20 rounded-xl p-4">
                                     <div className="flex items-start gap-3">
                                         <div className="text-2xl">🚀</div>
                                         <div>
@@ -175,8 +179,8 @@ export default function Header() {
                                             className={cn(
                                                 "h-full rounded-full transition-all duration-500",
                                                 indexProgress === 100
-                                                    ? "bg-gradient-to-r from-green-500 to-emerald-400"
-                                                    : "bg-gradient-to-r from-blue-500 to-purple-500"
+                                                    ? "bg-linear-to-r from-green-500 to-emerald-400"
+                                                    : "bg-linear-to-r from-blue-500 to-purple-500"
                                             )}
                                             style={{ width: `${indexProgress}%` }}
                                         />
@@ -191,7 +195,7 @@ export default function Header() {
                                         "w-full h-12 text-base font-semibold rounded-xl transition-all",
                                         indexProgress === 100
                                             ? "bg-green-600 hover:bg-green-500"
-                                            : "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500"
+                                            : "bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500"
                                     )}
                                 >
                                     {isIndexing ? (

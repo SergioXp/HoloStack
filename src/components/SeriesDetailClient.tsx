@@ -30,7 +30,7 @@ export default function SeriesDetailClient({ seriesName, seriesSets, countsMap }
         <div className="min-h-screen bg-slate-950 relative overflow-hidden">
             {/* Background Effects */}
             <div className="fixed inset-0 z-0">
-                <div className="absolute inset-0 bg-gradient-to-b from-purple-900/10 via-slate-950 to-slate-950" />
+                <div className="absolute inset-0 bg-linear-to-b from-purple-900/10 via-slate-950 to-slate-950" />
                 <div className="absolute top-0 right-0 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl" />
                 <div className="absolute bottom-0 left-0 w-96 h-96 bg-purple-600/5 rounded-full blur-3xl" />
             </div>
@@ -45,7 +45,7 @@ export default function SeriesDetailClient({ seriesName, seriesSets, countsMap }
                         </Link>
 
                         <div className="flex items-center gap-4 mb-4">
-                            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
+                            <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-blue-500 to-purple-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
                                 <Package className="h-7 w-7 text-white" />
                             </div>
                             <div>
@@ -73,9 +73,9 @@ export default function SeriesDetailClient({ seriesName, seriesSets, countsMap }
                                         <Card className="bg-slate-900/50 border-slate-800 hover:border-slate-600 transition-all duration-300 cursor-pointer overflow-hidden h-full backdrop-blur-sm group-hover:shadow-2xl group-hover:shadow-purple-900/10 group-hover:scale-[1.02]">
                                             {/* Top Progress Bar */}
                                             <div className={`h-1 ${isComplete
-                                                ? "bg-gradient-to-r from-emerald-500 to-green-400"
+                                                ? "bg-linear-to-r from-emerald-500 to-green-400"
                                                 : downloadedCards > 0
-                                                    ? "bg-gradient-to-r from-blue-500 to-purple-500"
+                                                    ? "bg-linear-to-r from-blue-500 to-purple-500"
                                                     : "bg-slate-800"
                                                 }`} style={{ width: `${Math.max(progress, isComplete ? 100 : downloadedCards > 0 ? 100 : 0)}%` }} />
 

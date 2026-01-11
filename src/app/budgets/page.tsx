@@ -114,7 +114,7 @@ export default function BudgetsPage() {
         <div className="min-h-screen bg-slate-950 relative overflow-hidden">
             {/* Background Effects */}
             <div className="fixed inset-0 z-0">
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/10 via-slate-950 to-blue-900/10" />
+                <div className="absolute inset-0 bg-linear-to-br from-emerald-900/10 via-slate-950 to-blue-900/10" />
                 <div className="absolute top-20 right-20 w-96 h-96 bg-emerald-600/5 rounded-full blur-3xl" />
                 <div className="absolute bottom-20 left-20 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl" />
             </div>
@@ -125,7 +125,7 @@ export default function BudgetsPage() {
                     <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-10">
                         <div>
                             <div className="flex items-center gap-4 mb-2">
-                                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-green-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
+                                <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-emerald-500 to-green-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
                                     <Wallet className="h-7 w-7 text-white" />
                                 </div>
                                 <div>
@@ -135,7 +135,7 @@ export default function BudgetsPage() {
                             </div>
                         </div>
                         <Link href="/budgets/new">
-                            <Button className="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white px-6 h-12 rounded-xl shadow-lg shadow-emerald-500/20">
+                            <Button className="bg-linear-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white px-6 h-12 rounded-xl shadow-lg shadow-emerald-500/20">
                                 <Plus className="h-5 w-5 mr-2" />
                                 {t("budgets.new")}
                             </Button>
@@ -145,7 +145,7 @@ export default function BudgetsPage() {
                     {/* Global Summary */}
                     {budgets.length > 0 && (
                         <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-800 mb-8 overflow-hidden">
-                            <div className={`h-1 w-full bg-gradient-to-r ${getProgressGradient(globalPercentage)}`} />
+                            <div className={`h-1 w-full bg-linear-to-r ${getProgressGradient(globalPercentage)}`} />
                             <CardContent className="p-6">
                                 <div className="flex flex-col md:flex-row md:items-center gap-6">
                                     <div className="flex-1">
@@ -184,7 +184,7 @@ export default function BudgetsPage() {
                                 {/* Progress Bar */}
                                 <div className="mt-4 h-3 w-full bg-slate-800 rounded-full overflow-hidden">
                                     <div
-                                        className={`h-full rounded-full bg-gradient-to-r ${getProgressGradient(globalPercentage)} transition-all duration-700`}
+                                        className={`h-full rounded-full bg-linear-to-r ${getProgressGradient(globalPercentage)} transition-all duration-700`}
                                         style={{ width: `${Math.min(globalPercentage, 100)}%` }}
                                     />
                                 </div>
@@ -195,7 +195,7 @@ export default function BudgetsPage() {
                     {/* Budget List */}
                     {budgets.length === 0 ? (
                         <div className="text-center py-24 border border-dashed border-slate-800 rounded-3xl bg-slate-900/30">
-                            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-green-500/20 flex items-center justify-center">
+                            <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-linear-to-br from-emerald-500/20 to-green-500/20 flex items-center justify-center">
                                 <Wallet className="h-10 w-10 text-emerald-400" />
                             </div>
                             <h3 className="text-2xl font-bold text-white mb-3">{t("budgets.empty.title")}</h3>
@@ -203,7 +203,7 @@ export default function BudgetsPage() {
                                 {t("budgets.empty.description")}
                             </p>
                             <Link href="/budgets/new">
-                                <Button className="bg-gradient-to-r from-emerald-600 to-green-600 text-white px-6 h-12 rounded-xl">
+                                <Button className="bg-linear-to-r from-emerald-600 to-green-600 text-white px-6 h-12 rounded-xl">
                                     <Plus className="h-5 w-5 mr-2" />
                                     {t("budgets.create")}
                                 </Button>
@@ -214,7 +214,7 @@ export default function BudgetsPage() {
                             {budgets.map((budget) => (
                                 <Link key={budget.id} href={`/budgets/${budget.id}`}>
                                     <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-800 hover:border-slate-700 transition-all cursor-pointer group overflow-hidden h-full">
-                                        <div className={`h-1 w-full bg-gradient-to-r ${getProgressGradient(budget.percentage)}`} />
+                                        <div className={`h-1 w-full bg-linear-to-r ${getProgressGradient(budget.percentage)}`} />
                                         <CardContent className="p-5">
                                             <div className="flex items-start justify-between mb-4">
                                                 <div className="flex items-center gap-3">
@@ -266,7 +266,7 @@ export default function BudgetsPage() {
 
                                                 <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
                                                     <div
-                                                        className={`h-full rounded-full bg-gradient-to-r ${getProgressGradient(budget.percentage)} transition-all duration-500`}
+                                                        className={`h-full rounded-full bg-linear-to-r ${getProgressGradient(budget.percentage)} transition-all duration-500`}
                                                         style={{ width: `${Math.min(budget.percentage, 100)}%` }}
                                                     />
                                                 </div>

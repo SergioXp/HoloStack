@@ -171,7 +171,7 @@ export default function BudgetDetailPage() {
         <div className="min-h-screen bg-slate-950 relative overflow-hidden">
             {/* Background Effects */}
             <div className="fixed inset-0 z-0">
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/10 via-slate-950 to-blue-900/10" />
+                <div className="absolute inset-0 bg-linear-to-br from-emerald-900/10 via-slate-950 to-blue-900/10" />
                 <div className="absolute top-20 right-20 w-96 h-96 bg-emerald-600/5 rounded-full blur-3xl" />
                 <div className="absolute bottom-20 left-20 w-96 h-96 bg-blue-600/5 rounded-full blur-3xl" />
             </div>
@@ -190,8 +190,8 @@ export default function BudgetDetailPage() {
                                 <div className={cn(
                                     "w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg",
                                     budget.type === "global"
-                                        ? "bg-gradient-to-br from-purple-500 to-pink-500 shadow-purple-500/20"
-                                        : "bg-gradient-to-br from-blue-500 to-cyan-500 shadow-blue-500/20"
+                                        ? "bg-linear-to-br from-purple-500 to-pink-500 shadow-purple-500/20"
+                                        : "bg-linear-to-br from-blue-500 to-cyan-500 shadow-blue-500/20"
                                 )}>
                                     {budget.type === "global" ? (
                                         <Sparkles className="h-7 w-7 text-white" />
@@ -392,7 +392,7 @@ export default function BudgetDetailPage() {
                                     <div className="px-4 pb-2">
                                         <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
                                             <div
-                                                className={`h-full rounded-full bg-gradient-to-r ${getProgressGradient(monthData.totalSpent, monthData.budgetAmount, monthData.carryOver)} transition-all duration-500`}
+                                                className={`h-full rounded-full bg-linear-to-r ${getProgressGradient(monthData.totalSpent, monthData.budgetAmount, monthData.carryOver)} transition-all duration-500`}
                                                 style={{ width: `${Math.min(percentage, 100)}%` }}
                                             />
                                         </div>

@@ -233,6 +233,31 @@ export type Expense = typeof expenses.$inferSelect;
 export type NewExpense = typeof expenses.$inferInsert;
 
 // ============================================
+// ESQUEMA DE ETIQUETAS y WISHLIST (FASE 2)
+// ============================================
+
+export const tags = sqliteTable("tags", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  color: text("color").default("slate"),
+});
+
+export const itemTags = sqliteTable("item_tags", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  itemId: text("item_id").notNull().references(() => collectionItems.id, { onDelete: 'cascade' }),
+  tagId: integer("tag_id").notNull().references(() => tags.id, { onDelete: 'cascade' }),
+});
+
+export const wishlistItems = sqliteTable("wishlist_items", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  cardId: text("card_id").notNull().references(() => cards.id),
+  userId: text("user_id").default("guest"),
+  addedAt: integer("added_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
+  priority: text("priority").default("normal"), // low, normal, high
+  notes: text("notes"),
+});
+
+// ============================================
 // RELACIONES
 // ============================================
 export const collectionsRelations = relations(collections, ({ many }) => ({
@@ -240,7 +265,7 @@ export const collectionsRelations = relations(collections, ({ many }) => ({
   budgets: many(budgets),
 }));
 
-export const collectionItemsRelations = relations(collectionItems, ({ one }) => ({
+export const collectionItemsRelations = relations(collectionItems, ({ one, many }) => ({
   collection: one(collections, {
     fields: [collectionItems.collectionId],
     references: [collections.id],
@@ -249,6 +274,7 @@ export const collectionItemsRelations = relations(collectionItems, ({ one }) => 
     fields: [collectionItems.cardId],
     references: [cards.id],
   }),
+  tags: many(itemTags),
 }));
 
 export const cardsRelations = relations(cards, ({ one, many }) => ({
@@ -295,5 +321,27 @@ export const expensesRelations = relations(expenses, ({ one }) => ({
   card: one(cards, {
     fields: [expenses.cardId],
     references: [cards.id],
+  }),
+}));
+
+export const tagsRelations = relations(tags, ({ many }) => ({
+  items: many(itemTags),
+}));
+
+export const itemTagsRelations = relations(itemTags, ({ one }) => ({
+  item: one(collectionItems, {
+    fields: [itemTags.itemId],
+    references: [collectionItems.id]
+  }),
+  tag: one(tags, {
+    fields: [itemTags.tagId],
+    references: [tags.id]
+  }),
+}));
+
+export const wishlistItemsRelations = relations(wishlistItems, ({ one }) => ({
+  card: one(cards, {
+    fields: [wishlistItems.cardId],
+    references: [cards.id]
   }),
 }));

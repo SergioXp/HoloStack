@@ -4,6 +4,90 @@
 
 ---
 
+## [0.4.0] - 2026-01-11
+
+### ✨ Phase 2 Complete: Proxies, Tags & Bulk Operations
+
+**Fecha**: 2026-01-11
+
+#### Nuevas Funcionalidades
+- **Sistema de Etiquetas (Tags)**:
+    - Creación de etiquetas personalizadas (Globales).
+    - Asignación de etiquetas a cartas específicas en la colección.
+    - Componente UI integrado en el gestor de items.
+- **Generador de Proxies**:
+    - Nueva página `/proxies` accesible desde el menú principal.
+    - Buscador de cartas específico para esta herramienta.
+    - Vista previa de impresión en formato A4 (3x3 grid).
+    - Impresión optimizada vía CSS print media.
+- **Operaciones en Lote (Bulk)**:
+    - Vista de tabla mejorada con edición in-line de cantidades.
+    - Importación/Exportación CSV robusta soportando variantes.
+
+#### Archivos Nuevos/Modificados
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `src/app/proxies/page.tsx` | Nuevo | Página de generador de proxies. |
+| `src/app/api/tags/*` | Nuevo | API Endpoints para Tags. |
+| `src/components/TagManager.tsx` | Nuevo | Componente UI para gestión de etiquetas. |
+| `src/app/api/cards/search/route.ts` | Nuevo | API de búsqueda de cartas. |
+| `src/components/CollectionItemManager.tsx` | Modificado | Integración de Tags. |
+| `src/components/CollectionTableView.tsx` | Modificado | Mejoras de bulk ops y CSV. |
+
+---
+
+## [0.3.3] - 2026-01-11
+
+### 🎨 Refactorización Visual y Correcciones de Fase 2
+
+**Fecha**: 2026-01-11
+
+#### Cambios
+- **Corrección de Temas UI**: Solucionado el problema donde el cambio de tema no afectaba a la interfaz.
+    - Implementación completa de variables CSS semánticas (`--background`, `--foreground`, `--primary`, etc.) en componentes clave como `Settings`, `Header` y `CollectionItemManager`.
+    - Eliminación de colores estáticos (hardcoded slate/purple) a favor de la paleta del tema activo.
+- **Wishlist en Colecciones**: Ahora es posible añadir/quitar cartas de la wishlist directamente desde la vista de colección.
+- **Limpieza i18n**: Eliminación de textos hardcoded restantes en componentes de colección, moviéndolos a los archivos de idioma.
+- **Configuración de Temas**: Configuración explícita en `ThemeProvider` para asegurar compatibilidad con temas personalizados.
+
+#### Archivos Modificados
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `src/app/settings/page.tsx` | Refactor | Migración total a semantic CSS. |
+| `src/components/CollectionItemManager.tsx` | Refactor | I18n y Semantic CSS. |
+| `src/components/Header.tsx` | Refactor | Semantic CSS. |
+| `src/app/layout.tsx` | Config | Lista explícita de temas. |
+| `src/locales/*.json` | Config | Nuevas claves de traducción. |
+
+---
+## [0.3.2] - 2026-01-11
+
+### ✨ Gestión Avanzada y Personalización (Fase 2 Iniciada)
+
+**Fecha**: 2026-01-11
+
+#### Cambios
+- **Sistema de Temas**: Añadido selector de apariencia con temas de tipos Pokémon (Fuego, Agua, Planta, Eléctrico, Psíquico) y modo oscuro base.
+- **Estadísticas Avanzadas**: Nuevo dashboard `/stats` con gráficos interactivos (`recharts`) mostrando valor de colección, distribución por rareza y cartas top.
+- **Wishlist (Lista de Deseos)**: Implementación completa de wishlist.
+    - Página dedicada `/wishlist` con visualización de cartas deseadas y prioridades.
+    - Integración en el explorador de sets: Botón de corazón en cada carta para añadir/quitar rápidamente.
+    - API REST con soporte de prioridades (Low, Normal, High).
+- **Base de Datos**: Nuevas tablas `tags`, `itemTags`, `wishlistItems` preparadas para gestión granular.
+- **PWA**: Configuración de `manifest.json` y metadatos viewport para instalación en dispositivos móviles.
+
+#### Archivos Modificados
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `src/app/settings/page.tsx` | Modificado | Integración de selector de temas con `next-themes`. |
+| `src/app/stats/page.tsx` | Nuevo | Dashboard con gráficos Recharts. |
+| `src/app/wishlist/page.tsx` | Nuevo | UI de Lista de Deseos. |
+| `src/db/schema.ts` | Modificado | Esquema extendido con Tablas de Fase 2. |
+| `src/app/api/wishlist/route.ts` | Nuevo | API CRUD para Wishlist. |
+| `src/app/api/stats/route.ts` | Nuevo | API de agregación de datos. |
+| `src/app/globals.css` | Modificado | Definición de variables CSS para paletas de colores. |
+| `src/components/SetCardsClientPage.tsx` | Modificado | Botón de Wishlist en overlay de carta. |
+
 ## [0.2.2] - 2026-01-11
 
 ### ✨ Internacionalización de Budgets y Login

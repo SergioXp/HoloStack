@@ -177,21 +177,21 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                     <TabsList className="bg-slate-800 border border-slate-700 w-full grid grid-cols-3 rounded-xl h-auto p-1">
                         <TabsTrigger
                             value="general"
-                            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white text-slate-400 rounded-lg py-2 text-sm"
+                            className="data-[state=active]:bg-linear-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white text-slate-400 rounded-lg py-2 text-sm"
                         >
                             <Pencil className="h-4 w-4 mr-1.5" />
                             General
                         </TabsTrigger>
                         <TabsTrigger
                             value="display"
-                            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white text-slate-400 rounded-lg py-2 text-sm"
+                            className="data-[state=active]:bg-linear-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white text-slate-400 rounded-lg py-2 text-sm"
                         >
                             <Eye className="h-4 w-4 mr-1.5" />
                             Visualización
                         </TabsTrigger>
                         <TabsTrigger
                             value="actions"
-                            className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white text-slate-400 rounded-lg py-2 text-sm"
+                            className="data-[state=active]:bg-linear-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white text-slate-400 rounded-lg py-2 text-sm"
                         >
                             <RefreshCw className="h-4 w-4 mr-1.5" />
                             Acciones
@@ -380,7 +380,7 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                                             <div className="mb-3">
                                                 <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden">
                                                     <div
-                                                        className="h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-300"
+                                                        className="h-full bg-linear-to-r from-blue-500 to-purple-500 transition-all duration-300"
                                                         style={{ width: `${syncProgress}%` }}
                                                     />
                                                 </div>
@@ -488,7 +488,7 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                     <Button
                         onClick={handleSave}
                         disabled={isSaving || !name.trim()}
-                        className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white"
+                        className="bg-linear-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white"
                     >
                         {isSaving ? (
                             <>
