@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { LayoutGrid, Layers, Library as LibraryIcon, Database, Sparkles, Settings, Wallet, Heart, ChartBar, Printer } from "lucide-react";
+import { LayoutGrid, Layers, Library as LibraryIcon, Database, Sparkles, Settings, Wallet, Heart, ChartBar, Printer, BookOpen, BarChart3 } from "lucide-react";
 
 import { useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -62,7 +62,9 @@ export default function Header() {
         { name: t("nav.wishlist"), href: "/wishlist", icon: Heart },
         { name: t("nav.stats"), href: "/stats", icon: ChartBar },
         { name: t("nav.budgets"), href: "/budgets", icon: Wallet },
-        { name: "Imprimir", href: "/proxies", icon: Printer },
+        { name: t("portfolio.title"), href: "/portfolio", icon: BarChart3 },
+        { name: t("binder.title"), href: "/binder", icon: BookOpen },
+        { name: t("proxies.print"), href: "/proxies", icon: Printer },
     ];
 
     const isHome = pathname === "/";

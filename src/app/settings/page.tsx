@@ -21,9 +21,17 @@ import {
     Database,
     Download,
     Upload,
-    AlertTriangle
+    AlertTriangle,
+    Coins
 } from "lucide-react";
 import { useI18n, APP_LANGUAGES, CARD_LANGUAGES, type Locale, type CardLanguage } from "@/lib/i18n";
+import { type Currency } from "@/lib/prices";
+
+const CURRENCIES: { code: Currency; name: string; symbol: string }[] = [
+    { code: "EUR", name: "Euro", symbol: "€" },
+    { code: "USD", name: "US Dollar", symbol: "$" },
+    { code: "GBP", name: "British Pound", symbol: "£" },
+];
 
 interface UserProfile {
     id: string;
@@ -52,6 +60,7 @@ export default function SettingsPage() {
     const [cardmarketUsername, setCardmarketUsername] = useState("");
     const [tcgplayerUsername, setTcgplayerUsername] = useState("");
     const [ebayUsername, setEbayUsername] = useState("");
+    const [preferredCurrency, setPreferredCurrency] = useState<Currency>("EUR");
     const [isImporting, setIsImporting] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -69,6 +78,7 @@ export default function SettingsPage() {
                     setCardmarketUsername(data.cardmarketUsername || "");
                     setTcgplayerUsername(data.tcgplayerUsername || "");
                     setEbayUsername(data.ebayUsername || "");
+                    setPreferredCurrency((data.preferredCurrency as Currency) || "EUR");
                 }
             } catch (error) {
                 console.error("Error loading profile:", error);
@@ -94,6 +104,7 @@ export default function SettingsPage() {
                     cardmarketUsername: cardmarketUsername || null,
                     tcgplayerUsername: tcgplayerUsername || null,
                     ebayUsername: ebayUsername || null,
+                    preferredCurrency: preferredCurrency,
                 }),
             });
 
@@ -286,6 +297,38 @@ export default function SettingsPage() {
                                             </button>
                                         ))}
                                     </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        {/* Currency Section */}
+                        <Card className="bg-slate-900/50 backdrop-blur-sm border-slate-800 text-white overflow-hidden">
+                            <CardHeader className="border-b border-slate-800">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
+                                        <Coins className="h-5 w-5 text-emerald-400" />
+                                    </div>
+                                    <div>
+                                        <CardTitle className="text-lg">Moneda</CardTitle>
+                                        <CardDescription className="text-slate-400">Elige tu moneda preferida para ver precios</CardDescription>
+                                    </div>
+                                </div>
+                            </CardHeader>
+                            <CardContent className="pt-6">
+                                <div className="grid grid-cols-3 gap-3">
+                                    {CURRENCIES.map((curr) => (
+                                        <button
+                                            key={curr.code}
+                                            onClick={() => setPreferredCurrency(curr.code)}
+                                            className={`p-4 rounded-xl border transition-all text-center ${preferredCurrency === curr.code
+                                                    ? "border-emerald-500 bg-emerald-500/10 text-white"
+                                                    : "border-slate-700 bg-slate-800/50 hover:border-slate-600 text-slate-400"
+                                                }`}
+                                        >
+                                            <div className="text-2xl font-bold mb-1">{curr.symbol}</div>
+                                            <div className="text-sm">{curr.name}</div>
+                                        </button>
+                                    ))}
                                 </div>
                             </CardContent>
                         </Card>

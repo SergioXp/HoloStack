@@ -450,5 +450,25 @@
         "readyTitle": "Ready to print",
         "readyDesc": "Search cards in the left panel to add them to your print sheet. Fits 9 cards per A4 page.",
         "confirmClear": "Are you sure you want to clear all cards?"
+    },
+    "binder": {
+        "title": "My Binder",
+        "page": "Page",
+        "cardsCollected": "cards collected",
+        "noCollections": "You have no collections",
+        "createFirst": "Create a collection to see your cards in binder format."
+    },
+    "portfolio": {
+        "title": "My Portfolio",
+        "loading": "Loading portfolio...",
+        "totalValue": "Total Value",
+        "totalCards": "Total Cards",
+        "unique": "unique",
+        "avgCardValue": "Avg Card Value",
+        "setsOwned": "Sets",
+        "topCards": "Most Valuable Cards",
+        "noCards": "You don't have any cards in your collection yet.",
+        "byRarity": "Value by Rarity",
+        "bySet": "Value by Set"
     }
 }

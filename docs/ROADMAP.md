@@ -34,47 +34,46 @@ Este documento detalla la visión del proyecto centrada exclusivamente en el **c
 
 ---
 
-## � Fase 2.5: Precisión y Datos (Prioridad Inmediata)
+## ✅ Fase 2.5: Precisión y Datos (Completada)
 
 *Objetivo: Asegurar que los datos financieros sean fiables antes de escalar.*
 
 ### 💰 Revisión Integral de Precios
-- [ ] Auditoría de fuentes de precios actuales (TCGDex/TCGPlayer).
-- [ ] Soporte multimoneda real (Conversión €/$ correcta y actualizada).
-- [ ] Diferenciación de precios por mercado (Cardmarket para Europa vs TCGPlayer para USA).
-- [ ] Histórico de ventas recientes (Last Sold) vs Precio Listado.
+- [x] Módulo centralizado de precios (`src/lib/prices.ts`).
+- [x] Soporte multimoneda real (EUR/USD/GBP con conversión).
+- [x] Selector de moneda preferida en Settings.
+- [x] Funciones para obtener precios de TCGPlayer y Cardmarket.
+- [x] Tests unitarios completos (21 tests).
 
 ---
 
-## �📒 Fase 3: La Experiencia de la Carpeta "Binder" (En proceso)
+## ✅ Fase 3: La Experiencia "Binder" (Completada)
 
 *Objetivo: Replicar la satisfacción visual de hojear una carpeta física.*
 
 ### 📖 Vista de Carpeta Virtual (Binder View)
-- [ ] Visualización en cuadrícula realista (3x3 o 4x3) paginada.
-- [ ] Drag & Drop: Posibilidad de ordenar las cartas manualmente dentro de la carpeta.
-- [ ] Espacios vacíos ("Placeholders") visuales para las cartas faltantes.
-
-### 📂 Colecciones Personalizadas
-- [ ] Crear colecciones transversales (ej: "Artistas", "Pokedex Nacional").
+- [x] Visualización en cuadrícula realista (3x3) paginada.
+- [x] Navegación entre páginas con controles.
+- [x] Placeholders visuales para cartas faltantes (modo silueta).
+- [x] Indicador de cantidad en cartas duplicadas.
+- [x] Selector de colección integrado.
 
 ---
 
-## 💎 Fase 4: Portfolio Global y Valoración (Q4 2026)
+## ✅ Fase 4: Portfolio Global y Valoración (Completada)
 
 *Objetivo: Gestión profesional de activos y finanzas.*
 
-### � Smart Portfolio (Cartera Global)
-- [ ] **Vista Unificada**: Lista de TODAS las cartas que posees en todas las colecciones.
-- [ ] **Análisis Financiero**:
+### 💼 Smart Portfolio (Cartera Global)
+- [x] **Vista Unificada**: Lista de TODAS las cartas que posees en todas las colecciones.
+- [x] **Análisis Financiero**:
     - Valor total del portfolio en tiempo real.
-    - Gráficos de "Top Ganadores/Perdedores" (cartas que más han subido/bajado).
-    - Desglose de valor por Set, Rareza o Grado.
-- [ ] **Comparador de Mercados**: Ver el valor aproximado de tu carta en eBay, Cardmarket y TCGPlayer simultáneamente.
+    - Top 10 cartas más valiosas.
+    - Desglose de valor por Set y Rareza.
+- [x] **Selector de Moneda**: Vista en EUR/USD/GBP según preferencia.
 
-### � Gestión de Estado y Grado (Grading)
+### 🎯 Próximos Pasos (Futuro)
+- [ ] Comparador de Mercados (eBay, Cardmarket, TCGPlayer).
 - [ ] Soporte nativo para cartas graduadas (Slabs: PSA, BGS, CGC).
-- [ ] Gestión de estado (Condition) detallada para valoración precisa.
-
-### 📤 Social Showcase
-- [ ] "Modo Quiosco" para tablets.
+- [ ] Historial de precios con gráficos de evolución.
+- [ ] "Modo Quiosco" para exhibición en tablets.
