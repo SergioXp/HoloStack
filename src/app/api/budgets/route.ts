@@ -3,6 +3,8 @@ import { budgets, budgetGroups, expenses, collections } from "@/db/schema";
 import { eq, sql, and, gte, lte, sum } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
+export const dynamic = "force-dynamic";
+
 // GET - Listar todos los presupuestos con stats
 export async function GET() {
     try {

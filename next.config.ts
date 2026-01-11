@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
   env: {
     APP_MODE: process.env.APP_MODE,
   },
+  output: "standalone",
   // Configurar dominios permitidos para next/image
   images: {
     remotePatterns: [

@@ -1,0 +1,41 @@
+# Dependencias y Build
+node_modules
+.next
+build
+dist
+
+# Control de versiones
+.git
+.gitignore
+
+# Variables de entorno locales (NO copiar a la imagen por seguridad)
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Base de datos local (se usará el volumen montado en /app/data)
+sqlite.db
+sqlite.db-journal
+local.db
+
+# Logs y depuración
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Configuración de Docker local
+docker-compose.yml
+docker-compose.override.yml
+
+# Documentación (no necesaria en runtime)
+docs
+README.md
+CHANGELOG.md
+.agent

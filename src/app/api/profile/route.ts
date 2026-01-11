@@ -5,6 +5,8 @@ import { eq } from "drizzle-orm";
 
 const GUEST_USER_ID = "guest";
 
+export const dynamic = "force-dynamic";
+
 // GET - Obtener perfil del usuario
 export async function GET() {
     try {

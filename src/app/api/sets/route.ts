@@ -1,6 +1,8 @@
 import { db } from "@/db";
 import { sets } from "@/db/schema";
 
+export const dynamic = "force-dynamic";
+
 export async function GET() {
     try {
         const allSets = await db.select().from(sets);

@@ -3,6 +3,8 @@ import { collections, collectionItems, sets } from "@/db/schema";
 import { desc, sql, eq } from "drizzle-orm";
 import CollectionsIndexClient from "@/components/CollectionsIndexClient";
 
+export const dynamic = "force-dynamic";
+
 export default async function CollectionsIndexPage() {
     const allCollections = await db.select({
         id: collections.id,

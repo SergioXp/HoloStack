@@ -1,0 +1,26 @@
+services:
+  app:
+    build: .
+    container_name: holostack_app
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      # Data Persistence: Mapea la carpeta local ./data a /app/data en el contenedor
+      - ./data:/app/data
+    environment:
+      # Database Location: Apunta al volumen persistente
+      - DATABASE_FILE=/app/data/sqlite.db
+      
+      # Application Mode:
+      # - LOCAL:  Acceso directo sin contraseña (ideal para uso personal en casa)
+      # - SERVER: Requiere inicio de sesión (ideal para desplegar en internet)
+      - APP_MODE=LOCAL
+      
+      # Authentication (Requerido para modo SERVER)
+      # Genera un secreto seguro con: openssl rand -base64 32
+      - NEXTAUTH_SECRET=changeme_in_production
+      - NEXTAUTH_URL=http://localhost:3000
+
+      # Configuración recomendada
+      - NODE_ENV=production

@@ -268,12 +268,43 @@ CREATE TABLE user_profiles (
 
 ---
 
+## [0.3.0] - 2026-01-11
+
+### ✨ Dockerización y Despliegue
+
+**Fecha**: 2026-01-11
+
+#### Cambios
+- **Dockerización Completa**: Creación de `Dockerfile` multi-stage optimizado (Alpine) y `docker-compose.yml`.
+- **Persistencia de Datos**: Configuración de volúmenes Docker para persistir la base de datos SQLite en `./data`.
+- **Configuración Dinámica**: Adaptación de la conexión a DB (`src/db/index.ts`) y Drizzle para soportar rutas dinámicas vía `DATABASE_FILE`.
+- **Manual de Usuario**: Creación de `docs/USER_MANUAL.md` con guía de instalación y uso.
+- **Optimización Build**: Resolución de conflictos de SSR en build time mediante `force-dynamic` en rutas que dependen de DB.
+- **Limpieza**: Eliminación de archivos obsoletos (`local.db`, scripts de prueba).
+
+#### Archivos Nuevos/Modificados
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `Dockerfile` | Nuevo | Configuración de imagen Docker |
+| `docker-compose.yml` | Nuevo | Orquestación de contenedores |
+| `.dockerignore` | Nuevo | Exclusiones de contexto Docker |
+| `docs/USER_MANUAL.md` | Nuevo | Guía de usuario y despliegue |
+| `src/db/index.ts` | Modificado | Soporte para `DATABASE_FILE` env var |
+| `next.config.ts` | Modificado | Output `standalone` para optimización |
+| `.env.local` | Modificado | Estandarización de `DATABASE_FILE` |
+
+#### Notas Técnicas
+- Se ha movido la base de datos local de raíz a `data/sqlite.db` para unificar la estructura con el volumen de Docker.
+- Se forzó el modo dinámico (`export const dynamic = "force-dynamic"`) en rutas críticas (`/collections`, `/budgets`, `/api/*`) para evitar errores de pre-renderizado estático cuando la DB no existe (build time).
+
+---
+
 ## Próximos Desarrollos
 
-- [ ] Aplicar traducciones a todos los componentes
-- [ ] Exportar/Importar colecciones
-- [ ] Estadísticas avanzadas de colección
-- [ ] Modo oscuro/claro configurable
+- [ ] Completar traducciones faltantes (si quedan componentes menores)
+- [ ] Exportar/Importar colecciones (JSON/CSV)
+- [ ] Estadísticas avanzadas de colección (Gráficos)
+- [ ] Modo oscuro/claro configurable por usuario
 - [ ] PWA para uso offline en móvil
 
 ---
