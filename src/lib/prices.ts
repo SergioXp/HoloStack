@@ -113,23 +113,52 @@ export function parseCardmarketPrices(jsonString: string | null | undefined): Ca
 
 /**
  * Obtiene el precio de mercado de una carta según su variante
- * Prioriza: market > mid > low
+ * Prioriza: marketPrice > midPrice > lowPrice
+ * Maneja variantes con diferentes formatos de la API
  */
 export function getMarketPrice(
     tcgPrices: TCGPlayerPrices | null,
     variant: Variant = "normal"
 ): number | null {
-    if (!tcgPrices) return null;
+    if (!tcgPrices || Object.keys(tcgPrices).length === 0) return null;
 
-    const variantPrices = tcgPrices[variant];
-    if (!variantPrices) {
-        // Fallback a normal si no hay precio para la variante
-        const normalPrices = tcgPrices.normal;
-        if (!normalPrices) return null;
-        return normalPrices.market ?? normalPrices.mid ?? normalPrices.low ?? null;
+    // Mapear variante interna a posibles claves en la API
+    const variantMappings: Record<string, string[]> = {
+        "normal": ["normal", "unlimited", "holofoil"],
+        "holofoil": ["holofoil", "normal", "unlimited"],
+        "reverseHolofoil": ["reverseHolofoil", "reverse-holofoil", "reverseHoloSell"],
+        "1stEditionHolofoil": ["1stEditionHolofoil", "1st-edition", "1stEdition"],
+        "1stEditionNormal": ["1stEditionNormal", "1st-edition", "1stEdition"],
+    };
+
+    const keysToTry = variantMappings[variant] || [variant, "normal", "unlimited", "holofoil"];
+
+    // Función para extraer precio de un objeto de variante
+    const extractPrice = (data: any): number | null => {
+        if (!data || typeof data !== "object") return null;
+        return data.marketPrice ?? data.market ?? data.midPrice ?? data.mid ?? data.lowPrice ?? data.low ?? null;
+    };
+
+    // Intentar encontrar precio para cada clave posible
+    for (const key of keysToTry) {
+        const priceData = (tcgPrices as Record<string, any>)[key];
+        const price = extractPrice(priceData);
+        if (price !== null && price > 0) {
+            return price;
+        }
     }
 
-    return variantPrices.market ?? variantPrices.mid ?? variantPrices.low ?? null;
+    // Fallback: buscar en cualquier variante que tenga precio
+    for (const key of Object.keys(tcgPrices)) {
+        if (key === "updated" || key === "unit") continue; // Skip metadata
+        const priceData = (tcgPrices as Record<string, any>)[key];
+        const price = extractPrice(priceData);
+        if (price !== null && price > 0) {
+            return price;
+        }
+    }
+
+    return null;
 }
 
 /**
