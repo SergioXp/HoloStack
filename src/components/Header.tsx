@@ -9,6 +9,7 @@ import { LayoutGrid, Layers, Library as LibraryIcon, Database, Sparkles, Setting
 import { useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useI18n } from "@/lib/i18n";
+import { GlobalSearch } from "@/components/GlobalSearch";
 
 export default function Header() {
     const pathname = usePathname();
@@ -112,6 +113,11 @@ export default function Header() {
                         );
                     })}
                 </nav>
+
+                {/* Global Search */}
+                <div className="hidden lg:block flex-1 max-w-sm mx-4">
+                    <GlobalSearch />
+                </div>
 
                 {/* Actions */}
                 <div className="flex items-center gap-2">

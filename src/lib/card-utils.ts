@@ -43,6 +43,7 @@ export function getAvailableVariants(rarity: string = "Unknown", supertype?: str
     // (Incluye 'rare' estandard y cualquier otra cosa no capturada arriba)
     available.add("normal");
     available.add("reverseHolofoil");
+    available.add("holofoil");
 
     return available;
 }

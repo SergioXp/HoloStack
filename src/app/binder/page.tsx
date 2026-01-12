@@ -49,6 +49,36 @@ export default function BinderPage() {
     const cardsPerSpread = cardsPerSide * 2; // Siempre mostramos 2 páginas (izquierda y derecha)
     const totalPages = Math.ceil(cards.length / cardsPerSpread);
 
+    // Wishlist state (Batch optimization)
+    const [wishlist, setWishlist] = useState<Set<string>>(new Set());
+
+    useEffect(() => {
+        fetch("/api/wishlist")
+            .then(res => res.json())
+            .then((data: any[]) => {
+                if (Array.isArray(data)) {
+                    setWishlist(new Set(data.map(item => item.cardId)));
+                }
+            })
+            .catch(console.error);
+    }, []);
+
+    const toggleWishlist = async (cardId: string) => {
+        const isIn = wishlist.has(cardId);
+        const newSet = new Set(wishlist);
+        if (isIn) newSet.delete(cardId);
+        else newSet.add(cardId);
+
+        setWishlist(newSet); // Optimistic attempt
+
+        try {
+            if (isIn) await fetch(`/api/wishlist?cardId=${cardId}`, { method: 'DELETE' });
+            else await fetch('/api/wishlist', { method: 'POST', body: JSON.stringify({ cardId }) });
+        } catch {
+            setWishlist(wishlist); // Revert on failure
+        }
+    };
+
     // Cargar colecciones
     useEffect(() => {
         async function loadCollections() {
@@ -172,6 +202,8 @@ export default function BinderPage() {
                     showSetInfo={true}
                     onUpdate={(variant, qty) => handleUpdateQuantity(card.id, variant, qty)}
                     variant="binder"
+                    isInWishlist={wishlist.has(card.id)}
+                    onToggleWishlist={toggleWishlist}
                 />
             </div>
         );

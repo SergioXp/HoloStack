@@ -647,5 +647,22 @@
         "importHelpOr": "o",
         "importHelpCols": "y columnas",
         "importHelpEtc": "etc."
+    },
+    "search": {
+        "title": "Buscador",
+        "placeholder": "Buscar cartas, sets, colecciones...",
+        "noResults": "No se encontraron resultados para \"{query}\"",
+        "showAll": "Ver todos los resultados",
+        "resultsTitle": "Resultados de Búsqueda",
+        "foundMatches": "Se encontraron {count} coincidencias para \"{query}\"",
+        "enterQuery": "Introduce al menos 2 caracteres para buscar.",
+        "sections": {
+            "portfolio": "En tu Portfolio",
+            "wishlist": "Lista de Deseos",
+            "sets": "Sets",
+            "collections": "Colecciones",
+            "budgets": "Presupuestos",
+            "cards": "Todas las Cartas"
+        }
     }
 }

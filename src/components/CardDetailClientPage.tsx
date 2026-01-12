@@ -46,7 +46,7 @@ export default function CardDetailClientPage({ card, set, currentPrice, priceHis
             <div className="max-w-5xl mx-auto">
                 {/* Navegación */}
                 <Link href="/explorer" className="text-slate-400 hover:text-white mb-6 inline-block">
-                    ← {t("explorer.backToExplorer")}
+                    ← {t("explorer.set.backToExplorer")}
                 </Link>
 
                 <div className="grid md:grid-cols-2 gap-8">

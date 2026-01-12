@@ -648,5 +648,22 @@
         "importHelpOr": "or",
         "importHelpCols": "and columns",
         "importHelpEtc": "etc."
+    },
+    "search": {
+        "title": "Search",
+        "placeholder": "Search cards, sets, collections...",
+        "noResults": "No results found for \"{query}\"",
+        "showAll": "Show all results",
+        "resultsTitle": "Search Results",
+        "foundMatches": "Found {count} matches for \"{query}\"",
+        "enterQuery": "Enter at least 2 characters to search.",
+        "sections": {
+            "portfolio": "In Your Portfolio",
+            "wishlist": "Wishlist Items",
+            "sets": "Sets",
+            "collections": "Collections",
+            "budgets": "Budgets",
+            "cards": "All Cards"
+        }
     }
 }

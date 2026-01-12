@@ -24,10 +24,10 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "cardIds required" }, { status: 400 });
         }
 
-        // Limitar a 20 cartas por request para evitar abuso
-        const limitedCardIds = cardIds.slice(0, 20);
+        // Limitar a 50 cartas por request para evitar abuso
+        const limitedCardIds = cardIds.slice(0, 50);
 
-        // Obtener las cartas de la BD
+        // ... obtención de datos preliminares ...
         const cardsData = await db
             .select({
                 id: cards.id,
@@ -80,9 +80,20 @@ export async function POST(request: NextRequest) {
                     return { cardId: card.id, refreshed: true };
                 }
 
+                // SI NO HAY PRECIOS O FALLA, marcamos como sincronizado para evitar bucle infinito
+                await db.update(cards)
+                    .set({ syncedAt: new Date() })
+                    .where(eq(cards.id, card.id));
+
                 return { cardId: card.id, refreshed: false, error: "No pricing data" };
             } catch (error) {
                 console.error(`Error refreshing ${card.id}:`, error);
+
+                // Tambien marcamos sincronizado en error (para no reintentar inmediatamente)
+                await db.update(cards)
+                    .set({ syncedAt: new Date() })
+                    .where(eq(cards.id, card.id));
+
                 return { cardId: card.id, refreshed: false, error: "Fetch failed" };
             }
         });

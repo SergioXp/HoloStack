@@ -123,4 +123,4 @@ export function useTranslation() {
     return { t, locale };
 }
 
-// Force rebuild of translations
+// Force rebuild of translations for search update
