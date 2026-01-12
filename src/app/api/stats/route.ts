@@ -1,6 +1,7 @@
 import { db } from "@/db";
 import { collectionItems, cards, sets } from "@/db/schema";
-import { eq, desc, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
+import { getBestPrice, type Variant } from "@/lib/prices";
 
 export const dynamic = "force-dynamic";
 
@@ -14,8 +15,9 @@ export async function GET() {
                 cardName: cards.name,
                 rarity: cards.rarity,
                 setSeries: sets.series,
-                prices: cards.tcgplayerPrices, // JSON string
-                images: cards.images, // JSON string
+                tcgplayerPrices: cards.tcgplayerPrices,
+                cardmarketPrices: cards.cardmarketPrices,
+                images: cards.images,
             })
             .from(collectionItems)
             .leftJoin(cards, eq(collectionItems.cardId, cards.id))
@@ -33,23 +35,15 @@ export async function GET() {
             const qty = item.quantity || 1;
             totalCards += qty;
 
-            // Calcular valor
-            let price = 0;
-            if (item.prices) {
-                try {
-                    const priceData = JSON.parse(item.prices);
-                    // Intentar obtener precio según variante
-                    if (item.variant === "holofoil" && priceData.holofoil) {
-                        price = priceData.holofoil.market || priceData.holofoil.mid || 0;
-                    } else if (item.variant === "reverseHolofoil" && priceData.reverseHolofoil) {
-                        price = priceData.reverseHolofoil.market || priceData.reverseHolofoil.mid || 0;
-                    } else {
-                        // Normal u otros
-                        price = priceData.normal?.market || priceData.normal?.mid || 0;
-                    }
-                } catch (e) { }
-            }
+            // Calcular valor usando el módulo de precios centralizado
+            const priceInfo = getBestPrice(
+                item.tcgplayerPrices,
+                item.cardmarketPrices,
+                (item.variant || "normal") as Variant,
+                "EUR" // Usar EUR por defecto para stats
+            );
 
+            const price = priceInfo?.price || 0;
             const itemTotalValue = price * qty;
             totalValue += itemTotalValue;
 
@@ -86,6 +80,7 @@ export async function GET() {
         return Response.json({
             totalValue,
             totalCards,
+            uniqueSeries: seriesMap.size,
             rarityData,
             seriesData,
             topCards
