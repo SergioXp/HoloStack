@@ -36,10 +36,31 @@ export async function GET() {
 
         const setNames = new Map(setsData.map(s => [s.id, s.name]));
 
+        // Verificar qué cartas tienen precios obsoletos (>24h)
+        const MAX_AGE_MS = 24 * 60 * 60 * 1000;
+        const now = Date.now();
+        const staleCardIds: string[] = [];
+
+        const isPriceStale = (pricesJson: string | null): boolean => {
+            if (!pricesJson) return true;
+            try {
+                const data = JSON.parse(pricesJson);
+                const updatedAt = data.updated ? new Date(data.updated).getTime() : 0;
+                return now - updatedAt > MAX_AGE_MS;
+            } catch {
+                return true;
+            }
+        };
+
         // Formatear respuesta
         const portfolio = allItems.map(item => {
             const card = cardsMap.get(item.cardId);
             if (!card) return null;
+
+            // Verificar si el precio está obsoleto
+            if (isPriceStale(card.cardmarketPrices) || isPriceStale(card.tcgplayerPrices)) {
+                staleCardIds.push(card.id);
+            }
 
             return {
                 cardId: card.id,
@@ -56,7 +77,11 @@ export async function GET() {
             };
         }).filter(Boolean);
 
-        return NextResponse.json(portfolio);
+        // Devolver también los IDs de cartas con precios obsoletos
+        return NextResponse.json({
+            items: portfolio,
+            staleCardIds: [...new Set(staleCardIds)], // Únicos
+        });
     } catch (error) {
         console.error("Error fetching portfolio:", error);
         return NextResponse.json({ error: "Error fetching portfolio" }, { status: 500 });

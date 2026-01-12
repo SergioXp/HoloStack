@@ -68,7 +68,20 @@ export default function PortfolioPage() {
                 const portfolioRes = await fetch("/api/portfolio");
                 if (portfolioRes.ok) {
                     const data = await portfolioRes.json();
-                    setItems(Array.isArray(data) ? data : []);
+
+                    // Nuevo formato: {items, staleCardIds}
+                    const portfolioItems = data.items || (Array.isArray(data) ? data : []);
+                    setItems(portfolioItems);
+
+                    // Si hay precios obsoletos (>24h), refrescarlos en background
+                    if (data.staleCardIds && data.staleCardIds.length > 0) {
+                        console.log(`Refreshing ${data.staleCardIds.length} stale prices...`);
+                        fetch("/api/prices/refresh", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ cardIds: data.staleCardIds }),
+                        }).catch(console.error);
+                    }
                 }
             } catch (error) {
                 console.error("Error loading portfolio:", error);
