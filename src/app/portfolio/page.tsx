@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useI18n } from "@/lib/i18n";
-import { formatPrice, getBestPrice, type Currency } from "@/lib/prices";
+import { formatPrice, getBestPrice, getAllPrices, getMarketUrl, type Currency } from "@/lib/prices";
 
 interface PortfolioCard {
     cardId: string;
@@ -41,6 +41,7 @@ interface PortfolioStats {
     topCards: {
         card: PortfolioCard;
         value: number;
+        source: string | null;
     }[];
     byRarity: Record<string, { count: number; value: number }>;
     bySet: Record<string, { count: number; value: number }>;
@@ -83,7 +84,7 @@ export default function PortfolioPage() {
         let totalValue = 0;
         const byRarity: Record<string, { count: number; value: number }> = {};
         const bySet: Record<string, { count: number; value: number }> = {};
-        const cardValues: { card: PortfolioCard; value: number }[] = [];
+        const cardValues: { card: PortfolioCard; value: number; source: string | null }[] = [];
         const uniqueCardIds = new Set<string>();
 
         for (const item of items) {
@@ -98,7 +99,7 @@ export default function PortfolioPage() {
             const itemValue = priceInfo ? priceInfo.price * item.quantity : 0;
             totalValue += itemValue;
 
-            cardValues.push({ card: item, value: priceInfo?.price || 0 });
+            cardValues.push({ card: item, value: priceInfo?.price || 0, source: priceInfo?.source || null });
 
             // Por rareza
             if (!byRarity[item.cardRarity]) {
@@ -241,8 +242,13 @@ export default function PortfolioPage() {
                             <p className="text-slate-500 text-center py-8">{t("portfolio.noCards")}</p>
                         ) : (
                             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-                                {stats.topCards.map(({ card, value }, index) => {
+                                {stats.topCards.map(({ card, value, source }, index) => {
                                     const images = card.cardImages ? JSON.parse(card.cardImages) : {};
+                                    const allPrices = getAllPrices(
+                                        card.tcgplayerPrices,
+                                        card.cardmarketPrices,
+                                        card.variant as any
+                                    );
                                     return (
                                         <div key={`${card.cardId}-${card.variant}-${index}`} className="relative group">
                                             <div className="aspect-[63/88] rounded-lg overflow-hidden bg-slate-800 relative">
@@ -256,14 +262,39 @@ export default function PortfolioPage() {
                                                     />
                                                 )}
                                                 {/* Rank Badge */}
-                                                <div className="absolute top-1 left-1 bg-gradient-to-r from-amber-500 to-amber-600 text-white text-xs font-bold px-1.5 py-0.5 rounded">
+                                                <div className="absolute top-1 left-1 bg-linear-to-r from-amber-500 to-amber-600 text-white text-xs font-bold px-1.5 py-0.5 rounded">
                                                     #{index + 1}
                                                 </div>
                                             </div>
                                             <div className="mt-2">
                                                 <p className="text-sm font-medium text-white truncate">{card.cardName}</p>
-                                                <p className="text-xs text-slate-400">{card.setName}</p>
-                                                <p className="text-sm font-bold text-emerald-400">{formatPrice(value, currency)}</p>
+                                                <p className="text-xs text-slate-400 mb-1">{card.setName}</p>
+                                                {/* Precios con links */}
+                                                <div className="flex flex-col gap-0.5 text-xs">
+                                                    {allPrices.cardmarket !== null && (
+                                                        <a
+                                                            href={getMarketUrl("cardmarket", card.cardName)}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-blue-400 hover:text-blue-300 hover:underline"
+                                                        >
+                                                            CM: €{allPrices.cardmarket.toFixed(2)}
+                                                        </a>
+                                                    )}
+                                                    {allPrices.tcgplayer !== null && (
+                                                        <a
+                                                            href={getMarketUrl("tcgplayer", card.cardName)}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="text-purple-400 hover:text-purple-300 hover:underline"
+                                                        >
+                                                            TCG: ${allPrices.tcgplayer.toFixed(2)}
+                                                        </a>
+                                                    )}
+                                                    {allPrices.cardmarket === null && allPrices.tcgplayer === null && (
+                                                        <span className="text-slate-500">Sin precio</span>
+                                                    )}
+                                                </div>
                                                 {card.quantity > 1 && (
                                                     <Badge variant="secondary" className="text-xs mt-1">x{card.quantity}</Badge>
                                                 )}

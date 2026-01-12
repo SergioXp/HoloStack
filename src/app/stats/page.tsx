@@ -65,9 +65,9 @@ export default function StatsPage() {
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold text-emerald-400">
-                                ${data.totalValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                €{data.totalValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </div>
-                            <p className="text-xs text-slate-500 mt-1">Basado en precios de mercado</p>
+                            <p className="text-xs text-slate-500 mt-1">Basado en precios de Cardmarket</p>
                         </CardContent>
                     </Card>
 
@@ -168,7 +168,12 @@ export default function StatsPage() {
                                         <div className="text-xs text-slate-400">{card.rarity}</div>
                                     </div>
                                     <div className="font-bold text-emerald-400">
-                                        ${card.value.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                        €{card.value.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                                        {card.source && (
+                                            <span className="text-[10px] font-normal text-slate-500 ml-1">
+                                                ({card.source === "cardmarket" ? "CM" : "TCG"})
+                                            </span>
+                                        )}
                                     </div>
                                 </div>
                             ))}

@@ -240,3 +240,57 @@ export function calculateTotalValue(
         return total;
     }, 0);
 }
+
+/**
+ * Obtiene todos los precios disponibles de todas las fuentes
+ */
+export function getAllPrices(
+    tcgPricesJson: string | null | undefined,
+    cardmarketPricesJson: string | null | undefined,
+    variant: Variant = "normal"
+): { tcgplayer: number | null; cardmarket: number | null } {
+    const tcgPrices = parseTCGPlayerPrices(tcgPricesJson);
+    const cmPrices = parseCardmarketPrices(cardmarketPricesJson);
+
+    return {
+        tcgplayer: getMarketPrice(tcgPrices, variant),
+        cardmarket: getCardmarketPrice(cmPrices),
+    };
+}
+
+/**
+ * Genera URL para ver la carta en el mercado correspondiente
+ */
+export function getMarketUrl(
+    source: Market,
+    cardName: string,
+    setName?: string
+): string {
+    const encodedName = encodeURIComponent(cardName);
+    const encodedSet = setName ? encodeURIComponent(setName) : "";
+
+    switch (source) {
+        case "cardmarket":
+            // Cardmarket busca por nombre
+            return `https://www.cardmarket.com/en/Pokemon/Products/Search?searchString=${encodedName}`;
+        case "tcgplayer":
+            // TCGPlayer busca por nombre + set
+            return `https://www.tcgplayer.com/search/pokemon/product?q=${encodedName}${encodedSet ? `&setName=${encodedSet}` : ""}`;
+        case "ebay":
+            return `https://www.ebay.com/sch/i.html?_nkw=pokemon+${encodedName}+card`;
+        default:
+            return "#";
+    }
+}
+
+/**
+ * Obtiene el símbolo de la moneda
+ */
+export function getCurrencySymbol(currency: Currency): string {
+    switch (currency) {
+        case "EUR": return "€";
+        case "USD": return "$";
+        case "GBP": return "£";
+        default: return currency;
+    }
+}

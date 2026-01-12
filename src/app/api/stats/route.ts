@@ -44,6 +44,7 @@ export async function GET() {
             );
 
             const price = priceInfo?.price || 0;
+            const source = priceInfo?.source || null;
             const itemTotalValue = price * qty;
             totalValue += itemTotalValue;
 
@@ -52,6 +53,7 @@ export async function GET() {
                     name: item.cardName,
                     rarity: item.rarity,
                     value: price,
+                    source: source,
                     image: item.images ? JSON.parse(item.images).small : null
                 });
             }
