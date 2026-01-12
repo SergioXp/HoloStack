@@ -1,9 +1,9 @@
 import { db } from "@/db";
-import { collections, collectionItems } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { collections, collectionItems, cards, sets } from "@/db/schema";
+import { eq, inArray, asc } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
-// GET - Obtener una colección específica
+// GET - Obtener una colección específica con sus cartas
 export async function GET(
     request: Request,
     { params }: { params: Promise<{ id: string }> }
@@ -19,7 +19,47 @@ export async function GET(
             return Response.json({ error: "Colección no encontrada" }, { status: 404 });
         }
 
-        return Response.json(collection);
+        // Obtener items que el usuario TIENE en esta colección
+        const items = await db.query.collectionItems.findMany({
+            where: eq(collectionItems.collectionId, id),
+        });
+
+        // Construir ownership map
+        const ownershipData: Record<string, any> = {};
+        items.forEach(item => {
+            if (!ownershipData[item.cardId]) ownershipData[item.cardId] = {};
+            ownershipData[item.cardId][item.variant] = { quantity: item.quantity };
+        });
+
+        let resultCards: any[] = [];
+        const filters = collection.filters ? JSON.parse(collection.filters) : {};
+
+        if (filters.set) {
+            // Si la colección está basada en un set, traemos TODAS las cartas del set para mostrar huecos
+            resultCards = await db.select().from(cards)
+                .where(eq(cards.setId, filters.set))
+                // Intentar ordenar numéricamente si es posible, si no por string number
+                // Como number es string ("001", "tg01"), orden alfabético relativo funciona aceptablemente
+                // Idealmente necesitaríamos un campo numérico real o un cast.
+                .orderBy(asc(cards.number));
+        } else {
+            // Si es manual, traemos solo las cartas que tiene
+            const cardIds = items.map(i => i.cardId);
+            if (cardIds.length > 0) {
+                resultCards = await db.select().from(cards)
+                    .where(inArray(cards.id, cardIds));
+            }
+        }
+
+        return Response.json({
+            ...collection,
+            cards: resultCards,
+            ownershipData,
+            setName: filters.set ? (await db.query.sets.findFirst({
+                where: eq(sets.id, filters.set),
+                columns: { name: true }
+            }))?.name : undefined
+        });
     } catch (error) {
         console.error("Error fetching collection:", error);
         return Response.json({ error: "Error interno del servidor" }, { status: 500 });

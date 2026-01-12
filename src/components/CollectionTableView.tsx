@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/lib/i18n";
 import { updateCollectionItem } from "@/app/actions/collection";
 import { getAvailableVariants } from "@/lib/card-utils";
 
@@ -64,6 +65,7 @@ export default function CollectionTableView({
     setNames,
     onDataImported,
 }: CollectionTableViewProps) {
+    const { t } = useI18n();
     const [searchQuery, setSearchQuery] = useState("");
     const [sortField, setSortField] = useState<SortField>("localId");
     const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
@@ -179,7 +181,7 @@ export default function CollectionTableView({
 
     // Exportar a CSV
     const handleExport = () => {
-        const headers = ["Número", "Nombre", "Set", "Rareza", "HP", ...VARIANTS.map(v => v.label), "Total"];
+        const headers = [t("tableView.columns.number"), t("tableView.columns.name"), t("tableView.columns.set"), t("tableView.columns.rarity"), t("tableView.columns.hp"), ...VARIANTS.map(v => t("tableView.columns." + v.key as any)), t("tableView.columns.total")];
         const rows = tableData.map(row => [
             row.localId,
             `"${row.name.replace(/"/g, '""')}"`,
@@ -218,7 +220,7 @@ export default function CollectionTableView({
             const lines = text.split("\n").filter(line => line.trim());
 
             if (lines.length < 2) {
-                throw new Error("El archivo CSV está vacío o no tiene datos");
+                throw new Error(t("tableView.emptyFileError"));
             }
 
             const headerLine = lines[0].toLowerCase();
@@ -238,7 +240,7 @@ export default function CollectionTableView({
             const totalIdx = headers.findIndex(h => h.includes("total") || h.includes("poseídas") || h.includes("poseidas"));
 
             if (nombreIdx === -1 && numeroIdx === -1) {
-                throw new Error("El CSV debe tener una columna 'Nombre' o 'Número'");
+                throw new Error(t("tableView.missingColumnsError"));
             }
 
             let matchedCount = 0;
@@ -302,12 +304,12 @@ export default function CollectionTableView({
                 }
             }
 
-            setImportSuccess(`Importación completada: ${matchedCount} cartas encontradas, ${updatedCount} actualizaciones`);
+            setImportSuccess(t("tableView.importSuccess", { found: matchedCount, updated: updatedCount }));
             onDataImported();
 
         } catch (error) {
             console.error("Error importing CSV:", error);
-            setImportError(error instanceof Error ? error.message : "Error al importar el archivo");
+            setImportError(error instanceof Error ? error.message : t("tableView.importError"));
         } finally {
             setImporting(false);
             event.target.value = "";
@@ -392,9 +394,9 @@ export default function CollectionTableView({
                         <Table className="h-5 w-5 text-white" />
                     </div>
                     <div>
-                        <h2 className="text-lg font-semibold text-white">Vista de Tabla</h2>
+                        <h2 className="text-lg font-semibold text-white">{t("tableView.title")}</h2>
                         <p className="text-sm text-slate-400">
-                            {stats.owned} / {stats.total} cartas ({stats.percentage}%)
+                            {stats.owned} / {stats.total} {t("tableView.cards")} ({stats.percentage}%)
                         </p>
                     </div>
                 </div>
@@ -404,7 +406,7 @@ export default function CollectionTableView({
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
                         <Input
                             type="text"
-                            placeholder="Buscar..."
+                            placeholder={t("tableView.search")}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="pl-10 bg-slate-800/50 border-slate-700 text-white w-48"
@@ -417,7 +419,7 @@ export default function CollectionTableView({
                         className="border-slate-700 bg-slate-800/50 text-slate-300 hover:bg-slate-700"
                     >
                         <Download className="h-4 w-4 mr-2" />
-                        Exportar
+                        {t("tableView.export")}
                     </Button>
 
                     <label className="cursor-pointer">
@@ -439,7 +441,7 @@ export default function CollectionTableView({
                                 ) : (
                                     <Upload className="h-4 w-4 mr-2" />
                                 )}
-                                Importar
+                                {t("tableView.import")}
                             </span>
                         </Button>
                     </label>
@@ -479,7 +481,7 @@ export default function CollectionTableView({
                                     className="text-left p-2 text-xs font-medium text-slate-400 cursor-pointer hover:text-white transition-colors"
                                 >
                                     <div className="flex items-center gap-1">
-                                        Nombre <SortIcon field="name" />
+                                        {t("tableView.columns.name")} <SortIcon field="name" />
                                     </div>
                                 </th>
                                 <th
@@ -487,7 +489,7 @@ export default function CollectionTableView({
                                     className="text-left p-2 text-xs font-medium text-slate-400 cursor-pointer hover:text-white transition-colors max-w-[120px]"
                                 >
                                     <div className="flex items-center gap-1">
-                                        Set <SortIcon field="set" />
+                                        {t("tableView.columns.set")} <SortIcon field="set" />
                                     </div>
                                 </th>
                                 <th
@@ -495,15 +497,15 @@ export default function CollectionTableView({
                                     className="text-left p-2 text-xs font-medium text-slate-400 cursor-pointer hover:text-white transition-colors"
                                 >
                                     <div className="flex items-center gap-1">
-                                        Rareza <SortIcon field="rarity" />
+                                        {t("tableView.columns.rarity")} <SortIcon field="rarity" />
                                     </div>
                                 </th>
                                 <th className="text-center p-2 text-xs font-medium text-slate-400 w-12">
                                     HP
                                 </th>
                                 {VARIANTS.map(v => (
-                                    <th key={v.key} className="text-center p-2 text-xs font-medium text-slate-400 w-24" title={v.label}>
-                                        {v.label}
+                                    <th key={v.key} className="text-center p-2 text-xs font-medium text-slate-400 w-24" title={t("tableView.columns." + v.key as any)}>
+                                        {t("tableView.columns." + v.key as any)}
                                     </th>
                                 ))}
                                 <th
@@ -511,7 +513,7 @@ export default function CollectionTableView({
                                     className="text-center p-2 text-xs font-medium text-slate-400 cursor-pointer hover:text-white transition-colors w-16"
                                 >
                                     <div className="flex items-center justify-center gap-1">
-                                        Total <SortIcon field="total" />
+                                        {t("tableView.columns.total")} <SortIcon field="total" />
                                     </div>
                                 </th>
                             </tr>
@@ -580,7 +582,7 @@ export default function CollectionTableView({
 
                 {tableData.length === 0 && (
                     <div className="p-8 text-center text-slate-500">
-                        No se encontraron cartas
+                        {t("tableView.noCards")}
                     </div>
                 )}
             </div>
@@ -589,12 +591,12 @@ export default function CollectionTableView({
             <div className="text-xs text-slate-500 p-4 bg-slate-900/30 rounded-lg border border-slate-800">
                 <p className="font-medium text-slate-400 mb-2 flex items-center gap-2">
                     <FileSpreadsheet className="h-4 w-4" />
-                    Formato CSV
+                    {t("tableView.csvFormat")}
                 </p>
                 <p>
-                    <strong>Exportar:</strong> Descarga todas las cartas con columnas para cada variante. <br />
-                    <strong>Importar:</strong> El CSV debe tener <code className="bg-slate-800 px-1 rounded">Nombre</code> o <code className="bg-slate-800 px-1 rounded">Número</code>,
-                    y columnas <code className="bg-slate-800 px-1 rounded">Normal</code>, <code className="bg-slate-800 px-1 rounded">Reverse</code>, etc.
+                    <strong>{t("tableView.export")}:</strong> {t("tableView.exportHelp")} <br />
+                    <strong>{t("tableView.import")}:</strong> {t("tableView.importHelpPre")} <code className="bg-slate-800 px-1 rounded">{t("tableView.columns.name")}</code> {t("tableView.importHelpOr")} <code className="bg-slate-800 px-1 rounded">{t("tableView.columns.number")}</code>,
+                    {t("tableView.importHelpCols")} <code className="bg-slate-800 px-1 rounded">{t("tableView.columns.normal")}</code>, <code className="bg-slate-800 px-1 rounded">{t("tableView.columns.reverse")}</code>, {t("tableView.importHelpEtc")}
                 </p>
             </div>
         </div>

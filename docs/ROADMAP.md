@@ -72,6 +72,25 @@ Este documento detalla la visión del proyecto centrada exclusivamente en el **c
     - Desglose de valor por Set y Rareza.
 - [x] **Selector de Moneda**: Vista en EUR/USD/GBP según preferencia.
 
+---
+
+## ✅ Fase 5: Infraestructura e Internacionalización (Completada)
+
+*Objetivo: Robustez técnica, despliegue y alcance global.*
+
+### 🌐 Internacionalización (i18n)
+- [x] Soporte completo Español/Inglés en toda la app.
+- [x] Traducción dinámica de datos de cartas (nombre, flavor text).
+- [x] Recordatorio de preferencia de idioma.
+
+### 🛡️ Seguridad y Datos
+- [x] Sistema de Backups (Importar/Exportar JSON).
+- [x] Validación de tipos estricta y Tests Unitarios (Vitest).
+
+### 🐳 Despliegue
+- [x] Dockerización completa (Alpine images, Docker Compose).
+- [x] Persistencia de datos en volúmenes.
+
 ### 🎯 Próximos Pasos (Futuro)
 - [ ] Comparador de Mercados (eBay, Cardmarket, TCGPlayer).
 - [ ] Soporte nativo para cartas graduadas (Slabs: PSA, BGS, CGC).

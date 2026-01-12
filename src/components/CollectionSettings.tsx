@@ -145,10 +145,10 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
     };
 
     const sortOptions = [
-        { value: "number", label: "Número" },
-        { value: "name", label: "Nombre" },
-        { value: "rarity", label: "Rareza" },
-        { value: "price", label: "Precio" },
+        { value: "number", label: t("collectionSettings.sortOptions.number") },
+        { value: "name", label: t("collectionSettings.sortOptions.name") },
+        { value: "rarity", label: t("collectionSettings.sortOptions.rarity") },
+        { value: "price", label: t("collectionSettings.sortOptions.price") },
     ];
 
     return (
@@ -166,10 +166,10 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2 text-xl">
                         <Settings className="h-5 w-5 text-purple-400" />
-                        Configuración de Colección
+                        {t("collectionSettings.title")}
                     </DialogTitle>
                     <DialogDescription className="text-slate-400">
-                        Personaliza los ajustes de esta colección
+                        {t("collectionSettings.subtitle")}
                     </DialogDescription>
                 </DialogHeader>
 
@@ -180,32 +180,32 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                             className="data-[state=active]:bg-linear-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white text-slate-400 rounded-lg py-2 text-sm"
                         >
                             <Pencil className="h-4 w-4 mr-1.5" />
-                            General
+                            {t("collectionSettings.tabs.general")}
                         </TabsTrigger>
                         <TabsTrigger
                             value="display"
                             className="data-[state=active]:bg-linear-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white text-slate-400 rounded-lg py-2 text-sm"
                         >
                             <Eye className="h-4 w-4 mr-1.5" />
-                            Visualización
+                            {t("collectionSettings.tabs.display")}
                         </TabsTrigger>
                         <TabsTrigger
                             value="actions"
                             className="data-[state=active]:bg-linear-to-r data-[state=active]:from-purple-600 data-[state=active]:to-blue-600 data-[state=active]:text-white text-slate-400 rounded-lg py-2 text-sm"
                         >
                             <RefreshCw className="h-4 w-4 mr-1.5" />
-                            Acciones
+                            {t("collectionSettings.tabs.actions")}
                         </TabsTrigger>
                     </TabsList>
 
                     {/* General Tab */}
                     <TabsContent value="general" className="space-y-5 pt-4">
                         <div className="space-y-2">
-                            <Label className="text-sm text-slate-300">Nombre</Label>
+                            <Label className="text-sm text-slate-300">{t("common.name")}</Label>
                             <Input
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
-                                placeholder="Nombre de la colección"
+                                placeholder={t("settings.collectionNamePlaceholder")}
                                 className="bg-slate-800 border-slate-700 text-white h-11 rounded-xl"
                             />
                         </div>
@@ -213,12 +213,12 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                         <div className="space-y-2">
                             <Label className="text-sm text-slate-300 flex items-center gap-2">
                                 <FileText className="h-4 w-4" />
-                                Descripción
+                                {t("common.description")}
                             </Label>
                             <textarea
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
-                                placeholder="Añade una descripción para esta colección..."
+                                placeholder={t("settings.descriptionPlaceholder")}
                                 rows={3}
                                 className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl p-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-purple-500"
                             />
@@ -227,7 +227,7 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                         <div className="space-y-3">
                             <Label className="text-sm text-slate-300 flex items-center gap-2">
                                 <Globe className="h-4 w-4" />
-                                Idioma de las cartas
+                                {t("collectionSettings.cardLanguage")}
                             </Label>
 
                             <div className="flex flex-col gap-2">
@@ -242,7 +242,7 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                                     )}
                                 >
                                     <div className="flex items-center justify-between">
-                                        <span>Usar idioma del perfil</span>
+                                        <span>{t("settings.useProfileLanguage")}</span>
                                         {useProfileLanguage && <Check className="h-4 w-4 text-purple-400" />}
                                     </div>
                                     <p className="text-xs text-slate-500 mt-1">
@@ -260,7 +260,7 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                                             : "border-slate-700 bg-slate-800/50 hover:border-slate-600"
                                     )}
                                 >
-                                    <span>Idioma personalizado</span>
+                                    <span>{t("settings.customLanguage")}</span>
                                 </button>
                             </div>
 
@@ -305,7 +305,7 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                         <div className="space-y-3">
                             <Label className="text-sm text-slate-300 flex items-center gap-2">
                                 <Eye className="h-4 w-4" />
-                                Mostrar precios
+                                {t("collectionSettings.showPrices")}
                             </Label>
                             <div className="flex gap-3">
                                 <button
@@ -318,8 +318,8 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                                             : "border-slate-700 bg-slate-800/50 hover:border-slate-600"
                                     )}
                                 >
-                                    <span className="text-sm font-medium">Sí</span>
-                                    <p className="text-xs text-slate-500 mt-1">Ver precios de mercado</p>
+                                    <span className="text-sm font-medium">{t("common.yes")}</span>
+                                    <p className="text-xs text-slate-500 mt-1">{t("collectionSettings.showPricesDesc")}</p>
                                 </button>
                                 <button
                                     type="button"
@@ -331,8 +331,8 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                                             : "border-slate-700 bg-slate-800/50 hover:border-slate-600"
                                     )}
                                 >
-                                    <span className="text-sm font-medium">No</span>
-                                    <p className="text-xs text-slate-500 mt-1">Ocultar precios</p>
+                                    <span className="text-sm font-medium">{t("common.no")}</span>
+                                    <p className="text-xs text-slate-500 mt-1">{t("collectionSettings.hidePricesDesc")}</p>
                                 </button>
                             </div>
                         </div>
@@ -340,7 +340,7 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                         <div className="space-y-3">
                             <Label className="text-sm text-slate-300 flex items-center gap-2">
                                 <SortAsc className="h-4 w-4" />
-                                Ordenar por
+                                {t("common.sortBy")}
                             </Label>
                             <div className="grid grid-cols-2 gap-2">
                                 {sortOptions.map((option) => (
@@ -372,9 +372,9 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                                         <RefreshCw className={cn("h-5 w-5 text-blue-400", isSyncing && "animate-spin")} />
                                     </div>
                                     <div className="flex-1">
-                                        <h4 className="font-medium text-white mb-1">Resincronizar cartas</h4>
+                                        <h4 className="font-medium text-white mb-1">{t("collectionSettings.resync.title")}</h4>
                                         <p className="text-xs text-slate-400 mb-3">
-                                            Vuelve a buscar las cartas que coinciden con los filtros de esta colección.
+                                            {t("collectionSettings.resync.description")}
                                         </p>
                                         {isSyncing && (
                                             <div className="mb-3">
@@ -396,12 +396,12 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                                             {isSyncing ? (
                                                 <>
                                                     <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                                    Sincronizando...
+                                                    {t("collectionSettings.resync.syncing")}
                                                 </>
                                             ) : (
                                                 <>
                                                     <RefreshCw className="h-4 w-4 mr-2" />
-                                                    Resincronizar
+                                                    {t("collectionSettings.resync.button")}
                                                 </>
                                             )}
                                         </Button>
@@ -417,10 +417,9 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                                     <AlertTriangle className="h-5 w-5 text-red-400" />
                                 </div>
                                 <div className="flex-1">
-                                    <h4 className="font-medium text-white mb-1">Zona de peligro</h4>
+                                    <h4 className="font-medium text-white mb-1">{t("collectionSettings.dangerZone.title")}</h4>
                                     <p className="text-xs text-slate-400 mb-3">
-                                        Eliminar esta colección es permanente y no se puede deshacer.
-                                        Todo el progreso se perderá.
+                                        {t("collectionSettings.dangerZone.description")}
                                     </p>
                                     <AlertDialog>
                                         <AlertDialogTrigger asChild>
@@ -430,18 +429,17 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                                                 className="border-red-500/30 bg-red-500/10 text-red-300 hover:bg-red-500/20 hover:text-red-200"
                                             >
                                                 <Trash2 className="h-4 w-4 mr-2" />
-                                                Eliminar colección
+                                                {t("collectionSettings.dangerZone.deleteButton")}
                                             </Button>
                                         </AlertDialogTrigger>
                                         <AlertDialogContent className="bg-slate-900 border-slate-700 text-white">
                                             <AlertDialogHeader>
                                                 <AlertDialogTitle className="flex items-center gap-2">
                                                     <AlertTriangle className="h-5 w-5 text-red-400" />
-                                                    ¿Eliminar &quot;{collection.name}&quot;?
+                                                    {t("collectionSettings.dangerZone.deleteTitle", { name: collection.name })}
                                                 </AlertDialogTitle>
                                                 <AlertDialogDescription className="text-slate-400">
-                                                    Esta acción no se puede deshacer. Se eliminará permanentemente
-                                                    la colección y todo tu progreso guardado.
+                                                    {t("collectionSettings.dangerZone.deleteDesc")}
                                                 </AlertDialogDescription>
                                             </AlertDialogHeader>
                                             <AlertDialogFooter>
@@ -456,10 +454,10 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                                                     {isDeleting ? (
                                                         <>
                                                             <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                                            Eliminando...
+                                                            {t("collectionSettings.dangerZone.deleting")}
                                                         </>
                                                     ) : (
-                                                        "Sí, eliminar"
+                                                        t("collectionSettings.dangerZone.confirmButton")
                                                     )}
                                                 </AlertDialogAction>
                                             </AlertDialogFooter>

@@ -279,12 +279,12 @@ export default function CreateCollectionForm({ availableSets }: CreateCollection
                                                         className="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                                                     >
                                                         <option value="">{t("collectionForm.anyRarity")}</option>
-                                                        <option value="Common">Common</option>
-                                                        <option value="Uncommon">Uncommon</option>
-                                                        <option value="Rare">Rare</option>
-                                                        <option value="Rare Holo">Rare Holo</option>
-                                                        <option value="Rare Ultra">Rare Ultra</option>
-                                                        <option value="Rare Secret">Rare Secret</option>
+                                                        <option value="Common">{t("rarities.Common")}</option>
+                                                        <option value="Uncommon">{t("rarities.Uncommon")}</option>
+                                                        <option value="Rare">{t("rarities.Rare")}</option>
+                                                        <option value="Rare Holo">{t("rarities.RareHolo")}</option>
+                                                        <option value="Rare Ultra">{t("rarities.RareUltra")}</option>
+                                                        <option value="Rare Secret">{t("rarities.RareSecret")}</option>
                                                     </select>
                                                 </div>
                                             </TabsContent>
@@ -309,7 +309,7 @@ export default function CreateCollectionForm({ availableSets }: CreateCollection
                                                         <PopoverContent className="w-full p-0 bg-slate-900 border-slate-700">
                                                             <Command className="bg-slate-900 text-white">
                                                                 <CommandInput
-                                                                    placeholder="Pikachu..."
+                                                                    placeholder={t("collectionForm.searchPlaceholderExample")}
                                                                     value={customValue}
                                                                     onValueChange={setCustomValue}
                                                                     className="text-white placeholder:text-slate-500"
@@ -358,9 +358,9 @@ export default function CreateCollectionForm({ availableSets }: CreateCollection
                                                         className="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                                                     >
                                                         <option value="">{t("collectionForm.select")}</option>
-                                                        <option value="Pokemon">Pokémon</option>
-                                                        <option value="Trainer">Trainer</option>
-                                                        <option value="Energy">Energy</option>
+                                                        <option value="Pokemon">{t("types.Pokemon")}</option>
+                                                        <option value="Trainer">{t("types.Trainer")}</option>
+                                                        <option value="Energy">{t("types.Energy")}</option>
                                                     </select>
                                                 </div>
                                             </TabsContent>
@@ -375,13 +375,13 @@ export default function CreateCollectionForm({ availableSets }: CreateCollection
                                                         className="w-full p-3 rounded-xl bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500"
                                                     >
                                                         <option value="">{t("collectionForm.select")}</option>
-                                                        <option value="Common">Common</option>
-                                                        <option value="Uncommon">Uncommon</option>
-                                                        <option value="Rare">Rare</option>
-                                                        <option value="Rare Holo">Rare Holo</option>
-                                                        <option value="Ultra Rare">Ultra Rare</option>
-                                                        <option value="Secret Rare">Secret Rare</option>
-                                                        <option value="Illustration rare">Illustration Rare (IR/SIR)</option>
+                                                        <option value="Common">{t("rarities.Common")}</option>
+                                                        <option value="Uncommon">{t("rarities.Uncommon")}</option>
+                                                        <option value="Rare">{t("rarities.Rare")}</option>
+                                                        <option value="Rare Holo">{t("rarities.RareHolo")}</option>
+                                                        <option value="Ultra Rare">{t("rarities.RareUltra")}</option>
+                                                        <option value="Secret Rare">{t("rarities.RareSecret")}</option>
+                                                        <option value="Illustration rare">{t("rarities.IllustrationRare")}</option>
                                                     </select>
                                                     <p className="text-xs text-slate-500 flex items-center gap-1">
                                                         <Sparkles className="h-3 w-3" />

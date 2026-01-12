@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/lib/i18n";
 
 interface CollectionCardProps {
     card: any;
@@ -12,6 +13,7 @@ interface CollectionCardProps {
 }
 
 export default function CollectionCard({ card, ownedQuantity, totalInSet }: CollectionCardProps) {
+    const { t } = useI18n();
     const isOwned = ownedQuantity > 0;
     const cardImages = card.images ? JSON.parse(card.images) : null;
 
@@ -40,7 +42,7 @@ export default function CollectionCard({ card, ownedQuantity, totalInSet }: Coll
                         />
                     ) : (
                         <div className="w-full h-full bg-slate-800 flex items-center justify-center">
-                            <span className="text-slate-600 text-xs">Sin imagen</span>
+                            <span className="text-slate-600 text-xs">{t("common.noImage")}</span>
                         </div>
                     )}
                 </div>

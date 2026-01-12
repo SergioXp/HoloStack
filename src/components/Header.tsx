@@ -76,7 +76,7 @@ export default function Header() {
                 ? "border-transparent bg-linear-to-b from-background/80 via-background/40 to-transparent"
                 : "border-border bg-background/80"
         )}>
-            <div className="container flex h-16 items-center px-4 md:px-8">
+            <div className="w-full flex h-16 items-center px-4 md:px-8">
                 {/* Logo */}
                 <Link href="/" className="mr-8 flex items-center space-x-3 group">
                     <div className="relative">
@@ -89,7 +89,7 @@ export default function Header() {
                 </Link>
 
                 {/* Navigation */}
-                <nav className="flex items-center space-x-1 flex-1">
+                <nav className="flex items-center gap-1 flex-1">
                     {navItems.map((item) => {
                         const isActive = pathname === item.href ||
                             (item.href !== "/" && pathname.startsWith(item.href));
@@ -98,6 +98,7 @@ export default function Header() {
                             <Link
                                 key={item.href}
                                 href={item.href}
+                                title={item.name}
                                 className={cn(
                                     "flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap",
                                     isActive
@@ -106,7 +107,7 @@ export default function Header() {
                                 )}
                             >
                                 <item.icon className="h-4 w-4 mr-2" />
-                                <span className="hidden md:inline">{item.name}</span>
+                                <span className="hidden xl:inline">{item.name}</span>
                             </Link>
                         );
                     })}

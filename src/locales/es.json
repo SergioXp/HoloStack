@@ -24,9 +24,80 @@
         "set": "Set",
         "collection": "Colección",
         "collections": "Colecciones",
-        "settings": "Configuración",
-        "profile": "Perfil",
+        "syncingCollection": "Sincronizando Colección",
+        "syncCloudData": "Sincronizar datos de la nube",
+        "viewDetails": "Ver detalles",
+        "name": "Nombre",
+        "description": "Descripción",
+        "sortBy": "Ordenar por",
+        "saved": "Guardado",
+        "close": "Cerrar",
+        "saving": "Guardando...",
+        "saveChanges": "Guardar cambios",
+        "noImage": "Sin imagen",
         "language": "Idioma",
+        "deleting": "Borrando...",
+        "noData": "Sin datos",
+        "time": {
+            "daysAgo": "hace {n}d",
+            "hoursAgo": "hace {n}h",
+            "justNow": "reciente"
+        }
+    },
+    "cardDetail": {
+        "market": "Mercado",
+        "detailsTab": "Detalles",
+        "updated": "Actualizado:",
+        "trend": "Tendencia",
+        "trendUp": "Tendencia Alcista",
+        "trendDown": "Tendencia Bajista",
+        "trendStable": "Estable",
+        "cmReference": "Principal referencia europea",
+        "minPrice": "Precio Mínimo",
+        "avg30": "Media 30 días",
+        "usdMarket": "Mercado USD",
+        "properties": "Propiedades",
+        "rarity": "Rareza",
+        "number": "Número",
+        "variant": "Variante",
+        "inCollection": "En tu colección",
+        "copy": "copia",
+        "copies": "copias",
+        "searchEbay": "Buscar en eBay",
+        "viewDetails": "Ver detalles",
+        "marketPrices": "Precios de Mercado",
+        "marketPrice": "Precio de Mercado",
+        "priceHistory": "Evolución del Precio",
+        "artist": "Artista",
+        "unknown": "Desconocido",
+        "evolvesFrom": "Evoluciona de",
+        "addToCollection": "Añadir a Colección",
+        "noPrices": "No hay información de precios disponible.",
+        "viewOnTCGPlayer": "Ver en TCGPlayer",
+        "min": "Mín",
+        "max": "Máx",
+        "source": "Fuente",
+        "records": "{count} registros",
+        "noHistory": "No hay historial de precios disponible",
+        "historyUpdate": "Los precios se actualizan periódicamente",
+        "date": "Fecha",
+        "price": "Precio"
+    },
+    "gridView": "Vista de cuadrícula",
+    "exportHelp": "Exportar: Descarga todas las cartas con columnas para cada variante.",
+    "searchPlaceholder": "Buscar...",
+    "hydrator": {
+        "title": "Descargar Datos",
+        "description": "Descarga la información más reciente de todas las cartas de esta colección.",
+        "button": "Descargar Datos",
+        "wait": "Por favor espera mientras descargamos la información de las cartas.",
+        "doNotClose": "No cierres esta ventana hasta que termine el proceso.",
+        "connecting": "Conectando con servidor...",
+        "completed": "¡Completado!",
+        "connectionError": "Error de conexión con el servidor",
+        "startError": "Error al iniciar la descarga"
+    },
+    "languages": {
         "spanish": "Español",
         "english": "Inglés",
         "french": "Francés",
@@ -93,7 +164,10 @@
             "cardsIndexed": "cartas indexadas",
             "setsAvailable": "sets disponibles",
             "inCollection": "en tu colección",
-            "collections": "colecciones"
+            "collections": "colecciones",
+            "rarityDistribution": "Distribución por Rareza",
+            "cardsBySeries": "Cartas por Serie",
+            "topCards": "Top 5 Cartas de Mayor Valor"
         },
         "footer": {
             "apiData": "Datos de TCGdex API",
@@ -170,6 +244,7 @@
         "anyRarity": "Cualquiera",
         "pokemonName": "Nombre del Pokémon",
         "searchName": "Busca un nombre...",
+        "searchPlaceholderExample": "Pikachu...",
         "autocompleteBased": "Autocompletado basado en tu base de datos.",
         "supertype": "Supertype",
         "select": "Selecciona...",
@@ -201,30 +276,6 @@
             "title": "Sin resultados",
             "description": "Intenta ajustar los filtros de búsqueda."
         }
-    },
-    "cardDetail": {
-        "evolvesFrom": "Evoluciona de",
-        "number": "Número",
-        "rarity": "Rareza",
-        "artist": "Artista",
-        "types": "Tipos",
-        "unknown": "Desconocido",
-        "marketPrices": "Precios de Mercado",
-        "marketPrice": "Precio de Mercado",
-        "market": "Mercado",
-        "trend": "Tendencia",
-        "noPrices": "No hay información de precios disponible.",
-        "viewOnTCGPlayer": "Ver en TCGPlayer",
-        "addToCollection": "Añadir a Colección",
-        "priceHistory": "Evolución del Precio",
-        "min": "Mín",
-        "max": "Máx",
-        "source": "Fuente",
-        "records": "{count} registros",
-        "noHistory": "No hay historial de precios disponible",
-        "historyUpdate": "Los precios se actualizan periódicamente",
-        "date": "Fecha",
-        "price": "Precio"
     },
     "cardItem": {
         "noImage": "Sin imagen",
@@ -269,7 +320,11 @@
         },
         "saveChanges": "Guardar cambios",
         "saving": "Guardando...",
-        "saved": "Cambios guardados correctamente"
+        "saved": "Cambios guardados correctamente",
+        "useProfileLanguage": "Usar idioma del perfil",
+        "customLanguage": "Idioma personalizado",
+        "collectionNamePlaceholder": "Nombre de la colección",
+        "descriptionPlaceholder": "Añade una descripción para esta colección..."
     },
     "sync": {
         "title": "Sincronización Global",
@@ -456,7 +511,10 @@
         "page": "Página",
         "cardsCollected": "cartas coleccionadas",
         "noCollections": "No tienes colecciones",
-        "createFirst": "Crea una colección para ver tus cartas en formato carpeta."
+        "createFirst": "Crea una colección para ver tus cartas en formato carpeta.",
+        "selectCollection": "Selecciona colección",
+        "spread": "Doble página",
+        "of": "de"
     },
     "portfolio": {
         "title": "Mi Portfolio",
@@ -469,6 +527,125 @@
         "topCards": "Cartas Más Valiosas",
         "noCards": "Aún no tienes cartas en tu colección.",
         "byRarity": "Valor por Rareza",
-        "bySet": "Valor por Set"
+        "bySet": "Valor por Set",
+        "updatingPrices": "Actualizando {count} precios...",
+        "noPrice": "Sin precio"
+    },
+    "rarities": {
+        "Common": "Común",
+        "Uncommon": "Infrecuente",
+        "Rare": "Rara",
+        "RareHolo": "Rara Holo",
+        "RareUltra": "Ultra Rara",
+        "RareSecret": "Secreta Rara",
+        "IllustrationRare": "Ilustración Rara (IR/SIR)"
+    },
+    "types": {
+        "Pokemon": "Pokémon",
+        "Trainer": "Entrenador",
+        "Energy": "Energía"
+    },
+    "stats": {
+        "title": "Estadísticas de Colección",
+        "subtitle": "Análisis detallado de tu progreso y valor",
+        "estimatedValue": "Valor Estimado",
+        "valueSubtitle": "Basado en precios de Cardmarket",
+        "totalCards": "Total Cartas",
+        "cardsSubtitle": "Copias totales en colección",
+        "uniqueSeries": "Series Únicas",
+        "seriesSubtitle": "Eras coleccionadas",
+        "composition": "Composición de tu colección",
+        "volume": "Volumen por era",
+        "rarityDistribution": "Distribución por Rareza",
+        "cardsBySeries": "Cartas por Serie",
+        "topCards": "Top 5 Cartas de Mayor Valor"
+    },
+    "appSettings": {
+        "currency": "Moneda",
+        "currencyDesc": "Elige tu moneda preferida para ver precios",
+        "appearance": "Apariencia",
+        "appearanceDesc": "Personaliza el tema de HoloStack"
+    },
+    "wishlist": {
+        "pageTitle": "Lista de Deseos",
+        "subtitle": "Cartas que estás buscando ({count})",
+        "emptyTitle": "Tu lista está vacía",
+        "emptyDesc": "Explora los sets y añade cartas que quieras conseguir.",
+        "exploreButton": "Explorar Sets",
+        "viewButton": "Ver",
+        "deleteButton": "Borrar",
+        "priorities": {
+            "high": "Alta",
+            "normal": "Normal",
+            "low": "Baja"
+        }
+    },
+    "collectionSettings": {
+        "title": "Configuración de Colección",
+        "subtitle": "Personaliza los ajustes de esta colección",
+        "tabs": {
+            "general": "General",
+            "display": "Visualización",
+            "actions": "Acciones"
+        },
+        "cardLanguage": "Idioma de las cartas",
+        "showPrices": "Mostrar precios",
+        "showPricesDesc": "Ver precios de mercado",
+        "hidePricesDesc": "Ocultar precios",
+        "sortOptions": {
+            "number": "Número",
+            "name": "Nombre",
+            "rarity": "Rareza",
+            "price": "Precio"
+        },
+        "resync": {
+            "title": "Resincronizar cartas",
+            "description": "Vuelve a buscar las cartas que coinciden con los filtros de esta colección.",
+            "button": "Resincronizar",
+            "syncing": "Sincronizando..."
+        },
+        "dangerZone": {
+            "title": "Zona de peligro",
+            "description": "Eliminar esta colección es permanente y no se puede deshacer. Todo el progreso se perderá.",
+            "deleteButton": "Eliminar colección",
+            "deleteTitle": "¿Eliminar \"{name}\"?",
+            "deleteDesc": "Esta acción no se puede deshacer. Se eliminará permanentemente la colección y todo tu progreso guardado.",
+            "confirmButton": "Sí, eliminar",
+            "deleting": "Eliminando..."
+        }
+    },
+    "deleteDialog": {
+        "title": "¿Borrar colección?",
+        "descriptionPre": "Estás a punto de eliminar permanentemente la colección",
+        "descriptionPost": ". Esta acción no se puede deshacer."
+    },
+    "tableView": {
+        "title": "Vista de Tabla",
+        "export": "Exportar",
+        "import": "Importar",
+        "search": "Buscar...",
+        "noCards": "No se encontraron cartas",
+        "cards": "cartas",
+        "columns": {
+            "name": "Nombre",
+            "number": "Número",
+            "set": "Set",
+            "rarity": "Rareza",
+            "hp": "HP",
+            "total": "Total",
+            "normal": "Normal",
+            "holofoil": "Holo",
+            "reverseHolofoil": "Reverse"
+        },
+        "importSuccess": "Importación completada: {found} cartas encontradas, {updated} actualizaciones",
+        "importError": "Error al importar el archivo",
+        "emptyFileError": "El archivo CSV está vacío o no tiene datos",
+        "missingColumnsError": "El CSV debe tener una columna 'Nombre' o 'Número'",
+        "csvFormat": "Formato CSV",
+        "exportHelp": "Exportar: Descarga todas las cartas con columnas para cada variante.",
+        "importHelpPre": "Importar: El CSV debe tener",
+        "importHelpOr": "o",
+        "importHelpCols": "y columnas",
+        "importHelpEtc": "etc."
     }
 }

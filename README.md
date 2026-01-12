@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# HoloStack
 
-## Getting Started
+<div align="center">
+  <img src="public/icon.svg" alt="Logo de HoloStack" width="120" />
+  <h1>HoloStack</h1>
+  <p><strong>El gestor de colecciones Pokémon TCG moderno y auto-alojado.</strong></p>
+  
+  [![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
+  [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)](https://www.typescriptlang.org/)
+  [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED)](https://www.docker.com/)
+  [![Licencia](https://img.shields.io/badge/License-MIT-green)](LICENSE)
+</div>
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🌟 Sobre el Proyecto
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+**HoloStack** es una aplicación premium de código abierto diseñada para coleccionistas serios de Pokémon TCG que desean gestionar su colección con la elegancia que merece. A diferencia de las aplicaciones genéricas basadas en listas, HoloStack se centra en la **experiencia visual**, ofreciendo una "Vista de Carpeta" (Binder) que replica la sensación de hojear un álbum físico, junto con un **seguimiento financiero robusto** y gestión de datos **privada**.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### ✨ Características Principales
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **📖 Álbum Virtual**: Experimenta tu colección en una cuadrícula realista de 3x3 con huecos visuales para las cartas que faltan.
+- **💰 Inteligencia de Mercado**: Seguimiento de precios en tiempo real con soporte multimoneda (EUR, USD, GBP) utilizando datos de Cardmarket y TCGPlayer.
+- **🌍 Totalmente Internacionalizado**: Soporte nativo para **Español** e **Inglés**, incluyendo la traducción de datos de las cartas.
+- **🎨 UI Premium**: Temas dinámicos basados en tipos de Pokémon (Fuego, Agua, Planta...) con diseño glassmorphism y animaciones fluidas.
+- **🔒 Privacidad y Auto-alojamiento**: Tus datos son tuyos. Ejecútalo localmente con Docker y mantén tu base de datos privada. Incluye Backup/Restauración robusta vía JSON.
+- **📊 Analíticas Avanzadas**: Visualiza la distribución de valor de tu colección, tasas de completado por set y desglose por rareza.
+- **🏷️ Sistema de Etiquetas**: Organiza tus cartas con etiquetas globales personalizadas para filtrado y gestión simplificada.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🛠️ Stack Tecnológico
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Construido con las últimas tecnologías web modernas para rendimiento y mantenibilidad:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Framework**: [Next.js 16](https://nextjs.org/) (App Router & Server Actions)
+- **Lenguaje**: [TypeScript](https://www.typescriptlang.org/)
+- **Base de Datos**: [SQLite](https://sqlite.org/) (vía [Better-SQLite3](https://github.com/WiseLibs/better-sqlite3))
+- **ORM**: [Drizzle ORM](https://orm.drizzle.team/)
+- **Estilos**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **Componentes UI**: [Shadcn/UI](https://ui.shadcn.com/) + [Lucide Icons](https://lucide.dev/)
+- **Gráficos**: [Recharts](https://recharts.org/)
+- **Contenedores**: [Docker](https://www.docker.com/)
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 🚀 Comenzando
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Puedes ejecutar HoloStack en minutos usando Docker o configurándolo manualmente.
+
+### Opción A: Docker (Recomendada)
+
+1.  **Clonar el repositorio**:
+    ```bash
+    git clone https://github.com/tu-usuario/holostack.git
+    cd holostack
+    ```
+
+2.  **Iniciar el contenedor**:
+    ```bash
+    docker-compose up -d
+    ```
+
+3.  **Acceder a la app**:
+    Abre [http://localhost:3000](http://localhost:3000) en tu navegador. Los datos persistirán en la carpeta `./data`.
+
+### Opción B: Instalación Manual
+
+1.  **Instalar dependencias**:
+    ```bash
+    npm install
+    ```
+
+2.  **Inicializar la base de datos**:
+    ```bash
+    npx drizzle-kit push
+    ```
+
+3.  **Iniciar servidor de desarrollo**:
+    ```bash
+    npm run dev
+    ```
+
+---
+
+## 📂 Documentación
+
+Para información detallada sobre funcionalidades, roadmap y guías de usuario:
+
+- [📖 Manual de Usuario](docs/USER_MANUAL.md) - Guía completa de uso de HoloStack.
+- [🚀 Roadmap](docs/ROADMAP.md) - Planes futuros e hitos completados.
+- [📝 Changelog](CHANGELOG.md) - Historial de cambios y actualizaciones.
+
+---
+
+## 🤝 Contribuir
+
+¡Las contribuciones son bienvenidas! Por favor revisa el [ROADMAP](docs/ROADMAP.md) para ver qué está planeado o envía un issue para bugs y sugerencias.
+
+---
+
+<div align="center">
+  <p>Creado con ❤️ para la Comunidad Pokémon</p>
+</div>

@@ -12,7 +12,8 @@ import {
     BarChart3,
     Layers,
     Award,
-    RefreshCw
+    RefreshCw,
+    Search
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -199,7 +200,7 @@ export default function PortfolioPage() {
                     {isRefreshing && (
                         <div className="flex items-center gap-2 text-amber-400 text-sm animate-pulse">
                             <RefreshCw className="h-4 w-4 animate-spin" />
-                            <span>Actualizando {staleCount} precio{staleCount !== 1 ? "s" : ""}...</span>
+                            <span>{t("portfolio.updatingPrices", { count: staleCount })}</span>
                         </div>
                     )}
                 </div>
@@ -221,7 +222,7 @@ export default function PortfolioPage() {
                 </div>
             </div>
 
-            <div className="p-6 space-y-6">
+            <div className="p-6 space-y-6 max-w-7xl mx-auto">
                 {/* Summary Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <Card className="bg-slate-900/50 border-slate-800">
@@ -320,7 +321,7 @@ export default function PortfolioPage() {
                                                 </div>
                                                 {/* Hover overlay */}
                                                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                                    <span className="text-white text-xs font-medium">Ver detalle</span>
+                                                    <Search className="h-8 w-8 text-white opacity-80" />
                                                 </div>
                                             </div>
                                             <div className="mt-2">
@@ -349,7 +350,7 @@ export default function PortfolioPage() {
                                                         </a>
                                                     )}
                                                     {allPrices.cardmarket === null && allPrices.tcgplayer === null && (
-                                                        <span className="text-slate-500">Sin precio</span>
+                                                        <span className="text-slate-500">{t("portfolio.noPrice")}</span>
                                                     )}
                                                 </div>
                                                 {card.quantity > 1 && (

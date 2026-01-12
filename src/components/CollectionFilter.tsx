@@ -283,7 +283,7 @@ export default function CollectionFilter({
                                 ? "bg-purple-500/20 text-purple-400"
                                 : "text-slate-400 hover:text-white"
                         )}
-                        title="Vista de cuadrícula"
+                        title={t("common.gridView")}
                     >
                         <LayoutGrid className="h-4 w-4" />
                     </button>
@@ -295,7 +295,7 @@ export default function CollectionFilter({
                                 ? "bg-emerald-500/20 text-emerald-400"
                                 : "text-slate-400 hover:text-white"
                         )}
-                        title="Vista de tabla (Excel)"
+                        title={t("common.tableView")}
                     >
                         <Table className="h-4 w-4" />
                     </button>

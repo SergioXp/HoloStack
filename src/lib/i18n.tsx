@@ -122,3 +122,5 @@ export function useTranslation() {
     const { t, locale } = useI18n();
     return { t, locale };
 }
+
+// Force rebuild of translations

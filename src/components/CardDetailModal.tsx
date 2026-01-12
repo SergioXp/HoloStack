@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { getAllPrices, getMarketUrl, formatPrice, type Currency } from "@/lib/prices";
 import { formatPriceAge } from "@/lib/price-refresh";
+import { useI18n } from "@/lib/i18n";
 
 interface CardData {
     cardId: string;
@@ -54,6 +55,7 @@ export function CardDetailTrigger({
     onClick: () => void;
     className?: string;
 }) {
+    const { t } = useI18n();
     return (
         <button
             onClick={(e) => {
@@ -61,7 +63,7 @@ export function CardDetailTrigger({
                 onClick();
             }}
             className={`p-1.5 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white transition-all ${className}`}
-            title="Ver detalles"
+            title={t("cardDetail.viewDetails")}
         >
             <Search className="h-4 w-4" />
         </button>
@@ -74,6 +76,7 @@ export function CardDetailModal({
     onOpenChange,
     currency = "EUR"
 }: CardDetailModalProps) {
+    const { t } = useI18n();
     const [activeTab, setActiveTab] = useState("prices");
 
     if (!card) return null;
@@ -96,7 +99,7 @@ export function CardDetailModal({
         if (card.tcgplayerPrices) tcgData = JSON.parse(card.tcgplayerPrices);
     } catch { }
 
-    const priceAge = formatPriceAge(card.cardmarketPrices || card.tcgplayerPrices);
+    const priceAge = formatPriceAge(card.cardmarketPrices || card.tcgplayerPrices, t);
 
     // Calcular tendencia (si avg7 < avg30 está subiendo)
     const trend = cmData?.avg7 && cmData?.avg30
@@ -164,13 +167,13 @@ export function CardDetailModal({
                                         value="prices"
                                         className="data-[state=active]:bg-slate-800 data-[state=active]:text-white text-slate-400 font-medium"
                                     >
-                                        Mercado
+                                        {t("cardDetail.market")}
                                     </TabsTrigger>
                                     <TabsTrigger
                                         value="details"
                                         className="data-[state=active]:bg-slate-800 data-[state=active]:text-white text-slate-400 font-medium"
                                     >
-                                        Detalles
+                                        {t("cardDetail.detailsTab")}
                                     </TabsTrigger>
                                 </TabsList>
 
@@ -181,12 +184,12 @@ export function CardDetailModal({
                                         <div className="flex items-center justify-between px-1">
                                             <div className="flex items-center gap-2 text-xs font-medium text-slate-500 uppercase tracking-wider">
                                                 <Calendar className="h-3 w-3" />
-                                                Actualizado: {priceAge}
+                                                {t("cardDetail.updated")} {priceAge}
                                             </div>
                                             {trend && (
                                                 <Badge variant="outline" className={`${trend === "up" ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" : trend === "down" ? "bg-rose-500/10 text-rose-400 border-rose-500/20" : "bg-slate-500/10 text-slate-400 border-slate-500/20"}`}>
                                                     {trend === "up" ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
-                                                    {trend === "up" ? "Tendencia Alcista" : "Tendencia Bajista"}
+                                                    {trend === "up" ? t("cardDetail.trendUp") : t("cardDetail.trendDown")}
                                                 </Badge>
                                             )}
                                         </div>
@@ -201,10 +204,10 @@ export function CardDetailModal({
                                                 <div className="flex justify-between items-start mb-4 relative z-10">
                                                     <div>
                                                         <h3 className="text-blue-400 font-semibold mb-1">Cardmarket</h3>
-                                                        <p className="text-xs text-slate-400">Principal referencia europea</p>
+                                                        <p className="text-xs text-slate-400">{t("cardDetail.cmReference")}</p>
                                                     </div>
                                                     <div className="text-right">
-                                                        <p className="text-sm text-slate-400">Tendencia</p>
+                                                        <p className="text-sm text-slate-400">{t("cardDetail.trend")}</p>
                                                         <p className="text-3xl font-bold text-white tracking-tight">
                                                             €{allPrices.cardmarket.toFixed(2)}
                                                         </p>
@@ -213,13 +216,13 @@ export function CardDetailModal({
 
                                                 <div className="grid grid-cols-2 gap-4 mt-2 relative z-10">
                                                     <div className="bg-slate-950/50 rounded-lg p-3 border border-indigo-500/10">
-                                                        <p className="text-xs text-slate-500 mb-1">Precio Mínimo</p>
+                                                        <p className="text-xs text-slate-500 mb-1">{t("cardDetail.minPrice")}</p>
                                                         <p className="font-semibold text-lg text-slate-200">
                                                             €{cmData?.low?.toFixed(2) || "-"}
                                                         </p>
                                                     </div>
                                                     <div className="bg-slate-950/50 rounded-lg p-3 border border-indigo-500/10">
-                                                        <p className="text-xs text-slate-500 mb-1">Media 30 días</p>
+                                                        <p className="text-xs text-slate-500 mb-1">{t("cardDetail.avg30")}</p>
                                                         <p className="font-semibold text-lg text-slate-200">
                                                             €{cmData?.avg30?.toFixed(2) || "-"}
                                                         </p>
@@ -233,10 +236,10 @@ export function CardDetailModal({
                                             <div className="bg-linear-to-br from-purple-950/30 to-slate-900 border border-purple-900/30 rounded-xl p-5 flex items-center justify-between">
                                                 <div>
                                                     <h3 className="text-purple-400 font-semibold mb-1">TCGPlayer</h3>
-                                                    <p className="text-xs text-slate-400">Mercado USD</p>
+                                                    <p className="text-xs text-slate-400">{t("cardDetail.usdMarket")}</p>
                                                 </div>
                                                 <div className="text-right">
-                                                    <p className="text-sm text-slate-400">Market Price</p>
+                                                    <p className="text-sm text-slate-400">{t("cardDetail.marketPrice")}</p>
                                                     <p className="text-2xl font-bold text-white">
                                                         ${allPrices.tcgplayer.toFixed(2)}
                                                     </p>
@@ -248,22 +251,22 @@ export function CardDetailModal({
                                     <TabsContent value="details" className="space-y-4 animate-in slide-in-from-bottom-2 fade-in duration-300">
                                         <div className="grid grid-cols-1 gap-4">
                                             <div className="p-4 bg-slate-900/50 rounded-xl border border-slate-800">
-                                                <h3 className="text-slate-400 text-sm font-medium mb-3 uppercase tracking-wider">Propiedades</h3>
+                                                <h3 className="text-slate-400 text-sm font-medium mb-3 uppercase tracking-wider">{t("cardDetail.properties")}</h3>
                                                 <dl className="grid grid-cols-2 gap-x-4 gap-y-4 text-sm">
                                                     <div>
-                                                        <dt className="text-slate-500 mb-1">Set</dt>
+                                                        <dt className="text-slate-500 mb-1">{t("common.set")}</dt>
                                                         <dd className="font-medium text-slate-200">{card.setName || card.setId}</dd>
                                                     </div>
                                                     <div>
-                                                        <dt className="text-slate-500 mb-1">Rareza</dt>
+                                                        <dt className="text-slate-500 mb-1">{t("cardDetail.rarity")}</dt>
                                                         <dd className="font-medium text-slate-200">{card.cardRarity || "-"}</dd>
                                                     </div>
                                                     <div>
-                                                        <dt className="text-slate-500 mb-1">Número</dt>
+                                                        <dt className="text-slate-500 mb-1">{t("cardDetail.number")}</dt>
                                                         <dd className="font-medium text-slate-200">{card.cardNumber || "-"}</dd>
                                                     </div>
                                                     <div>
-                                                        <dt className="text-slate-500 mb-1">Variante</dt>
+                                                        <dt className="text-slate-500 mb-1">{t("cardDetail.variant")}</dt>
                                                         <dd className="font-medium text-slate-200 capitalize">{card.variant?.replace("-", " ") || "Normal"}</dd>
                                                     </div>
                                                 </dl>
@@ -275,9 +278,9 @@ export function CardDetailModal({
                                                         <Package className="h-5 w-5" />
                                                     </div>
                                                     <div>
-                                                        <p className="text-sm text-emerald-500 font-medium">En tu colección</p>
+                                                        <p className="text-sm text-emerald-500 font-medium">{t("cardDetail.inCollection")}</p>
                                                         <p className="text-xl font-bold text-emerald-400">
-                                                            {card.quantity} {card.quantity === 1 ? "copia" : "copias"}
+                                                            {card.quantity} {card.quantity === 1 ? t("cardDetail.copy") : t("cardDetail.copies")}
                                                         </p>
                                                     </div>
                                                 </div>
@@ -306,7 +309,7 @@ export function CardDetailModal({
                                     asChild
                                 >
                                     <a href={getMarketUrl("ebay", card.cardName)} target="_blank" rel="noopener noreferrer">
-                                        Buscar en eBay
+                                        {t("cardDetail.searchEbay")}
                                     </a>
                                 </Button>
                             </div>

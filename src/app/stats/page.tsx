@@ -54,44 +54,44 @@ export default function StatsPage() {
                         <ChevronRight className="h-4 w-4 mr-1 rotate-180" />
                         {t("common.backToHome")}
                     </Link>
-                    <h1 className="text-3xl font-bold text-white mb-2">Estadísticas de Colección</h1>
-                    <p className="text-slate-400">Análisis detallado de tu progreso y valor</p>
+                    <h1 className="text-3xl font-bold text-white mb-2">{t("stats.title")}</h1>
+                    <p className="text-slate-400">{t("stats.subtitle")}</p>
                 </div>
 
                 {/* KPI Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <Card className="bg-slate-900/50 border-slate-800 text-white">
                         <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium text-slate-400">Valor Estimado</CardTitle>
+                            <CardTitle className="text-sm font-medium text-slate-400">{t("stats.estimatedValue")}</CardTitle>
                             <TrendingUp className="h-4 w-4 text-emerald-400" />
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold text-emerald-400">
                                 €{data.totalValue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </div>
-                            <p className="text-xs text-slate-500 mt-1">Basado en precios de Cardmarket</p>
+                            <p className="text-xs text-slate-500 mt-1">{t("stats.valueSubtitle")}</p>
                         </CardContent>
                     </Card>
 
                     <Card className="bg-slate-900/50 border-slate-800 text-white">
                         <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium text-slate-400">Total Cartas</CardTitle>
+                            <CardTitle className="text-sm font-medium text-slate-400">{t("stats.totalCards")}</CardTitle>
                             <Layers className="h-4 w-4 text-blue-400" />
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold text-white">{data.totalCards.toLocaleString()}</div>
-                            <p className="text-xs text-slate-500 mt-1">Copias totales en colección</p>
+                            <p className="text-xs text-slate-500 mt-1">{t("stats.cardsSubtitle")}</p>
                         </CardContent>
                     </Card>
 
                     <Card className="bg-slate-900/50 border-slate-800 text-white">
                         <CardHeader className="flex flex-row items-center justify-between pb-2">
-                            <CardTitle className="text-sm font-medium text-slate-400">Series Unicas</CardTitle>
+                            <CardTitle className="text-sm font-medium text-slate-400">{t("stats.uniqueSeries")}</CardTitle>
                             <Award className="h-4 w-4 text-purple-400" />
                         </CardHeader>
                         <CardContent>
                             <div className="text-2xl font-bold text-white">{data.seriesData.length}</div>
-                            <p className="text-xs text-slate-500 mt-1">Eras coleccionadas</p>
+                            <p className="text-xs text-slate-500 mt-1">{t("stats.seriesSubtitle")}</p>
                         </CardContent>
                     </Card>
                 </div>
@@ -101,8 +101,8 @@ export default function StatsPage() {
                     {/* Rarity Distribution */}
                     <Card className="bg-slate-900/50 border-slate-800 text-white">
                         <CardHeader>
-                            <CardTitle>Distribución por Rareza</CardTitle>
-                            <CardDescription className="text-slate-400">Composición de tu colección</CardDescription>
+                            <CardTitle className="text-white">{t("stats.rarityDistribution")}</CardTitle>
+                            <CardDescription className="text-slate-400">{t("stats.composition")}</CardDescription>
                         </CardHeader>
                         <CardContent className="h-[300px]">
                             <ResponsiveContainer width="100%" height="100%">
@@ -132,8 +132,8 @@ export default function StatsPage() {
                     {/* Series Distribution */}
                     <Card className="bg-slate-900/50 border-slate-800 text-white">
                         <CardHeader>
-                            <CardTitle>Cartas por Serie</CardTitle>
-                            <CardDescription className="text-slate-400">Volumen por era</CardDescription>
+                            <CardTitle className="text-white">{t("stats.cardsBySeries")}</CardTitle>
+                            <CardDescription className="text-slate-400">{t("stats.volume")}</CardDescription>
                         </CardHeader>
                         <CardContent className="h-[300px]">
                             <ResponsiveContainer width="100%" height="100%">
@@ -155,7 +155,7 @@ export default function StatsPage() {
                 {/* Top Cards List */}
                 <Card className="bg-slate-900/50 border-slate-800 text-white">
                     <CardHeader>
-                        <CardTitle>Top 5 Cartas de Mayor Valor</CardTitle>
+                        <CardTitle className="text-white">{t("stats.topCards")}</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-4">

@@ -34,6 +34,7 @@ export async function POST(request: NextRequest) {
                 name: cards.name,
                 cardmarketPrices: cards.cardmarketPrices,
                 tcgplayerPrices: cards.tcgplayerPrices,
+                syncedAt: cards.syncedAt,
             })
             .from(cards)
             .where(inArray(cards.id, limitedCardIds));
@@ -46,30 +47,11 @@ export async function POST(request: NextRequest) {
         for (const card of cardsData) {
             let needsRefresh = false;
 
-            // Parsear timestamp de Cardmarket
-            if (card.cardmarketPrices) {
-                try {
-                    const cmData = JSON.parse(card.cardmarketPrices);
-                    const updatedAt = cmData.updated ? new Date(cmData.updated).getTime() : 0;
-                    if (now - updatedAt > MAX_AGE_MS) {
-                        needsRefresh = true;
-                    }
-                } catch {
-                    needsRefresh = true;
-                }
-            } else {
+            if (!card.syncedAt) {
                 needsRefresh = true;
-            }
-
-            // También verificar TCGPlayer
-            if (!needsRefresh && card.tcgplayerPrices) {
-                try {
-                    const tcgData = JSON.parse(card.tcgplayerPrices);
-                    const updatedAt = tcgData.updated ? new Date(tcgData.updated).getTime() : 0;
-                    if (now - updatedAt > MAX_AGE_MS) {
-                        needsRefresh = true;
-                    }
-                } catch {
+            } else {
+                const refreshedMs = card.syncedAt.getTime();
+                if (now - refreshedMs > MAX_AGE_MS) {
                     needsRefresh = true;
                 }
             }
@@ -91,6 +73,7 @@ export async function POST(request: NextRequest) {
                         .set({
                             tcgplayerPrices: JSON.stringify(freshData.pricing.tcgplayer || {}),
                             cardmarketPrices: JSON.stringify(freshData.pricing.cardmarket || {}),
+                            syncedAt: new Date(),
                         })
                         .where(eq(cards.id, card.id));
 

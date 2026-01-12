@@ -41,15 +41,9 @@ export async function GET() {
         const now = Date.now();
         const staleCardIds: string[] = [];
 
-        const isPriceStale = (pricesJson: string | null): boolean => {
-            if (!pricesJson) return true;
-            try {
-                const data = JSON.parse(pricesJson);
-                const updatedAt = data.updated ? new Date(data.updated).getTime() : 0;
-                return now - updatedAt > MAX_AGE_MS;
-            } catch {
-                return true;
-            }
+        const isPriceStale = (syncedAt: Date | null): boolean => {
+            if (!syncedAt) return true;
+            return now - syncedAt.getTime() > MAX_AGE_MS;
         };
 
         // Formatear respuesta
@@ -58,7 +52,7 @@ export async function GET() {
             if (!card) return null;
 
             // Verificar si el precio está obsoleto
-            if (isPriceStale(card.cardmarketPrices) || isPriceStale(card.tcgplayerPrices)) {
+            if (isPriceStale(card.syncedAt)) {
                 staleCardIds.push(card.id);
             }
 

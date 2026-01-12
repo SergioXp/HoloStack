@@ -4,6 +4,56 @@
 
 ---
 
+## [0.4.2] - 2026-01-12
+
+### 🌐 Internationalization Final Polish
+
+**Fecha**: 2026-01-12
+
+#### Cambios
+- **Corrección Estructural I18n**: Reorganización de archivos JSON marcando namespaces globales fuera de `common` para evitar errores de acceso y conflictos.
+- **Cobertura Total**: Traducción final de componentes complejos (`CollectionTableView`) y utilidades (`price-refresh`), eliminando los últimos textos hardcoded ("Sin datos", "Updated").
+- **Integridad**: Eliminación de claves duplicadas en archivos de idioma y fusión de definiciones perdidas.
+
+#### Archivos Modificados
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `src/locales/*.json` | Refactor | Reestructuración de namespaces y limpieza. |
+| `src/lib/price-refresh.ts` | Refactor | Soporte i18n en funciones de utilidad. |
+| `src/components/CardDetailModal.tsx` | Fix | Paso de función `t` a utilidades. |
+| `src/components/CollectionTableView.tsx` | I18n | Traducción de headers y mensajes CSV. |
+| `src/components/DeleteCollectionButton.tsx` | I18n | Traducción de diálogos. |
+
+## [0.4.1] - 2026-01-12
+
+### 🎨 Binder Visual Overhaul & Responsive Nav
+
+**Fecha**: 2026-01-12
+
+#### Cambios
+- **Binder (Álbum) Mejorado**:
+    - Cálculo dinámico de aspect-ratio para evitar recortes en todos los layouts (3x3, 4x3).
+    - Aumento del tamaño visual del álbum (47vw por página) y márgenes reducidos para cartas más grandes.
+    - Scroll vertical automático habilitado para adaptarse a diferentes alturas de viewport.
+    - Cartas en modo binder optimizadas (`object-cover`, sin texto, badges reubicados).
+- **Navegación Responsive**:
+    - Adaptación inteligente del menú principal: textos ocultos en pantallas < 1280px.
+    - Eliminación de scroll horizontal en favor de diseño limpio de iconos.
+    - Tooltips añadidos para accesibilidad en modo iconos.
+- **Mejoras API**:
+    - Inclusión de `setName` en respuestas de colección individual.
+
+#### Archivos Modificados
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `src/app/binder/page.tsx` | Modificado | Lógica de aspect-ratio y estilos de layout. |
+| `src/components/CollectionItemManager.tsx` | Modificado | Variante 'binder' y estilos de carta. |
+| `src/components/Header.tsx` | Modificado | Lógica responsive y tooltips. |
+| `src/app/api/collections/[id]/route.ts` | Modificado | Campo `setName` añadido. |
+
+#### Notas Técnicas
+- El cálculo del binder ahora usa: `(layout.cols * 70 + 40) / (layout.rows * 95 + 40)` para garantizar que el contenedor siempre respete la proporción de las cartas + márgenes.
+
 ## [0.4.0] - 2026-01-11
 
 ### ✨ Phase 2 Complete: Proxies, Tags & Bulk Operations
@@ -407,7 +457,7 @@ CREATE TABLE user_profiles (
 
 ## Próximos Desarrollos
 
-- [ ] Completar traducciones faltantes (si quedan componentes menores)
+- [x] Completar traducciones faltantes (Proyecto 100% traducido)
 - [ ] Exportar/Importar colecciones (JSON/CSV)
 - [ ] Estadísticas avanzadas de colección (Gráficos)
 - [ ] Modo oscuro/claro configurable por usuario
@@ -417,7 +467,7 @@ CREATE TABLE user_profiles (
 
 ## Estado Actual del Proyecto
 
-**Última verificación**: 2026-01-11
+**Última verificación**: 2026-01-12
 
 | Check | Estado |
 |-------|--------|

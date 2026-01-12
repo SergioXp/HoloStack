@@ -7,14 +7,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, Layers, Heart } from "lucide-react";
-import {
-    Dialog,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
-    DialogDescription,
-} from "@/components/ui/dialog";
 import { useI18n } from "@/lib/i18n";
+import { CardDetailModal } from "@/components/CardDetailModal";
 
 interface CardData {
     id: string;
@@ -51,8 +45,10 @@ export default function SetCardsClientPage({ setKeywords: set, cards }: PageProp
     const { t, locale } = useI18n();
     const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
     const [wishlist, setWishlist] = useState<Set<string>>(new Set());
+    const [ownership, setOwnership] = useState<Record<string, number>>({});
 
     useEffect(() => {
+        // Fetch wishlist
         fetch("/api/wishlist")
             .then(res => res.json())
             .then((data: any[]) => {
@@ -60,6 +56,12 @@ export default function SetCardsClientPage({ setKeywords: set, cards }: PageProp
                     setWishlist(new Set(data.map(item => item.cardId)));
                 }
             })
+            .catch(console.error);
+
+        // Fetch ownership
+        fetch("/api/collection/ownership")
+            .then(res => res.json())
+            .then(data => setOwnership(data))
             .catch(console.error);
     }, []);
 
@@ -265,183 +267,22 @@ export default function SetCardsClientPage({ setKeywords: set, cards }: PageProp
                     )}
 
                     {/* Card Detail Modal */}
-                    <Dialog open={!!selectedCard} onOpenChange={(open) => !open && setSelectedCard(null)}>
-                        <DialogContent className="bg-slate-950 border-slate-800 text-white sm:max-w-5xl w-full p-0 overflow-hidden shadow-2xl">
-                            {selectedCard && (
-                                <div className="flex flex-col md:flex-row max-h-[90vh]">
-                                    {/* Left Column: Image */}
-                                    <div className="bg-linear-to-br from-slate-900 via-slate-950 to-slate-900 p-8 flex items-center justify-center md:w-2/5 relative overflow-hidden">
-                                        {/* Background Glow */}
-                                        <div className="absolute inset-0 opacity-30">
-                                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-purple-600/20 rounded-full blur-3xl" />
-                                        </div>
-
-                                        {(() => {
-                                            const imgs = selectedCard.images ? JSON.parse(selectedCard.images) : null;
-                                            return imgs?.large || imgs?.small ? (
-                                                <div className="relative group">
-                                                    <div className="relative h-[420px] w-[300px] rounded-xl overflow-hidden shadow-2xl shadow-black/50 transition-transform duration-500 group-hover:scale-105">
-                                                        <Image
-                                                            src={imgs.large || imgs.small}
-                                                            alt={selectedCard.name}
-                                                            fill
-                                                            className="object-contain"
-                                                            sizes="300px"
-                                                            priority
-                                                        />
-                                                    </div>
-                                                    <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-[80%] h-8 bg-linear-to-t from-purple-500/10 to-transparent blur-xl" />
-                                                </div>
-                                            ) : (
-                                                <div className="h-[400px] w-[280px] bg-slate-800 flex items-center justify-center rounded-xl border border-slate-700">
-                                                    <span className="text-slate-500">{t("cardItem.noImage")}</span>
-                                                </div>
-                                            );
-                                        })()}
-                                    </div>
-
-                                    {/* Right Column: Info */}
-                                    <div className="p-8 md:w-3/5 overflow-y-auto max-h-[80vh] bg-slate-900/50">
-                                        <DialogHeader className="mb-6">
-                                            <div className="flex items-start justify-between gap-4">
-                                                <div className="flex-1">
-                                                    <DialogTitle className="text-3xl font-bold mb-2 text-white leading-tight">
-                                                        {selectedCard.name}
-                                                    </DialogTitle>
-                                                    <DialogDescription className="text-slate-400 text-base flex flex-wrap items-center gap-2">
-                                                        <Badge className="bg-slate-800 text-slate-300 border-0">
-                                                            {selectedCard.supertype}
-                                                        </Badge>
-                                                        {selectedCard.subtypes && JSON.parse(selectedCard.subtypes).map((st: string) => (
-                                                            <Badge key={st} variant="outline" className="border-slate-700 text-slate-400">
-                                                                {st}
-                                                            </Badge>
-                                                        ))}
-                                                    </DialogDescription>
-                                                    {selectedCard.evolvesFrom && (
-                                                        <p className="text-sm text-blue-400 mt-2 flex items-center gap-1">
-                                                            <span>↩</span> {t("cardDetail.evolvesFrom")} <span className="font-semibold">{selectedCard.evolvesFrom}</span>
-                                                        </p>
-                                                    )}
-                                                </div>
-                                                {selectedCard.hp && (
-                                                    <div className="text-right shrink-0">
-                                                        <div className="text-4xl font-black text-red-500 leading-none">{selectedCard.hp}</div>
-                                                        <div className="text-xs text-slate-500 uppercase tracking-wider">HP</div>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </DialogHeader>
-
-                                        {/* Flavor Text */}
-                                        {selectedCard.flavorText && (
-                                            <div className="bg-slate-800/50 p-4 rounded-xl border-l-4 border-purple-500 mb-6 italic text-slate-300 text-sm leading-relaxed">
-                                                &quot;{selectedCard.flavorText}&quot;
-                                            </div>
-                                        )}
-
-                                        {/* Info Grid */}
-                                        <div className="grid grid-cols-2 gap-3 mb-6">
-                                            <div className="bg-slate-800/40 rounded-xl p-4">
-                                                <h4 className="text-xs text-slate-500 uppercase tracking-wider mb-1">{t("cardDetail.number")}</h4>
-                                                <p className="font-bold text-white text-lg">{selectedCard.number}/{set.total}</p>
-                                            </div>
-                                            <div className="bg-slate-800/40 rounded-xl p-4">
-                                                <h4 className="text-xs text-slate-500 uppercase tracking-wider mb-1">{t("cardDetail.rarity")}</h4>
-                                                {selectedCard.rarity ? (
-                                                    <Badge className="bg-linear-to-r from-yellow-600/20 to-orange-600/20 text-yellow-300 border border-yellow-600/30">
-                                                        {selectedCard.rarity}
-                                                    </Badge>
-                                                ) : <span className="text-slate-500">-</span>}
-                                            </div>
-                                            <div className="bg-slate-800/40 rounded-xl p-4">
-                                                <h4 className="text-xs text-slate-500 uppercase tracking-wider mb-1">{t("cardDetail.artist")}</h4>
-                                                <p className="text-white text-sm">{selectedCard.artist || t("cardDetail.unknown")}</p>
-                                            </div>
-                                            <div className="bg-slate-800/40 rounded-xl p-4">
-                                                <h4 className="text-xs text-slate-500 uppercase tracking-wider mb-1">{t("cardDetail.types")}</h4>
-                                                <div className="flex gap-1 flex-wrap">
-                                                    {selectedCard.types ? JSON.parse(selectedCard.types).map((t: string) => (
-                                                        <Badge key={t} className="bg-slate-700 text-slate-200 text-xs">{t}</Badge>
-                                                    )) : <span className="text-slate-500">N/A</span>}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* Prices Section */}
-                                        <div className="border-t border-slate-800 pt-6">
-                                            <h4 className="text-white font-bold mb-4 flex items-center gap-2 text-lg">
-                                                <span className="text-xl">💰</span> {t("cardDetail.marketPrices")}
-                                            </h4>
-
-                                            <div className="space-y-3">
-                                                {selectedCard.tcgplayerPrices && (() => {
-                                                    try {
-                                                        const prices = JSON.parse(selectedCard.tcgplayerPrices);
-                                                        return Object.entries(prices).map(([type, data]: [string, any]) => {
-                                                            if (!data || !data.market) return null;
-                                                            return (
-                                                                <div key={type} className="bg-linear-to-r from-green-950/40 to-emerald-950/20 border border-green-700/30 p-4 rounded-xl flex items-center justify-between">
-                                                                    <div className="flex items-center gap-3">
-                                                                        <span className="text-green-400 font-bold">TCGPlayer</span>
-                                                                        <Badge variant="outline" className="text-xs border-green-600/50 text-green-300/80 capitalize">
-                                                                            {type.replace(/([A-Z])/g, ' $1').trim()}
-                                                                        </Badge>
-                                                                    </div>
-                                                                    <div className="text-right">
-                                                                        <p className="text-2xl font-bold text-white">${data.market?.toFixed(2)}</p>
-                                                                        <p className="text-xs text-slate-500">{t("cardDetail.market")}</p>
-                                                                    </div>
-                                                                </div>
-                                                            );
-                                                        });
-                                                    } catch { return null; }
-                                                })()}
-
-                                                {selectedCard.cardmarketPrices && (() => {
-                                                    try {
-                                                        const prices = JSON.parse(selectedCard.cardmarketPrices);
-                                                        return (
-                                                            <div className="bg-linear-to-r from-blue-950/40 to-cyan-950/20 border border-blue-700/30 p-4 rounded-xl flex items-center justify-between">
-                                                                <div className="flex items-center gap-3">
-                                                                    <span className="text-blue-400 font-bold">Cardmarket</span>
-                                                                    <Badge variant="outline" className="text-xs border-blue-600/50 text-blue-300/80">
-                                                                        Trend
-                                                                    </Badge>
-                                                                </div>
-                                                                <div className="text-right">
-                                                                    <p className="text-2xl font-bold text-white">€{prices.trendPrice?.toFixed(2)}</p>
-                                                                    <p className="text-xs text-slate-500">{t("cardDetail.trend")}</p>
-                                                                </div>
-                                                            </div>
-                                                        );
-                                                    } catch { return null; }
-                                                })()}
-
-                                                {!selectedCard.tcgplayerPrices && !selectedCard.cardmarketPrices && (
-                                                    <div className="text-center py-6 text-slate-500 bg-slate-800/30 rounded-xl">
-                                                        <p className="text-sm">{t("cardDetail.noPrices")}</p>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-
-                                        {/* Action Buttons */}
-                                        <div className="mt-8 pt-6 border-t border-slate-800">
-                                            <div className="grid grid-cols-2 gap-3">
-                                                <Button variant="outline" className="h-12 bg-slate-800/50 border-slate-700 hover:bg-slate-700 text-white rounded-xl">
-                                                    🌐 {t("cardDetail.viewOnTCGPlayer")}
-                                                </Button>
-                                                <Button className="h-12 bg-linear-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-semibold rounded-xl">
-                                                    ➕ {t("cardDetail.addToCollection")}
-                                                </Button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        </DialogContent>
-                    </Dialog>
+                    <CardDetailModal
+                        open={!!selectedCard}
+                        onOpenChange={(open) => !open && setSelectedCard(null)}
+                        card={selectedCard ? {
+                            cardId: selectedCard.id,
+                            cardName: selectedCard.name,
+                            cardNumber: selectedCard.number,
+                            cardImages: selectedCard.images || undefined,
+                            cardRarity: selectedCard.rarity || undefined,
+                            setId: set.id,
+                            setName: set.name,
+                            tcgplayerPrices: selectedCard.tcgplayerPrices,
+                            cardmarketPrices: selectedCard.cardmarketPrices,
+                            quantity: ownership[selectedCard.id] || 0,
+                        } : null}
+                    />
                 </div>
             </div>
         </div>

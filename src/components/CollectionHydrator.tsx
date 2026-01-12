@@ -6,6 +6,7 @@ import { Download, CloudDownload, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { useI18n } from "@/lib/i18n";
 import {
     Dialog,
     DialogContent,
@@ -22,6 +23,7 @@ interface CollectionHydratorProps {
 }
 
 export default function CollectionHydrator({ collectionId, hasFilters, mode = "full", className }: CollectionHydratorProps) {
+    const { t } = useI18n();
     const [isSyncing, setIsSyncing] = useState(false);
     const [showDialog, setShowDialog] = useState(false);
     const [progress, setProgress] = useState(0);
@@ -35,7 +37,7 @@ export default function CollectionHydrator({ collectionId, hasFilters, mode = "f
         setIsSyncing(true);
         setShowDialog(true);
         console.log("Dialog state set to true");
-        setStatusMessage("Conectando con servidor...");
+        setStatusMessage(t("hydrator.connecting"));
         setProgress(0);
         setProcessedFiles(0);
         setTotalFiles(0);
@@ -86,14 +88,14 @@ export default function CollectionHydrator({ collectionId, hasFilters, mode = "f
             eventSource.onerror = (error) => {
                 console.error("SSE Error:", error);
                 if (eventSource.readyState !== EventSource.CLOSED) {
-                    setStatusMessage("Error de conexión con el servidor");
+                    setStatusMessage(t("hydrator.connectionError"));
                     eventSource.close();
                     setIsSyncing(false);
                 }
             };
         } catch (error) {
             console.error("Error initiating sync:", error);
-            setStatusMessage("Error al iniciar la descarga");
+            setStatusMessage(t("hydrator.startError"));
             setIsSyncing(false);
         }
     };
@@ -107,9 +109,9 @@ export default function CollectionHydrator({ collectionId, hasFilters, mode = "f
                     <div className="bg-blue-500/10 p-4 rounded-full mb-4">
                         <Download className="w-8 h-8 text-blue-400" />
                     </div>
-                    <h3 className="text-xl font-semibold text-white mb-2">Descargar Datos</h3>
+                    <h3 className="text-xl font-semibold text-white mb-2">{t("hydrator.title")}</h3>
                     <p className="text-slate-400 text-center mb-6 text-sm">
-                        Descarga la información más reciente de todas las cartas de esta colección.
+                        {t("hydrator.description")}
                     </p>
                     <Button
                         onClick={handleSync}
@@ -117,7 +119,7 @@ export default function CollectionHydrator({ collectionId, hasFilters, mode = "f
                         className="bg-blue-600 hover:bg-blue-500 text-white w-full"
                     >
                         <Download className="w-4 h-4 mr-2" />
-                        Descargar Datos
+                        {t("hydrator.button")}
                     </Button>
                 </div>
             ) : (
@@ -126,7 +128,7 @@ export default function CollectionHydrator({ collectionId, hasFilters, mode = "f
                     variant="ghost"
                     size="icon"
                     className="text-blue-400 hover:text-blue-300 hover:bg-blue-950/30"
-                    title="Sincronizar datos de la nube"
+                    title={t("common.syncCloudData")}
                 >
                     <CloudDownload className="h-5 w-5" />
                 </Button>
@@ -139,9 +141,9 @@ export default function CollectionHydrator({ collectionId, hasFilters, mode = "f
             }}>
                 <DialogContent className="bg-slate-900 border-slate-800 text-slate-100 sm:max-w-md">
                     <DialogHeader>
-                        <DialogTitle>Sincronizando Colección</DialogTitle>
+                        <DialogTitle>{t("common.syncingCollection")}</DialogTitle>
                         <DialogDescription className="text-slate-400">
-                            Por favor espera mientras descargamos la información de las cartas.
+                            {t("hydrator.wait")}
                         </DialogDescription>
                     </DialogHeader>
 
@@ -164,7 +166,7 @@ export default function CollectionHydrator({ collectionId, hasFilters, mode = "f
                         )}
 
                         <p className="text-xs text-slate-500 text-center">
-                            No cierres esta ventana hasta que termine el proceso.
+                            {t("hydrator.doNotClose")}
                         </p>
                     </div>
                 </DialogContent>

@@ -29,6 +29,8 @@ interface CollectionItemManagerProps {
     totalInSet: number;
     showSetInfo?: boolean;
     setName?: string;
+    onUpdate?: (variant: string, quantity: number) => void;
+    variant?: 'default' | 'binder';
 }
 
 export default function CollectionItemManager({
@@ -37,7 +39,9 @@ export default function CollectionItemManager({
     ownedData,
     totalInSet,
     showSetInfo = false,
-    setName
+    setName,
+    onUpdate,
+    variant = 'default'
 }: CollectionItemManagerProps) {
     const { t } = useI18n();
     const [isLoading, setIsLoading] = useState(false);
@@ -48,14 +52,23 @@ export default function CollectionItemManager({
     const [isInWishlist, setIsInWishlist] = useState(false);
     const [wishlistLoading, setWishlistLoading] = useState(false);
 
-    // ... (rest of logic same as before)
     // Load wishlist (optimizado: solo IDs)
     useEffect(() => {
-        // ... same as before
-    }, []);
+        const checkWishlist = async () => {
+            try {
+                const res = await fetch(`/api/wishlist?check=${card.id}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setIsInWishlist(data.inWishlist);
+                }
+            } catch (error) {
+                console.error("Error checking wishlist:", error);
+            }
+        };
+        checkWishlist();
+    }, [card.id]);
 
     const toggleWishlist = async (e: React.MouseEvent) => {
-        // ... same as before
         e.stopPropagation();
         setWishlistLoading(true);
         const newState = !isInWishlist;
@@ -71,6 +84,22 @@ export default function CollectionItemManager({
             setIsInWishlist(!newState);
         } finally {
             setWishlistLoading(false);
+        }
+    };
+
+    const handleUpdate = async (variant: string, newQuantity: number) => {
+        // Optimistic update via callback if provided
+        if (onUpdate) {
+            onUpdate(variant, newQuantity);
+        }
+
+        setIsLoading(true);
+        try {
+            await updateCollectionItem(collectionId, card.id, variant, newQuantity);
+        } catch (error) {
+            console.error("Failed to update item", error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -99,12 +128,6 @@ export default function CollectionItemManager({
 
     const cardImages = card.images ? JSON.parse(card.images) : null;
 
-    const handleUpdate = async (variant: string, newQuantity: number) => {
-        setIsLoading(true);
-        await updateCollectionItem(collectionId, card.id, variant, newQuantity);
-        setIsLoading(false);
-    };
-
     // Determinar rareza para efectos visuales
     const isSpecialRarity = card.rarity?.toLowerCase().includes('rare') ||
         card.rarity?.toLowerCase().includes('holo') ||
@@ -123,32 +146,42 @@ export default function CollectionItemManager({
                                 ? "bg-secondary/50 border-primary/20"
                                 : "bg-muted/30 border-transparent",
                             !isOwned && "grayscale opacity-50 hover:grayscale-0 hover:opacity-100",
-                            isHovered && "scale-[1.03] z-10"
+                            isHovered && "scale-[1.03] z-10",
+                            variant === 'binder' ? "h-full w-full border-0 rounded-md bg-transparent m-0 p-0" : ""
                         )}
                         onMouseEnter={() => setIsHovered(true)}
                         onMouseLeave={() => setIsHovered(false)}
                     >
                         {/* Glow Effect for Special Cards */}
-                        {isOwned && isSpecialRarity && (
+                        {isOwned && isSpecialRarity && variant !== 'binder' && (
                             <div className="absolute inset-0 bg-linear-to-br from-yellow-500/10 via-transparent to-purple-500/10 z-0" />
                         )}
 
-                        <div className="relative p-2">
-                            {/* Owned Badge */}
-                            {isOwned && (
-                                <div className="absolute top-3 right-3 z-20">
-                                    <div className="flex items-center gap-1 bg-emerald-500 text-black px-2 py-0.5 rounded-full text-xs font-bold shadow-lg shadow-emerald-500/30">
-                                        {isSpecialRarity && <Sparkles className="h-3 w-3" />}
-                                        {totalOwned}
-                                    </div>
-                                </div>
-                            )}
+                        <div className={cn("relative", variant === 'default' && "p-2", variant === 'binder' && "h-full p-0 flex items-center justify-center")}>
+
 
                             {/* Card Image */}
                             <div className={cn(
-                                "relative aspect-[2.5/3.5] rounded-lg overflow-hidden mb-2 transition-all duration-300",
+                                "relative overflow-hidden transition-all duration-300",
+                                variant === 'default' && "aspect-[2.5/3.5] rounded-lg mb-2",
+                                variant === 'binder' && "aspect-[63/88] h-full w-auto max-w-full mx-auto rounded-sm shadow-md",
                                 isHovered && "shadow-xl shadow-black/50"
                             )}>
+                                {/* Owned Badge - Moved Inside */}
+                                {isOwned && (
+                                    <div className={cn(
+                                        "absolute z-20",
+                                        variant === 'binder' ? "top-1 right-1" : "top-3 right-3"
+                                    )}>
+                                        <div className={cn(
+                                            "flex items-center gap-1 bg-emerald-500 text-black rounded-full font-bold shadow-lg shadow-emerald-500/30",
+                                            variant === 'binder' ? "px-1.5 py-0.5 text-[10px]" : "px-2 py-0.5 text-xs"
+                                        )}>
+                                            {isSpecialRarity && <Sparkles className={cn(variant === 'binder' ? "h-2 w-2" : "h-3 w-3")} />}
+                                            {totalOwned}
+                                        </div>
+                                    </div>
+                                )}
                                 {cardImages?.small && !imageError ? (
                                     <Image
                                         src={cardImages.small}
@@ -171,9 +204,8 @@ export default function CollectionItemManager({
                                 {/* Quick Action Overlay */}
                                 <div
                                     className={cn(
-                                        "absolute bottom-2 left-2 right-2 p-2 bg-slate-950/90 backdrop-blur-md rounded-xl",
-                                        "transform transition-all duration-300 ease-out",
-                                        "border border-white/10 shadow-xl",
+                                        "absolute bg-slate-950/90 backdrop-blur-md rounded-xl transition-all duration-300 ease-out border border-white/10 shadow-xl",
+                                        variant === 'binder' ? "bottom-2 left-2 right-2 p-1.5" : "bottom-2 left-2 right-2 p-2",
                                         isHovered ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
                                     )}
                                     onClick={(e) => e.stopPropagation()}
@@ -182,7 +214,7 @@ export default function CollectionItemManager({
                                         {/* Detail Modal Trigger */}
                                         <CardDetailTrigger
                                             onClick={() => setDetailOpen(true)}
-                                            className="h-8 w-8 bg-transparent hover:bg-slate-800 text-slate-400 hover:text-white"
+                                            className={cn("bg-transparent hover:bg-slate-800 text-slate-400 hover:text-white", variant === 'binder' ? "h-6 w-6" : "h-8 w-8")}
                                         />
 
                                         {/* Wishlist Button */}
@@ -190,7 +222,8 @@ export default function CollectionItemManager({
                                             variant="ghost"
                                             size="icon"
                                             className={cn(
-                                                "h-8 w-8 rounded-full",
+                                                "rounded-full",
+                                                variant === 'binder' ? "h-6 w-6" : "h-8 w-8",
                                                 isInWishlist
                                                     ? "text-pink-500 bg-pink-500/10 hover:bg-pink-500/20"
                                                     : "text-muted-foreground hover:text-pink-400 hover:bg-pink-500/10"
@@ -198,7 +231,7 @@ export default function CollectionItemManager({
                                             onClick={toggleWishlist}
                                             disabled={wishlistLoading}
                                         >
-                                            <Heart className={cn("h-4 w-4", isInWishlist && "fill-current")} />
+                                            <Heart className={cn(variant === 'binder' ? "h-3 w-3" : "h-4 w-4", isInWishlist && "fill-current")} />
                                         </Button>
 
                                         <div className="w-px h-4 bg-slate-800 mx-1" />
@@ -206,7 +239,7 @@ export default function CollectionItemManager({
                                         <Button
                                             variant="ghost"
                                             size="icon"
-                                            className="h-8 w-8 text-red-400 hover:text-red-300 hover:bg-red-950/50 rounded-full"
+                                            className={cn("text-red-400 hover:text-red-300 hover:bg-red-950/50 rounded-full", variant === 'binder' ? "h-6 w-6" : "h-8 w-8")}
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 const defaultVariant = possibleVariants[0];
@@ -216,11 +249,11 @@ export default function CollectionItemManager({
                                             }}
                                             disabled={isLoading}
                                         >
-                                            <Minus className="h-4 w-4" />
+                                            <Minus className={cn(variant === 'binder' ? "h-3 w-3" : "h-4 w-4")} />
                                         </Button>
 
                                         <div className="text-center min-w-[20px]">
-                                            <span className="text-white font-mono font-bold text-lg leading-none">
+                                            <span className={cn("text-white font-mono font-bold leading-none", variant === 'binder' ? "text-sm" : "text-lg")}>
                                                 {(ownedData.get(possibleVariants[0])?.quantity || 0)}
                                             </span>
                                         </div>
@@ -228,7 +261,7 @@ export default function CollectionItemManager({
                                         <Button
                                             variant="ghost"
                                             size="icon"
-                                            className="h-8 w-8 text-green-400 hover:text-green-300 hover:bg-green-950/50 rounded-full"
+                                            className={cn("text-green-400 hover:text-green-300 hover:bg-green-950/50 rounded-full", variant === 'binder' ? "h-6 w-6" : "h-8 w-8")}
                                             onClick={(e) => {
                                                 e.stopPropagation();
                                                 const defaultVariant = possibleVariants[0];
@@ -238,44 +271,46 @@ export default function CollectionItemManager({
                                             }}
                                             disabled={isLoading}
                                         >
-                                            <Plus className="h-4 w-4" />
+                                            <Plus className={cn(variant === 'binder' ? "h-3 w-3" : "h-4 w-4")} />
                                         </Button>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Card Info */}
-                            <div className="space-y-1">
-                                <div className="flex justify-between items-start gap-2">
-                                    <span className={cn(
-                                        "font-semibold text-sm truncate leading-tight flex-1",
-                                        isOwned ? "text-white" : "text-slate-500"
-                                    )}>
-                                        {card.name}
-                                    </span>
-                                </div>
-                                <div className="flex justify-between items-center text-xs">
-                                    <span className="text-slate-500 font-mono">
-                                        {card.number}/{totalInSet}
-                                    </span>
-                                    {card.rarity && (
+                            {/* Card Info - Hidden in binder mode */}
+                            {variant === 'default' && (
+                                <div className="space-y-1">
+                                    <div className="flex justify-between items-start gap-2">
                                         <span className={cn(
-                                            "text-xs truncate max-w-[60%] text-right",
-                                            isSpecialRarity ? "text-yellow-500/80" : "text-slate-600"
+                                            "font-semibold text-sm truncate leading-tight flex-1",
+                                            isOwned ? "text-white" : "text-slate-500"
                                         )}>
-                                            {card.rarity}
+                                            {card.name}
                                         </span>
+                                    </div>
+                                    <div className="flex justify-between items-center text-xs">
+                                        <span className="text-slate-500 font-mono">
+                                            {card.number}/{totalInSet}
+                                        </span>
+                                        {card.rarity && (
+                                            <span className={cn(
+                                                "text-xs truncate max-w-[60%] text-right",
+                                                isSpecialRarity ? "text-yellow-500/80" : "text-slate-600"
+                                            )}>
+                                                {card.rarity}
+                                            </span>
+                                        )}
+                                    </div>
+                                    {showSetInfo && setName && (
+                                        <p className="text-[10px] text-slate-600 truncate">{setName}</p>
                                     )}
                                 </div>
-                                {showSetInfo && setName && (
-                                    <p className="text-[10px] text-slate-600 truncate">{setName}</p>
-                                )}
-                            </div>
+                            )}
                         </div>
                     </div>
                 </PopoverTrigger>
 
-                {/* Variants Popover - Premium Style */}
+                {/* Variants Popover */}
                 <PopoverContent className="w-72 bg-slate-900 border-slate-700 text-white p-0 overflow-hidden shadow-2xl">
                     <div className="bg-slate-800/50 p-4 border-b border-slate-700">
                         <h4 className="font-bold text-base">{card.name}</h4>

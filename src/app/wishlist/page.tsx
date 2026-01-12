@@ -58,20 +58,20 @@ export default function WishlistPage() {
                     <div>
                         <h1 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
                             <Heart className="h-8 w-8 text-pink-500 fill-pink-500" />
-                            Lista de Deseos
+                            {t("wishlist.pageTitle")}
                         </h1>
-                        <p className="text-slate-400">Cartas que estás buscando ({items.length})</p>
+                        <p className="text-slate-400">{t("wishlist.subtitle", { count: items.length })}</p>
                     </div>
                 </div>
 
                 {items.length === 0 ? (
                     <div className="text-center py-20 px-4 rounded-3xl bg-slate-900/30 border border-slate-800 border-dashed">
                         <Heart className="h-16 w-16 text-slate-700 mx-auto mb-4" />
-                        <h3 className="text-xl font-medium text-slate-300">Tu lista está vacía</h3>
-                        <p className="text-slate-500 mt-2 mb-6">Explora los sets y añade cartas que quieras conseguir.</p>
+                        <h3 className="text-xl font-medium text-slate-300">{t("wishlist.emptyTitle")}</h3>
+                        <p className="text-slate-500 mt-2 mb-6">{t("wishlist.emptyDesc")}</p>
                         <Link href="/explorer">
                             <Button className="bg-purple-600 hover:bg-purple-700 text-white rounded-xl">
-                                Explorar Sets
+                                {t("wishlist.exploreButton")}
                             </Button>
                         </Link>
                     </div>
@@ -94,10 +94,10 @@ export default function WishlistPage() {
                                         />
                                         <Badge
                                             className={`absolute top-2 right-2 border-0 ${item.priority === 'high' ? 'bg-red-500' :
-                                                    item.priority === 'low' ? 'bg-slate-500' : 'bg-blue-500'
+                                                item.priority === 'low' ? 'bg-slate-500' : 'bg-blue-500'
                                                 }`}
                                         >
-                                            {item.priority === 'high' ? 'Alta' : item.priority === 'low' ? 'Baja' : 'Normal'}
+                                            {item.priority === 'high' ? t("wishlist.priorities.high") : item.priority === 'low' ? t("wishlist.priorities.low") : t("wishlist.priorities.normal")}
                                         </Badge>
                                     </div>
                                     <CardContent className="p-4">
@@ -117,7 +117,7 @@ export default function WishlistPage() {
                                             <Link href={`/explorer/set/${card?.setId}?card=${card?.id}`} className="w-full">
                                                 <Button size="sm" variant="outline" className="w-full border-slate-700 hover:bg-slate-800">
                                                     <ExternalLink className="h-3 w-3 mr-1" />
-                                                    Ver
+                                                    {t("wishlist.viewButton")}
                                                 </Button>
                                             </Link>
                                             <Button
@@ -127,7 +127,7 @@ export default function WishlistPage() {
                                                 onClick={() => handleDelete(item.id)}
                                             >
                                                 <Trash2 className="h-3 w-3 mr-1" />
-                                                Borrar
+                                                {t("wishlist.deleteButton")}
                                             </Button>
                                         </div>
                                     </CardContent>

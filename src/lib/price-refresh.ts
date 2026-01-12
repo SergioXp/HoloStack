@@ -51,19 +51,26 @@ export function getPriceUpdatedAt(pricesJson: string | null | undefined): Date |
 /**
  * Formatea la antigüedad de un precio de forma legible
  */
-export function formatPriceAge(pricesJson: string | null | undefined): string {
+// t type definition (simplified)
+type TranslateFn = (key: string, options?: any) => string;
+
+export function formatPriceAge(pricesJson: string | null | undefined, t?: TranslateFn): string {
     const updatedAt = getPriceUpdatedAt(pricesJson);
-    if (!updatedAt) return "Sin datos";
+    // Fallback strings if t is not provided (for backward compatibility during migration)
+    const noData = t ? t("common.noData") : "Sin datos";
+    const justNow = t ? t("common.time.justNow") : "reciente";
+
+    if (!updatedAt) return noData;
 
     const diffMs = Date.now() - updatedAt.getTime();
     const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
     const diffDays = Math.floor(diffHours / 24);
 
     if (diffDays > 0) {
-        return `hace ${diffDays}d`;
+        return t ? t("common.time.daysAgo", { n: diffDays }) : `hace ${diffDays}d`;
     } else if (diffHours > 0) {
-        return `hace ${diffHours}h`;
+        return t ? t("common.time.hoursAgo", { n: diffHours }) : `hace ${diffHours}h`;
     } else {
-        return "reciente";
+        return justNow;
     }
 }

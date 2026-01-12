@@ -3,6 +3,7 @@ import { db } from "@/db";
 import { sets, cards } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import SetCardsClientPage from "@/components/SetCardsClientPage";
+import SetNotFound from "@/components/SetNotFound";
 
 interface PageProps {
     params: Promise<{ setId: string }>;
@@ -73,16 +74,7 @@ export default async function SetCardsPage({ params }: PageProps) {
     ]);
 
     if (!set) {
-        return (
-            <div className="min-h-screen bg-linear-to-b from-slate-900 to-slate-800 p-8 flex items-center justify-center">
-                <div className="text-center">
-                    <p className="text-slate-400 mb-4">Set no encontrado</p>
-                    <Link href="/explorer" className="text-blue-400 hover:text-blue-300">
-                        Volver al explorador
-                    </Link>
-                </div>
-            </div>
-        );
+        return <SetNotFound />;
     }
 
     return <SetCardsClientPage setKeywords={set} cards={cardsData} />;

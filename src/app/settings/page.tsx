@@ -309,8 +309,8 @@ export default function SettingsPage() {
                                         <Coins className="h-5 w-5 text-emerald-400" />
                                     </div>
                                     <div>
-                                        <CardTitle className="text-lg">Moneda</CardTitle>
-                                        <CardDescription className="text-slate-400">Elige tu moneda preferida para ver precios</CardDescription>
+                                        <CardTitle className="text-lg">{t("appSettings.currency")}</CardTitle>
+                                        <CardDescription className="text-slate-400">{t("appSettings.currencyDesc")}</CardDescription>
                                     </div>
                                 </div>
                             </CardHeader>
@@ -321,8 +321,8 @@ export default function SettingsPage() {
                                             key={curr.code}
                                             onClick={() => setPreferredCurrency(curr.code)}
                                             className={`p-4 rounded-xl border transition-all text-center ${preferredCurrency === curr.code
-                                                    ? "border-emerald-500 bg-emerald-500/10 text-white"
-                                                    : "border-slate-700 bg-slate-800/50 hover:border-slate-600 text-slate-400"
+                                                ? "border-emerald-500 bg-emerald-500/10 text-white"
+                                                : "border-slate-700 bg-slate-800/50 hover:border-slate-600 text-slate-400"
                                                 }`}
                                         >
                                             <div className="text-2xl font-bold mb-1">{curr.symbol}</div>
@@ -341,8 +341,8 @@ export default function SettingsPage() {
                                         <Palette className="h-5 w-5 text-purple-400" />
                                     </div>
                                     <div>
-                                        <CardTitle className="text-lg">Apariencia</CardTitle>
-                                        <CardDescription className="text-slate-400">Personaliza el tema de HoloStack</CardDescription>
+                                        <CardTitle className="text-lg">{t("appSettings.appearance")}</CardTitle>
+                                        <CardDescription className="text-slate-400">{t("appSettings.appearanceDesc")}</CardDescription>
                                     </div>
                                 </div>
                             </CardHeader>
