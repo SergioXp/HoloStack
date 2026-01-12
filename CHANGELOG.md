@@ -4,6 +4,22 @@
 
 ---
 
+## [0.4.3] - 2026-01-12
+
+### ⚡ Performance Optimization: Wishlist Batch Loading
+
+**Fecha**: 2026-01-12
+
+#### Cambios
+- **Optimización Crítica**: Se eliminó el problema de N+1 peticiones en la vista de colección. Ahora la wishlist se carga en una única petición "batch" al inicio.
+- **Mejora de UX**: Actualización optimista del estado de wishlist en la interfaz.
+
+#### Archivos Modificados
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `src/components/CollectionFilter.tsx` | Refactor | Implementación de carga batch de wishlist y gestión de estado centralizada. |
+| `src/components/CollectionItemManager.tsx` | Refactor | Eliminación de fetch interno, ahora recibe estado via props. Restauración de prop `variant`. |
+
 ## [0.4.2] - 2026-01-12
 
 ### 🌐 Internationalization Final Polish
