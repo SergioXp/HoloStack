@@ -10,6 +10,7 @@ export async function GET() {
         // 1. Obtener todos los items con sus precios
         const allItems = await db
             .select({
+                cardId: cards.id,
                 variant: collectionItems.variant,
                 quantity: collectionItems.quantity,
                 cardName: cards.name,
@@ -50,11 +51,14 @@ export async function GET() {
 
             if (price > 0) {
                 valuableCards.push({
+                    id: item.cardId,
                     name: item.cardName,
                     rarity: item.rarity,
                     value: price,
                     source: source,
-                    image: item.images ? JSON.parse(item.images).small : null
+                    image: item.images ? JSON.parse(item.images).small : null,
+                    tcgplayerPrices: item.tcgplayerPrices,
+                    cardmarketPrices: item.cardmarketPrices,
                 });
             }
 

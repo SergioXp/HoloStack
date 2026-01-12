@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { ChevronRight, TrendingUp, CreditCard, Layers, Award } from "lucide-react";
 import Link from "next/link";
 import { useI18n } from "@/lib/i18n";
+import { CardDetailModal } from "@/components/CardDetailModal";
 
 const COLORS = ['#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#ec4899', '#6366f1'];
 
@@ -16,6 +17,7 @@ export default function StatsPage() {
     const { t } = useI18n();
     const [data, setData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
+    const [selectedCard, setSelectedCard] = useState<any>(null);
 
     useEffect(() => {
         async function fetchStats() {
@@ -158,7 +160,18 @@ export default function StatsPage() {
                     <CardContent>
                         <div className="space-y-4">
                             {data.topCards.map((card: any, idx: number) => (
-                                <div key={idx} className="flex items-center gap-4 p-3 rounded-xl bg-slate-800/50 border border-slate-700/50">
+                                <div
+                                    key={idx}
+                                    className="flex items-center gap-4 p-3 rounded-xl bg-slate-800/50 border border-slate-700/50 cursor-pointer hover:bg-slate-700/50 transition-colors"
+                                    onClick={() => setSelectedCard({
+                                        cardId: card.id,
+                                        cardName: card.name,
+                                        cardImages: JSON.stringify({ small: card.image }),
+                                        cardRarity: card.rarity,
+                                        tcgplayerPrices: card.tcgplayerPrices,
+                                        cardmarketPrices: card.cardmarketPrices,
+                                    })}
+                                >
                                     <div className="font-bold text-slate-500 w-6">#{idx + 1}</div>
                                     {card.image && (
                                         <img src={card.image} alt={card.name} className="w-10 h-14 object-contain" />
@@ -181,6 +194,14 @@ export default function StatsPage() {
                     </CardContent>
                 </Card>
             </div>
+
+            {/* Modal de detalle de carta */}
+            <CardDetailModal
+                card={selectedCard}
+                open={!!selectedCard}
+                onOpenChange={(open) => !open && setSelectedCard(null)}
+                currency="EUR"
+            />
         </div>
     );
 }
