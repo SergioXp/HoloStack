@@ -63,47 +63,12 @@ export default function PortfolioPage() {
                     setCurrency((profile.preferredCurrency as Currency) || "EUR");
                 }
 
-                // Cargar todas las colecciones
-                const collectionsRes = await fetch("/api/collections");
-                if (!collectionsRes.ok) return;
-
-                const collections = await collectionsRes.json();
-                const allItems: PortfolioCard[] = [];
-
-                // Para cada colección, cargar sus items
-                for (const col of collections) {
-                    const colRes = await fetch(`/api/collections/${col.id}`);
-                    if (!colRes.ok) continue;
-
-                    const colData = await colRes.json();
-                    const ownershipData = colData.ownershipData || {};
-
-                    for (const card of colData.cards) {
-                        const cardOwnership = ownershipData[card.id];
-                        if (!cardOwnership) continue;
-
-                        for (const [variant, data] of Object.entries(cardOwnership)) {
-                            const variantData = data as { quantity: number; id: string };
-                            if (variantData.quantity > 0) {
-                                allItems.push({
-                                    cardId: card.id,
-                                    cardName: card.name,
-                                    cardNumber: card.localId || card.number,
-                                    cardImages: card.images,
-                                    cardRarity: card.rarity || "Unknown",
-                                    setId: card.setId,
-                                    setName: colData.setNames?.[card.setId] || card.setId,
-                                    variant,
-                                    quantity: variantData.quantity,
-                                    tcgplayerPrices: card.tcgplayerPrices,
-                                    cardmarketPrices: card.cardmarketPrices,
-                                });
-                            }
-                        }
-                    }
+                // Cargar portfolio completo desde la API
+                const portfolioRes = await fetch("/api/portfolio");
+                if (portfolioRes.ok) {
+                    const data = await portfolioRes.json();
+                    setItems(Array.isArray(data) ? data : []);
                 }
-
-                setItems(allItems);
             } catch (error) {
                 console.error("Error loading portfolio:", error);
             } finally {
