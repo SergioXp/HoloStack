@@ -163,10 +163,17 @@ export function getMarketPrice(
 
 /**
  * Obtiene el precio de Cardmarket (en EUR)
+ * Maneja ambos formatos de API: {trend, avg, low} y {trendPrice, averageSellPrice, lowPrice}
  */
 export function getCardmarketPrice(cmPrices: CardmarketPrices | null): number | null {
-    if (!cmPrices) return null;
-    return cmPrices.trendPrice ?? cmPrices.averageSellPrice ?? cmPrices.lowPrice ?? null;
+    if (!cmPrices || Object.keys(cmPrices).length === 0) return null;
+
+    const prices = cmPrices as Record<string, any>;
+
+    // Prioridad: trend > avg > low (formatos de la API)
+    return prices.trend ?? prices.trendPrice ??
+        prices.avg ?? prices.averageSellPrice ??
+        prices.low ?? prices.lowPrice ?? null;
 }
 
 /**
