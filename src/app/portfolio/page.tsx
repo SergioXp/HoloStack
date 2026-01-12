@@ -19,6 +19,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useI18n } from "@/lib/i18n";
 import { formatPrice, getBestPrice, getAllPrices, getMarketUrl, type Currency } from "@/lib/prices";
+import { CardDetailModal } from "@/components/CardDetailModal";
 
 interface PortfolioCard {
     cardId: string;
@@ -54,6 +55,8 @@ export default function PortfolioPage() {
     const [currency, setCurrency] = useState<Currency>("EUR");
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [staleCount, setStaleCount] = useState(0);
+    const [selectedCard, setSelectedCard] = useState<PortfolioCard | null>(null);
+
 
 
     // Función para cargar portfolio
@@ -296,8 +299,12 @@ export default function PortfolioPage() {
                                         card.variant as any
                                     );
                                     return (
-                                        <div key={`${card.cardId}-${card.variant}-${index}`} className="relative group">
-                                            <div className="aspect-[63/88] rounded-lg overflow-hidden bg-slate-800 relative">
+                                        <div
+                                            key={`${card.cardId}-${card.variant}-${index}`}
+                                            className="relative group cursor-pointer"
+                                            onClick={() => setSelectedCard(card)}
+                                        >
+                                            <div className="aspect-[63/88] rounded-lg overflow-hidden bg-slate-800 relative transition-transform group-hover:scale-105">
                                                 {images.small && (
                                                     <Image
                                                         src={images.small}
@@ -310,6 +317,10 @@ export default function PortfolioPage() {
                                                 {/* Rank Badge */}
                                                 <div className="absolute top-1 left-1 bg-linear-to-r from-amber-500 to-amber-600 text-white text-xs font-bold px-1.5 py-0.5 rounded">
                                                     #{index + 1}
+                                                </div>
+                                                {/* Hover overlay */}
+                                                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                                    <span className="text-white text-xs font-medium">Ver detalle</span>
                                                 </div>
                                             </div>
                                             <div className="mt-2">
@@ -404,6 +415,14 @@ export default function PortfolioPage() {
                     </Card>
                 </div>
             </div>
+
+            {/* Modal de detalle de carta */}
+            <CardDetailModal
+                card={selectedCard}
+                open={!!selectedCard}
+                onOpenChange={(open) => !open && setSelectedCard(null)}
+                currency={currency}
+            />
         </div>
     );
 }
