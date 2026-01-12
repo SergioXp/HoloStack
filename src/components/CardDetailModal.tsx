@@ -74,7 +74,7 @@ export function CardDetailModal({
     onOpenChange,
     currency = "EUR"
 }: CardDetailModalProps) {
-    const [activeTab, setActiveTab] = useState("info");
+    const [activeTab, setActiveTab] = useState("prices");
 
     if (!card) return null;
 
@@ -105,218 +105,213 @@ export function CardDetailModal({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="bg-slate-900 border-slate-700 text-white max-w-2xl max-h-[90vh] overflow-y-auto">
-                <DialogHeader>
-                    <DialogTitle className="text-xl flex items-center gap-3">
-                        <Sparkles className="h-5 w-5 text-amber-400" />
-                        {card.cardName}
-                        {card.cardRarity && (
-                            <Badge variant="outline" className="text-xs border-slate-600">
-                                {card.cardRarity}
-                            </Badge>
-                        )}
-                    </DialogTitle>
-                </DialogHeader>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                    {/* Imagen de la carta */}
-                    <div className="flex justify-center">
-                        <div className="relative w-64 aspect-[63/88] rounded-xl overflow-hidden shadow-2xl">
+            <DialogContent className="bg-slate-950/95 border-slate-800 text-white max-w-4xl p-0 overflow-hidden shadow-2xl backdrop-blur-xl">
+                <div className="flex flex-col md:flex-row h-full max-h-[90vh]">
+                    {/* Columna Izquierda: Imagen (más prominente) */}
+                    <div className="w-full md:w-2/5 bg-slate-900/50 p-8 flex items-center justify-center relative border-b md:border-b-0 md:border-r border-slate-800">
+                        <div className="relative w-full max-w-[280px] aspect-[63/88] rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/10 group animate-in fade-in zoom-in duration-300">
                             {images.large || images.small ? (
                                 <Image
                                     src={images.large || images.small}
                                     alt={card.cardName}
                                     fill
-                                    className="object-cover"
-                                    sizes="256px"
+                                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                    sizes="(max-width: 768px) 100vw, 400px"
                                 />
                             ) : (
                                 <div className="w-full h-full bg-slate-800 flex items-center justify-center">
-                                    <Package className="h-12 w-12 text-slate-600" />
+                                    <Package className="h-16 w-16 text-slate-700" />
+                                </div>
+                            )}
+
+                            {/* Rarity Badge Overlay */}
+                            {card.cardRarity && (
+                                <div className="absolute top-3 right-3">
+                                    <Badge className="bg-black/60 backdrop-blur border-white/10 text-xs font-semibold hover:bg-black/80">
+                                        {card.cardRarity}
+                                    </Badge>
                                 </div>
                             )}
                         </div>
                     </div>
 
-                    {/* Información y precios */}
-                    <div className="space-y-4">
-                        <Tabs value={activeTab} onValueChange={setActiveTab}>
-                            <TabsList className="grid grid-cols-2 bg-slate-800">
-                                <TabsTrigger value="info" className="data-[state=active]:bg-emerald-600">
-                                    Información
-                                </TabsTrigger>
-                                <TabsTrigger value="prices" className="data-[state=active]:bg-emerald-600">
-                                    Precios
-                                </TabsTrigger>
-                            </TabsList>
+                    {/* Columna Derecha: Contenido */}
+                    <div className="flex-1 flex flex-col h-full overflow-y-auto">
 
-                            <TabsContent value="info" className="mt-4 space-y-3">
-                                {/* Info básica */}
-                                <div className="grid grid-cols-2 gap-3">
-                                    <div className="p-3 bg-slate-800/50 rounded-lg">
-                                        <div className="flex items-center gap-2 text-slate-400 text-sm mb-1">
-                                            <Layers className="h-4 w-4" />
-                                            Set
-                                        </div>
-                                        <p className="font-medium">{card.setName || card.setId || "-"}</p>
-                                    </div>
-                                    <div className="p-3 bg-slate-800/50 rounded-lg">
-                                        <div className="flex items-center gap-2 text-slate-400 text-sm mb-1">
-                                            <Hash className="h-4 w-4" />
-                                            Número
-                                        </div>
-                                        <p className="font-medium">{card.cardNumber || "-"}</p>
-                                    </div>
-                                </div>
+                        {/* Header */}
+                        <div className="p-6 pb-2">
+                            <h2 className="text-2xl font-bold flex items-center gap-2 mb-1 text-white">
+                                {card.cardName}
+                            </h2>
+                            <div className="flex items-center gap-3 text-sm text-slate-400">
+                                <span className="flex items-center gap-1.5 bg-slate-900/80 px-2 py-1 rounded-full border border-slate-800">
+                                    <Layers className="h-3.5 w-3.5" />
+                                    {card.setName || card.setId || "Desconocido"}
+                                </span>
+                                <span className="flex items-center gap-1.5 bg-slate-900/80 px-2 py-1 rounded-full border border-slate-800">
+                                    <Hash className="h-3.5 w-3.5" />
+                                    {card.cardNumber || "# --"}
+                                </span>
+                            </div>
+                        </div>
 
-                                {card.variant && (
-                                    <div className="p-3 bg-slate-800/50 rounded-lg">
-                                        <div className="text-slate-400 text-sm mb-1">Variante</div>
-                                        <Badge className="bg-purple-600">{card.variant}</Badge>
-                                    </div>
-                                )}
+                        {/* Tabs Navigation */}
+                        <div className="px-6 mt-2">
+                            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                                <TabsList className="bg-slate-900/50 p-1 border border-slate-800 w-full grid grid-cols-2 h-10">
+                                    <TabsTrigger
+                                        value="prices"
+                                        className="data-[state=active]:bg-slate-800 data-[state=active]:text-white text-slate-400 font-medium"
+                                    >
+                                        Precios y Mercado
+                                    </TabsTrigger>
+                                    <TabsTrigger
+                                        value="details"
+                                        className="data-[state=active]:bg-slate-800 data-[state=active]:text-white text-slate-400 font-medium"
+                                    >
+                                        Detalles
+                                    </TabsTrigger>
+                                </TabsList>
 
-                                {card.quantity !== undefined && card.quantity > 0 && (
-                                    <div className="p-3 bg-emerald-800/30 border border-emerald-700/50 rounded-lg">
-                                        <div className="text-emerald-400 text-sm mb-1">En tu colección</div>
-                                        <p className="text-2xl font-bold text-emerald-400">
-                                            {card.quantity} {card.quantity === 1 ? "copia" : "copias"}
-                                        </p>
-                                    </div>
-                                )}
-                            </TabsContent>
+                                <div className="mt-6 space-y-6">
+                                    <TabsContent value="prices" className="space-y-6 animate-in slide-in-from-bottom-2 fade-in duration-300">
 
-                            <TabsContent value="prices" className="mt-4 space-y-3">
-                                {/* Precios */}
-                                <div className="flex items-center justify-between text-sm text-slate-400 mb-2">
-                                    <span className="flex items-center gap-1">
-                                        <Calendar className="h-4 w-4" />
-                                        Última actualización: {priceAge}
-                                    </span>
-                                    {trend && (
-                                        <span className={`flex items-center gap-1 ${trend === "up" ? "text-emerald-400" : trend === "down" ? "text-red-400" : "text-slate-400"}`}>
-                                            {trend === "up" ? <TrendingUp className="h-4 w-4" /> : <TrendingDown className="h-4 w-4" />}
-                                            {trend === "up" ? "Subiendo" : "Bajando"}
-                                        </span>
-                                    )}
-                                </div>
-
-                                {/* Cardmarket */}
-                                {allPrices.cardmarket !== null && (
-                                    <div className="p-4 bg-blue-900/20 border border-blue-800/50 rounded-lg">
-                                        <div className="flex items-center justify-between mb-3">
-                                            <span className="font-medium text-blue-400">Cardmarket</span>
-                                            <a
-                                                href={getMarketUrl("cardmarket", card.cardName)}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-blue-400 hover:text-blue-300 flex items-center gap-1 text-sm"
-                                            >
-                                                Ver en web <ExternalLink className="h-3 w-3" />
-                                            </a>
-                                        </div>
-                                        <div className="grid grid-cols-3 gap-2 text-center">
-                                            <div>
-                                                <div className="text-slate-400 text-xs">Mínimo</div>
-                                                <div className="font-bold text-lg">€{cmData?.low?.toFixed(2) || "-"}</div>
+                                        {/* Estado del Tiempo */}
+                                        <div className="flex items-center justify-between px-1">
+                                            <div className="flex items-center gap-2 text-xs font-medium text-slate-500 uppercase tracking-wider">
+                                                <Calendar className="h-3 w-3" />
+                                                Actualizado: {priceAge}
                                             </div>
-                                            <div className="bg-blue-800/30 rounded p-1">
-                                                <div className="text-slate-400 text-xs">Tendencia</div>
-                                                <div className="font-bold text-lg text-blue-400">
-                                                    €{allPrices.cardmarket.toFixed(2)}
+                                            {trend && (
+                                                <Badge variant="outline" className={`${trend === "up" ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" : trend === "down" ? "bg-rose-500/10 text-rose-400 border-rose-500/20" : "bg-slate-500/10 text-slate-400 border-slate-500/20"}`}>
+                                                    {trend === "up" ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
+                                                    {trend === "up" ? "Tendencia Alcista" : "Tendencia Bajista"}
+                                                </Badge>
+                                            )}
+                                        </div>
+
+                                        {/* Cardmarket Card */}
+                                        {allPrices.cardmarket !== null && (
+                                            <div className="bg-linear-to-br from-blue-950/30 to-slate-900 border border-blue-900/30 rounded-xl p-5 relative overflow-hidden group">
+                                                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                                                    <TrendingUp className="h-24 w-24 text-blue-500" />
+                                                </div>
+
+                                                <div className="flex justify-between items-start mb-4 relative z-10">
+                                                    <div>
+                                                        <h3 className="text-blue-400 font-semibold mb-1">Cardmarket</h3>
+                                                        <p className="text-xs text-slate-400">Principal referencia europea</p>
+                                                    </div>
+                                                    <div className="text-right">
+                                                        <p className="text-sm text-slate-400">Tendencia</p>
+                                                        <p className="text-3xl font-bold text-white tracking-tight">
+                                                            €{allPrices.cardmarket.toFixed(2)}
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                <div className="grid grid-cols-2 gap-4 mt-2 relative z-10">
+                                                    <div className="bg-slate-950/50 rounded-lg p-3 border border-indigo-500/10">
+                                                        <p className="text-xs text-slate-500 mb-1">Precio Mínimo</p>
+                                                        <p className="font-semibold text-lg text-slate-200">
+                                                            €{cmData?.low?.toFixed(2) || "-"}
+                                                        </p>
+                                                    </div>
+                                                    <div className="bg-slate-950/50 rounded-lg p-3 border border-indigo-500/10">
+                                                        <p className="text-xs text-slate-500 mb-1">Media 30 días</p>
+                                                        <p className="font-semibold text-lg text-slate-200">
+                                                            €{cmData?.avg30?.toFixed(2) || "-"}
+                                                        </p>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div>
-                                                <div className="text-slate-400 text-xs">Media</div>
-                                                <div className="font-bold text-lg">€{cmData?.avg?.toFixed(2) || "-"}</div>
-                                            </div>
-                                        </div>
-                                        {cmData?.avg30 && (
-                                            <div className="mt-2 text-center text-sm text-slate-400">
-                                                Media 30 días: €{cmData.avg30.toFixed(2)}
+                                        )}
+
+                                        {/* TCGPlayer Card */}
+                                        {allPrices.tcgplayer !== null && (
+                                            <div className="bg-linear-to-br from-purple-950/30 to-slate-900 border border-purple-900/30 rounded-xl p-5 flex items-center justify-between">
+                                                <div>
+                                                    <h3 className="text-purple-400 font-semibold mb-1">TCGPlayer</h3>
+                                                    <p className="text-xs text-slate-400">Mercado USD</p>
+                                                </div>
+                                                <div className="text-right">
+                                                    <p className="text-sm text-slate-400">Market Price</p>
+                                                    <p className="text-2xl font-bold text-white">
+                                                        ${allPrices.tcgplayer.toFixed(2)}
+                                                    </p>
+                                                </div>
                                             </div>
                                         )}
-                                    </div>
-                                )}
+                                    </TabsContent>
 
-                                {/* TCGPlayer */}
-                                {allPrices.tcgplayer !== null && (
-                                    <div className="p-4 bg-purple-900/20 border border-purple-800/50 rounded-lg">
-                                        <div className="flex items-center justify-between mb-3">
-                                            <span className="font-medium text-purple-400">TCGPlayer</span>
-                                            <a
-                                                href={getMarketUrl("tcgplayer", card.cardName)}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-purple-400 hover:text-purple-300 flex items-center gap-1 text-sm"
-                                            >
-                                                Ver en web <ExternalLink className="h-3 w-3" />
-                                            </a>
-                                        </div>
-                                        <div className="text-center">
-                                            <div className="text-slate-400 text-xs">Precio de mercado</div>
-                                            <div className="font-bold text-2xl text-purple-400">
-                                                ${allPrices.tcgplayer.toFixed(2)}
+                                    <TabsContent value="details" className="space-y-4 animate-in slide-in-from-bottom-2 fade-in duration-300">
+                                        <div className="grid grid-cols-1 gap-4">
+                                            <div className="p-4 bg-slate-900/50 rounded-xl border border-slate-800">
+                                                <h3 className="text-slate-400 text-sm font-medium mb-3 uppercase tracking-wider">Propiedades</h3>
+                                                <dl className="grid grid-cols-2 gap-x-4 gap-y-4 text-sm">
+                                                    <div>
+                                                        <dt className="text-slate-500 mb-1">Set</dt>
+                                                        <dd className="font-medium text-slate-200">{card.setName || card.setId}</dd>
+                                                    </div>
+                                                    <div>
+                                                        <dt className="text-slate-500 mb-1">Rareza</dt>
+                                                        <dd className="font-medium text-slate-200">{card.cardRarity || "-"}</dd>
+                                                    </div>
+                                                    <div>
+                                                        <dt className="text-slate-500 mb-1">Número</dt>
+                                                        <dd className="font-medium text-slate-200">{card.cardNumber || "-"}</dd>
+                                                    </div>
+                                                    <div>
+                                                        <dt className="text-slate-500 mb-1">Variante</dt>
+                                                        <dd className="font-medium text-slate-200 capitalize">{card.variant?.replace("-", " ") || "Normal"}</dd>
+                                                    </div>
+                                                </dl>
                                             </div>
+
+                                            {card.quantity !== undefined && card.quantity > 0 && (
+                                                <div className="p-4 bg-emerald-950/20 rounded-xl border border-emerald-900/30 flex items-center gap-4">
+                                                    <div className="h-10 w-10 rounded-full bg-emerald-900/30 flex items-center justify-center text-emerald-500">
+                                                        <Package className="h-5 w-5" />
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-sm text-emerald-500 font-medium">En tu colección</p>
+                                                        <p className="text-xl font-bold text-emerald-400">
+                                                            {card.quantity} {card.quantity === 1 ? "copia" : "copias"}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
-                                    </div>
-                                )}
+                                    </TabsContent>
+                                </div>
+                            </Tabs>
+                        </div>
 
-                                {allPrices.cardmarket === null && allPrices.tcgplayer === null && (
-                                    <div className="p-6 bg-slate-800/50 rounded-lg text-center">
-                                        <Package className="h-8 w-8 text-slate-500 mx-auto mb-2" />
-                                        <p className="text-slate-400">No hay información de precios disponible</p>
-                                    </div>
-                                )}
-                            </TabsContent>
-                        </Tabs>
+                        {/* Footer (Sticky bottom) */}
+                        <div className="mt-auto p-6 border-t border-slate-800 bg-slate-900/30 backdrop-blur-sm">
+                            <div className="flex gap-3">
+                                <Button
+                                    className="flex-1 bg-blue-600 hover:bg-blue-500 text-white border-none shadow-lg shadow-blue-900/20"
+                                    asChild
+                                >
+                                    <a href={getMarketUrl("cardmarket", card.cardName)} target="_blank" rel="noopener noreferrer">
+                                        <ExternalLink className="h-4 w-4 mr-2" />
+                                        Cardmarket
+                                    </a>
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    className="flex-1 border-slate-700 bg-transparent hover:bg-slate-800 text-slate-300"
+                                    asChild
+                                >
+                                    <a href={getMarketUrl("ebay", card.cardName)} target="_blank" rel="noopener noreferrer">
+                                        Buscar en eBay
+                                    </a>
+                                </Button>
+                            </div>
+                        </div>
+
                     </div>
-                </div>
-
-                {/* Footer con links rápidos */}
-                <div className="mt-6 pt-4 border-t border-slate-700 flex flex-wrap gap-2">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        className="border-slate-700 text-slate-300 hover:text-white"
-                        asChild
-                    >
-                        <a
-                            href={getMarketUrl("cardmarket", card.cardName)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Comprar en Cardmarket <ExternalLink className="h-3 w-3 ml-1" />
-                        </a>
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        className="border-slate-700 text-slate-300 hover:text-white"
-                        asChild
-                    >
-                        <a
-                            href={getMarketUrl("tcgplayer", card.cardName)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Comprar en TCGPlayer <ExternalLink className="h-3 w-3 ml-1" />
-                        </a>
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        className="border-slate-700 text-slate-300 hover:text-white"
-                        asChild
-                    >
-                        <a
-                            href={getMarketUrl("ebay", card.cardName)}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            Buscar en eBay <ExternalLink className="h-3 w-3 ml-1" />
-                        </a>
-                    </Button>
                 </div>
             </DialogContent>
         </Dialog>
