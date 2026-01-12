@@ -11,6 +11,9 @@ export async function GET() {
         const allItems = await db
             .select({
                 cardId: cards.id,
+                cardNumber: cards.number,
+                setId: cards.setId,
+                setName: sets.name,
                 variant: collectionItems.variant,
                 quantity: collectionItems.quantity,
                 cardName: cards.name,
@@ -53,6 +56,9 @@ export async function GET() {
                 valuableCards.push({
                     id: item.cardId,
                     name: item.cardName,
+                    number: item.cardNumber,
+                    setId: item.setId,
+                    setName: item.setName,
                     rarity: item.rarity,
                     value: price,
                     source: source,

@@ -166,6 +166,9 @@ export default function StatsPage() {
                                     onClick={() => setSelectedCard({
                                         cardId: card.id,
                                         cardName: card.name,
+                                        cardNumber: card.number,
+                                        setId: card.setId,
+                                        setName: card.setName,
                                         cardImages: JSON.stringify({ small: card.image }),
                                         cardRarity: card.rarity,
                                         tcgplayerPrices: card.tcgplayerPrices,
