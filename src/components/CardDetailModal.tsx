@@ -105,11 +105,11 @@ export function CardDetailModal({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="bg-slate-950/95 border-slate-800 text-white max-w-4xl p-0 overflow-hidden shadow-2xl backdrop-blur-xl">
+            <DialogContent className="bg-slate-950/95 border-slate-800 text-white max-w-5xl p-0 overflow-hidden shadow-2xl backdrop-blur-xl">
                 <div className="flex flex-col md:flex-row h-full max-h-[90vh]">
                     {/* Columna Izquierda: Imagen (más prominente) */}
-                    <div className="w-full md:w-2/5 bg-slate-900/50 p-8 flex items-center justify-center relative border-b md:border-b-0 md:border-r border-slate-800">
-                        <div className="relative w-full max-w-[280px] aspect-[63/88] rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/10 group animate-in fade-in zoom-in duration-300">
+                    <div className="w-full md:w-[45%] bg-slate-900/50 p-8 md:p-10 flex items-center justify-center relative border-b md:border-b-0 md:border-r border-slate-800">
+                        <div className="relative w-full max-w-[360px] aspect-[63/88] rounded-2xl overflow-hidden shadow-2xl ring-1 ring-white/10 group animate-in fade-in zoom-in duration-300">
                             {images.large || images.small ? (
                                 <Image
                                     src={images.large || images.small}
