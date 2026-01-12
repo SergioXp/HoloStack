@@ -52,43 +52,69 @@ export default function PortfolioPage() {
     const [items, setItems] = useState<PortfolioCard[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [currency, setCurrency] = useState<Currency>("EUR");
+    const [isRefreshing, setIsRefreshing] = useState(false);
+    const [staleCount, setStaleCount] = useState(0);
 
-    // Cargar todas las cartas del usuario
-    useEffect(() => {
-        async function loadPortfolio() {
-            try {
-                // Primero cargar preferencias del usuario
-                const profileRes = await fetch("/api/profile");
-                if (profileRes.ok) {
-                    const profile = await profileRes.json();
-                    setCurrency((profile.preferredCurrency as Currency) || "EUR");
-                }
 
-                // Cargar portfolio completo desde la API
-                const portfolioRes = await fetch("/api/portfolio");
-                if (portfolioRes.ok) {
-                    const data = await portfolioRes.json();
+    // Función para cargar portfolio
+    const loadPortfolio = async (showLoading = true) => {
+        if (showLoading) setIsLoading(true);
+        try {
+            // Primero cargar preferencias del usuario
+            const profileRes = await fetch("/api/profile");
+            if (profileRes.ok) {
+                const profile = await profileRes.json();
+                setCurrency((profile.preferredCurrency as Currency) || "EUR");
+            }
 
-                    // Nuevo formato: {items, staleCardIds}
-                    const portfolioItems = data.items || (Array.isArray(data) ? data : []);
-                    setItems(portfolioItems);
+            // Cargar portfolio completo desde la API
+            const portfolioRes = await fetch("/api/portfolio");
+            if (portfolioRes.ok) {
+                const data = await portfolioRes.json();
 
-                    // Si hay precios obsoletos (>24h), refrescarlos en background
-                    if (data.staleCardIds && data.staleCardIds.length > 0) {
-                        console.log(`Refreshing ${data.staleCardIds.length} stale prices...`);
-                        fetch("/api/prices/refresh", {
+                // Nuevo formato: {items, staleCardIds}
+                const portfolioItems = data.items || (Array.isArray(data) ? data : []);
+                setItems(portfolioItems);
+
+                // Si hay precios obsoletos (>24h), refrescarlos
+                if (data.staleCardIds && data.staleCardIds.length > 0) {
+                    setStaleCount(data.staleCardIds.length);
+                    setIsRefreshing(true);
+
+                    try {
+                        const refreshRes = await fetch("/api/prices/refresh", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify({ cardIds: data.staleCardIds }),
-                        }).catch(console.error);
+                        });
+
+                        if (refreshRes.ok) {
+                            // Esperar un momento y recargar los datos actualizados
+                            await new Promise(resolve => setTimeout(resolve, 500));
+                            const updatedRes = await fetch("/api/portfolio");
+                            if (updatedRes.ok) {
+                                const updatedData = await updatedRes.json();
+                                const updatedItems = updatedData.items || (Array.isArray(updatedData) ? updatedData : []);
+                                setItems(updatedItems);
+                            }
+                        }
+                    } catch (error) {
+                        console.error("Error refreshing prices:", error);
+                    } finally {
+                        setIsRefreshing(false);
+                        setStaleCount(0);
                     }
                 }
-            } catch (error) {
-                console.error("Error loading portfolio:", error);
-            } finally {
-                setIsLoading(false);
             }
+        } catch (error) {
+            console.error("Error loading portfolio:", error);
+        } finally {
+            setIsLoading(false);
         }
+    };
+
+    // Cargar todas las cartas del usuario
+    useEffect(() => {
         loadPortfolio();
     }, []);
 
@@ -166,6 +192,13 @@ export default function PortfolioPage() {
                         <BarChart3 className="h-5 w-5 text-emerald-400" />
                         {t("portfolio.title")}
                     </h1>
+                    {/* Indicador de actualización de precios */}
+                    {isRefreshing && (
+                        <div className="flex items-center gap-2 text-amber-400 text-sm animate-pulse">
+                            <RefreshCw className="h-4 w-4 animate-spin" />
+                            <span>Actualizando {staleCount} precio{staleCount !== 1 ? "s" : ""}...</span>
+                        </div>
+                    )}
                 </div>
                 <div className="flex items-center gap-2">
                     {(["EUR", "USD", "GBP"] as Currency[]).map((curr) => (
