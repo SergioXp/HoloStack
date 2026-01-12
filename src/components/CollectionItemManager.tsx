@@ -30,6 +30,8 @@ interface CollectionItemManagerProps {
     showSetInfo?: boolean;
     setName?: string;
     onUpdate?: (variant: string, quantity: number) => void;
+    isInWishlist?: boolean;
+    onToggleWishlist?: (cardId: string) => void;
     variant?: 'default' | 'binder';
 }
 
@@ -41,7 +43,9 @@ export default function CollectionItemManager({
     showSetInfo = false,
     setName,
     onUpdate,
-    variant = 'default'
+    variant = 'default',
+    isInWishlist: initialInWishlist,
+    onToggleWishlist
 }: CollectionItemManagerProps) {
     const { t } = useI18n();
     const [isLoading, setIsLoading] = useState(false);
@@ -49,30 +53,44 @@ export default function CollectionItemManager({
     const [detailOpen, setDetailOpen] = useState(false);
     const [imageError, setImageError] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
-    const [isInWishlist, setIsInWishlist] = useState(false);
+
+    // Internal state only used if prop is not provided (legacy behavior)
+    const [internalInWishlist, setInternalInWishlist] = useState(false);
     const [wishlistLoading, setWishlistLoading] = useState(false);
 
-    // Load wishlist (optimizado: solo IDs)
+    const isWishlist = initialInWishlist !== undefined ? initialInWishlist : internalInWishlist;
+
+    // Load wishlist only if prop not provided (Legacy support, though we should avoid this path)
     useEffect(() => {
+        if (initialInWishlist !== undefined) return;
+
         const checkWishlist = async () => {
             try {
                 const res = await fetch(`/api/wishlist?check=${card.id}`);
                 if (res.ok) {
                     const data = await res.json();
-                    setIsInWishlist(data.inWishlist);
+                    setInternalInWishlist(data.inWishlist);
                 }
             } catch (error) {
                 console.error("Error checking wishlist:", error);
             }
         };
         checkWishlist();
-    }, [card.id]);
+    }, [card.id, initialInWishlist]);
 
-    const toggleWishlist = async (e: React.MouseEvent) => {
+    const handleToggleWishlist = async (e: React.MouseEvent) => {
         e.stopPropagation();
+
+        // If parent handler provided, delegate logic
+        if (onToggleWishlist) {
+            onToggleWishlist(card.id);
+            return;
+        }
+
+        // Fallback internal logic
         setWishlistLoading(true);
-        const newState = !isInWishlist;
-        setIsInWishlist(newState); // Optimistic
+        const newState = !internalInWishlist;
+        setInternalInWishlist(newState); // Optimistic
 
         try {
             await fetch("/api/wishlist", {
@@ -81,7 +99,7 @@ export default function CollectionItemManager({
                 body: JSON.stringify({ cardId: card.id }),
             });
         } catch (error) {
-            setIsInWishlist(!newState);
+            setInternalInWishlist(!newState);
         } finally {
             setWishlistLoading(false);
         }
@@ -224,14 +242,14 @@ export default function CollectionItemManager({
                                             className={cn(
                                                 "rounded-full",
                                                 variant === 'binder' ? "h-6 w-6" : "h-8 w-8",
-                                                isInWishlist
+                                                isWishlist
                                                     ? "text-pink-500 bg-pink-500/10 hover:bg-pink-500/20"
                                                     : "text-muted-foreground hover:text-pink-400 hover:bg-pink-500/10"
                                             )}
-                                            onClick={toggleWishlist}
+                                            onClick={handleToggleWishlist}
                                             disabled={wishlistLoading}
                                         >
-                                            <Heart className={cn(variant === 'binder' ? "h-3 w-3" : "h-4 w-4", isInWishlist && "fill-current")} />
+                                            <Heart className={cn(variant === 'binder' ? "h-3 w-3" : "h-4 w-4", isWishlist && "fill-current")} />
                                         </Button>
 
                                         <div className="w-px h-4 bg-slate-800 mx-1" />

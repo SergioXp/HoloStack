@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Search, X, ChevronDown, LayoutGrid, Sparkles, Table } from "lucide-react";
 import { Input } from "@/components/ui/input";
@@ -42,6 +42,36 @@ export default function CollectionFilter({
     const [gridColumns, setGridColumns] = useState(5);
     const [displayMode, setDisplayMode] = useState<"grid" | "table">("grid");
     const [refreshKey, setRefreshKey] = useState(0);
+
+    // -- Wishlist Loading (Batch) --
+    const [wishlist, setWishlist] = useState<Set<string>>(new Set());
+
+    useEffect(() => {
+        fetch("/api/wishlist")
+            .then(res => res.json())
+            .then((data: any[]) => {
+                if (Array.isArray(data)) {
+                    setWishlist(new Set(data.map(item => item.cardId)));
+                }
+            })
+            .catch(console.error);
+    }, []);
+
+    const toggleWishlist = async (cardId: string) => {
+        const isIn = wishlist.has(cardId);
+        const newSet = new Set(wishlist);
+        if (isIn) newSet.delete(cardId);
+        else newSet.add(cardId);
+
+        setWishlist(newSet); // Optimistic
+
+        try {
+            if (isIn) await fetch(`/api/wishlist?cardId=${cardId}`, { method: 'DELETE' });
+            else await fetch('/api/wishlist', { method: 'POST', body: JSON.stringify({ cardId }) });
+        } catch {
+            setWishlist(wishlist); // Revert
+        }
+    };
 
     const handleDataChanged = () => {
         router.refresh();
@@ -140,6 +170,7 @@ export default function CollectionFilter({
     const isComplete = parseFloat(stats.percentage) === 100;
 
     return (
+
         <div className="space-y-6">
             {/* Stats Dashboard */}
             <div className="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-6 shadow-xl">
@@ -360,6 +391,8 @@ export default function CollectionFilter({
                                     totalInSet={totalCardsCount}
                                     showSetInfo={isMultiSet}
                                     setName={setNames[card.setId] || card.setId}
+                                    isInWishlist={wishlist.has(card.id)}
+                                    onToggleWishlist={toggleWishlist}
                                 />
                             ))}
                         </div>
