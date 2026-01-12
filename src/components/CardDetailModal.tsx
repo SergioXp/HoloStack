@@ -106,6 +106,7 @@ export function CardDetailModal({
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="bg-slate-950/95 border-slate-800 text-white w-[95vw] md:w-full max-w-5xl h-[90vh] md:h-auto md:max-h-[85vh] p-0 overflow-hidden shadow-2xl backdrop-blur-xl sm:max-w-5xl">
+                <DialogTitle className="sr-only">{card.cardName}</DialogTitle>
                 <div className="flex flex-col md:flex-row h-full">
                     {/* Columna Izquierda: Imagen (más prominente) */}
                     <div className="w-full md:w-[45%] bg-slate-900/50 p-6 flex items-center justify-center relative border-b md:border-b-0 md:border-r border-slate-800 shrink-0">
