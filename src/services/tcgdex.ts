@@ -143,6 +143,14 @@ async function tcgdexFetch<T>(endpoint: string): Promise<T> {
 }
 
 /**
+ * Get cards by Name query (summary list)
+ */
+export async function fetchCardsByName(name: string): Promise<TCGdexCardBrief[]> {
+    const data = await tcgdexFetch<TCGdexCardBrief[]>(`/cards?name=${encodeURIComponent(name)}`);
+    return data || [];
+}
+
+/**
  * Get list of all sets (summary only)
  * Optionally enrich with series info by fetching series detailed data
  */
@@ -280,26 +288,35 @@ export async function fetchCardsByCategory(category: string): Promise<TCGdexCard
  * 
  * UPDATE: To robustly hydrate a list of brief cards into detailed cards:
  */
-export async function fetchDetailedCards(briefCards: TCGdexCardBrief[]): Promise<TCGdexCard[]> {
-    // Limit concurrency if needed, but TCGdex handles parallel well.
-    // For very large lists (e.g. 500+), we might want to chunk?
-    // Let's just do Promise.all for now, typically sets are < 300.
-    // Categories like "Pokemon" are huge (10k+). This will likely crash if we try to fetch ALL pokemon.
-    // We should probably limit or warn.
+export async function fetchDetailedCards(briefs: TCGdexCardBrief[]): Promise<TCGdexCard[]> {
+    const details: TCGdexCard[] = [];
+    const BATCH_SIZE = 10; // Process in small batches
 
-    // Safety cap: Fetch max 200 items for non-set bulk operations to avoid timeouts?
-    // Or just let it run.
+    console.log(`[TCGdex] Hydrating ${briefs.length} cards...`);
 
-    console.log(`[TCGdex] Hydrating ${briefCards.length} cards...`);
+    for (let i = 0; i < briefs.length; i += BATCH_SIZE) {
+        const batch = briefs.slice(i, i + BATCH_SIZE);
+        const promises = batch.map(async (b) => {
+            try {
+                return await fetchCard(b.id);
+            } catch (error) {
+                console.warn(`[TCGdex] Failed to fetch card detail for ${b.id}:`, error);
+                return null;
+            }
+        });
 
-    const cards = await Promise.all(
-        briefCards.map(card => fetchCard(card.id).catch(err => {
-            console.error(`[TCGdex] Error fetching card ${card.id}:`, err);
-            return null;
-        }))
-    );
+        const results = await Promise.all(promises);
+        results.forEach(r => {
+            if (r) details.push(r);
+        });
 
-    return cards.filter((c): c is TCGdexCard => c !== null);
+        // Small delay between batches
+        if (i + BATCH_SIZE < briefs.length) {
+            await new Promise(resolve => setTimeout(resolve, 500));
+        }
+    }
+
+    return details;
 }
 
 // ==========================================

@@ -264,8 +264,23 @@
             "title": "Colección vacía",
             "description": "Añade cartas desde el explorador para empezar tu colección."
         },
+        "deleteConfirm": "¿Estás seguro que deseas eliminar {count} cartas de la colección?",
+        "deleteSuccess": "Cartas eliminadas correctamente",
+        "deleteError": "Error al eliminar las cartas",
         "progressByRarity": "Progreso por Rareza",
         "searchCard": "Buscar carta...",
+        "editModeTooltip": "Editar colección (Eliminar cartas)",
+        "deleteSelected": "Eliminar ({count})",
+        "editMode": "Modo Selección",
+        "refreshPrices": {
+            "noCards": "No hay cartas para actualizar",
+            "updating": "Actualizando precios de {count} cartas...",
+            "processing": "Procesando... {current}/{total}",
+            "success": "Precios actualizados: {refreshed} cartas",
+            "errorsSuffix": " ({errors} errores)",
+            "error": "Error al actualizar precios",
+            "button": "Actualizar Precios"
+        },
         "allSets": "Todos los Sets",
         "showAll": "Todas",
         "showOwned": "Tengo",
@@ -598,6 +613,13 @@
             "rarity": "Rareza",
             "price": "Precio"
         },
+        "subSort": {
+            "label": "Orden Secundario",
+            "priceDesc": "Precio (+ a -)",
+            "priceAsc": "Precio (- a +)",
+            "dateDesc": "Más Recientes",
+            "manualWarning": "⚠️ La ordenación por Pokédex solo aplica a colecciones predefinidas (ej: \"151 Originales\")."
+        },
         "resync": {
             "title": "Resincronizar cartas",
             "description": "Vuelve a buscar las cartas que coinciden con los filtros de esta colección.",
@@ -663,6 +685,72 @@
             "collections": "Colecciones",
             "budgets": "Presupuestos",
             "cards": "Todas las Cartas"
+        }
+    },
+    "predefined": {
+        "title": "Predefinidas (Top Picks)",
+        "original151": {
+            "title": "Original 151",
+            "description": "La primera generación de Pokémon de la región de Kanto."
+        },
+        "starters": {
+            "title": "Iniciales (Starters)",
+            "description": "Todos los Pokémon iniciales de todas las regiones."
+        },
+        "pikachu": {
+            "title": "Pikachu Mania",
+            "description": "Colección dedicada al Pokémon más famoso del mundo."
+        },
+        "eeveelutions": {
+            "title": "Eeveelutions",
+            "description": "Eevee y sus 8 evoluciones."
+        },
+        "charizard": {
+            "title": "Charizard Hunter",
+            "description": "Busca y captura todos los Charizard."
+        },
+        "illustration": {
+            "title": "Galería de Arte",
+            "description": "Cartas con ilustraciones especiales y arte completo."
+        },
+        "trainers": {
+            "title": "Entrenadores Full Art",
+            "description": "Colección de cartas de soporte con arte extendido."
+        },
+        "shiny": {
+            "title": "Shiny Vault",
+            "description": "Pokémon en su versión variocolor (Shiny)."
+        },
+        "promos": {
+            "title": "Black Star Promos",
+            "description": "Cartas promocionales exclusivas."
+        },
+        "rocket": {
+            "title": "Team Rocket",
+            "description": "Únete al lado oscuro con el Team Rocket."
+        },
+        "variants": {
+            "all": "Todo",
+            "vintage": "Vintage (Clásico)",
+            "modern151": "Moderno (Scarlet & Violet 151)",
+            "fullArt": "Solo Full Art / Ilustración",
+            "kantoOnly": "Solo Kanto",
+            "promos": "Solo Promos",
+            "rareOnly": "Solo Raras",
+            "mechanics": "Mecánicas (V/ex)",
+            "trainerGallery": "Trainer Gallery",
+            "shiny": "Solo Shinies",
+            "svEra": "Era Scarlet & Violet",
+            "swshEra": "Era Sword & Shield",
+            "paldeanFates": "Paldean Fates",
+            "shiningFates": "Shining Fates",
+            "hiddenFates": "Hidden Fates",
+            "allShiny": "Todos los Shinies",
+            "svp": "Scarlet & Violet Promos",
+            "swsh": "Sword & Shield Promos",
+            "smp": "Sun & Moon Promos",
+            "wizards": "Wizards Black Star",
+            "rocketReturns": "Team Rocket Returns"
         }
     }
 }

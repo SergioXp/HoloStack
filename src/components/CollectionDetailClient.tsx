@@ -1,10 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronRight, Library, Sparkles, Globe } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { ChevronRight, Library, Sparkles, Globe, Pencil, Trash2, X, CheckSquare } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import CollectionHydrator from "@/components/CollectionHydrator";
 import CollectionFilter from "@/components/CollectionFilter";
 import CollectionSettings from "@/components/CollectionSettings";
+import RefreshPricesButton from "@/components/RefreshPricesButton";
 import { Badge } from "@/components/ui/badge";
 import { useI18n } from "@/lib/i18n";
 
@@ -27,6 +31,7 @@ interface CollectionDetailClientProps {
     isComplete: boolean;
     isMultiSet: boolean;
     setNames: Record<string, string>;
+    userCurrency: "EUR" | "USD";
 }
 
 export default function CollectionDetailClient({
@@ -38,9 +43,53 @@ export default function CollectionDetailClient({
     progress,
     isComplete,
     isMultiSet,
-    setNames
+    setNames,
+    userCurrency
 }: CollectionDetailClientProps) {
     const { t } = useI18n();
+    const router = useRouter();
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [selectedCards, setSelectedCards] = useState<Set<string>>(new Set());
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const toggleSelection = (cardId: string) => {
+        const newSelected = new Set(selectedCards);
+        if (newSelected.has(cardId)) {
+            newSelected.delete(cardId);
+        } else {
+            newSelected.add(cardId);
+        }
+        setSelectedCards(newSelected);
+    };
+
+    const handleDeleteSelected = async () => {
+        if (selectedCards.size === 0) return;
+
+        if (!confirm(t("collectionDetail.deleteConfirm", { count: selectedCards.size }))) return;
+
+        setIsDeleting(true);
+        try {
+            const res = await fetch(`/api/collections/${collection.id}/items`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ cardIds: Array.from(selectedCards) }),
+            });
+
+            if (!res.ok) throw new Error("Failed to delete items");
+
+            // toast.success(t("collectionDetail.deleteSuccess"));
+            alert(t("collectionDetail.deleteSuccess"));
+            setSelectedCards(new Set());
+            setIsEditMode(false);
+            router.refresh();
+        } catch (error) {
+            console.error("Error deleting items:", error);
+            // toast.error(t("collectionDetail.deleteError"));
+            alert(t("collectionDetail.deleteError"));
+        } finally {
+            setIsDeleting(false);
+        }
+    };
 
     return (
         <div className="min-h-screen bg-slate-950 relative overflow-hidden">
@@ -76,8 +125,53 @@ export default function CollectionDetailClient({
                                     <div className="flex-1">
                                         <div className="flex items-center gap-3">
                                             <h1 className="text-3xl font-bold text-white tracking-tight">{collection.name}</h1>
-                                            <CollectionSettings collection={collection} />
+                                            {!isEditMode && (
+                                                <>
+                                                    <CollectionSettings collection={collection} />
+                                                    <RefreshPricesButton cardIds={displayCards.map(c => c.id)} />
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="icon"
+                                                        onClick={() => setIsEditMode(true)}
+                                                        className="text-slate-400 hover:text-white hover:bg-white/10"
+                                                        title={t("collectionDetail.editModeTooltip")}
+                                                    >
+                                                        <Pencil className="h-4 w-4" />
+                                                    </Button>
+                                                </>
+                                            )}
                                         </div>
+
+                                        {isEditMode && (
+                                            <div className="flex items-center gap-2 mt-2 p-2 bg-red-500/10 border border-red-500/30 rounded-lg animate-in fade-in slide-in-from-top-2">
+                                                <Button
+                                                    variant="secondary"
+                                                    size="sm"
+                                                    onClick={() => setIsEditMode(false)}
+                                                    className="h-8 gap-2"
+                                                >
+                                                    <X className="h-3 w-3" />
+                                                    {t("common.cancel")}
+                                                </Button>
+                                                <Button
+                                                    variant="destructive"
+                                                    size="sm"
+                                                    disabled={selectedCards.size === 0 || isDeleting}
+                                                    onClick={handleDeleteSelected}
+                                                    className="h-8 gap-2 bg-red-500 hover:bg-red-600 border-red-600"
+                                                >
+                                                    {isDeleting ? (
+                                                        <Sparkles className="h-3 w-3 animate-spin" />
+                                                    ) : (
+                                                        <Trash2 className="h-3 w-3" />
+                                                    )}
+                                                    {t("collectionDetail.deleteSelected", { count: selectedCards.size })}
+                                                </Button>
+                                                <div className="ml-auto text-xs text-red-200 font-medium px-2">
+                                                    {t("collectionDetail.editMode")}
+                                                </div>
+                                            </div>
+                                        )}
                                         <div className="flex items-center gap-3 mt-2 flex-wrap">
                                             <Badge variant="outline" className={`capitalize border-0 ${collection.type === "auto"
                                                 ? "bg-purple-500/10 text-purple-300"
@@ -149,6 +243,12 @@ export default function CollectionDetailClient({
                             totalCardsCount={totalCardsCount}
                             isMultiSet={isMultiSet}
                             setNames={setNames}
+                            defaultSort={collection.sortBy || "number"}
+                            showPrices={collection.showPrices}
+                            userCurrency={userCurrency}
+                            isEditMode={isEditMode}
+                            selectedCards={selectedCards}
+                            onToggleSelection={toggleSelection}
                         />
                     )}
                 </div>

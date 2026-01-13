@@ -33,8 +33,8 @@ export default async function CardDetailPage({ params }: CardDetailPageProps) {
         .limit(90);
 
     // Parsear datos JSON de la carta para el precio actual
-    const tcgplayerPrices = card.tcgplayerPrices ? JSON.parse(card.tcgplayerPrices) : null;
-    const cardmarketPrices = card.cardmarketPrices ? JSON.parse(card.cardmarketPrices) : null;
+    const tcgplayerPrices = card.tcgplayerPrices as any;
+    const cardmarketPrices = card.cardmarketPrices as any;
 
     // Precio actual (Prioridad: Cardmarket > TCGPlayer)
     const getCurrentPrice = () => {

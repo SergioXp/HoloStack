@@ -88,27 +88,35 @@ export function formatPrice(amount: number | undefined | null, currency: Currenc
 }
 
 /**
- * Parsea los precios de TCGPlayer desde el JSON almacenado
+ * Parsea los precios de TCGPlayer desde el input (objeto o JSON string)
  */
-export function parseTCGPlayerPrices(jsonString: string | null | undefined): TCGPlayerPrices | null {
-    if (!jsonString) return null;
-    try {
-        return JSON.parse(jsonString) as TCGPlayerPrices;
-    } catch {
-        return null;
+export function parseTCGPlayerPrices(input: unknown): TCGPlayerPrices | null {
+    if (!input) return null;
+    if (typeof input === 'object') return input as TCGPlayerPrices;
+    if (typeof input === 'string') {
+        try {
+            return JSON.parse(input) as TCGPlayerPrices;
+        } catch {
+            return null;
+        }
     }
+    return null;
 }
 
 /**
- * Parsea los precios de Cardmarket desde el JSON almacenado
+ * Parsea los precios de Cardmarket desde el input (objeto o JSON string)
  */
-export function parseCardmarketPrices(jsonString: string | null | undefined): CardmarketPrices | null {
-    if (!jsonString) return null;
-    try {
-        return JSON.parse(jsonString) as CardmarketPrices;
-    } catch {
-        return null;
+export function parseCardmarketPrices(input: unknown): CardmarketPrices | null {
+    if (!input) return null;
+    if (typeof input === 'object') return input as CardmarketPrices;
+    if (typeof input === 'string') {
+        try {
+            return JSON.parse(input) as CardmarketPrices;
+        } catch {
+            return null;
+        }
     }
+    return null;
 }
 
 /**
@@ -180,13 +188,13 @@ export function getCardmarketPrice(cmPrices: CardmarketPrices | null): number | 
  * Obtiene el mejor precio disponible de cualquier fuente, convertido a la moneda deseada
  */
 export function getBestPrice(
-    tcgPricesJson: string | null | undefined,
-    cardmarketPricesJson: string | null | undefined,
+    tcgPricesInput: unknown,
+    cardmarketPricesInput: unknown,
     variant: Variant = "normal",
     targetCurrency: Currency = "EUR"
 ): { price: number; source: Market; currency: Currency } | null {
-    const tcgPrices = parseTCGPlayerPrices(tcgPricesJson);
-    const cmPrices = parseCardmarketPrices(cardmarketPricesJson);
+    const tcgPrices = parseTCGPlayerPrices(tcgPricesInput);
+    const cmPrices = parseCardmarketPrices(cardmarketPricesInput);
 
     const tcgPrice = getMarketPrice(tcgPrices, variant);
     const cmPrice = getCardmarketPrice(cmPrices);
@@ -220,8 +228,8 @@ export function getBestPrice(
  */
 export function calculateTotalValue(
     items: Array<{
-        tcgplayerPrices: string | null;
-        cardmarketPrices: string | null;
+        tcgplayerPrices: unknown;
+        cardmarketPrices: unknown;
         variant: Variant;
         quantity: number;
     }>,
@@ -245,12 +253,12 @@ export function calculateTotalValue(
  * Obtiene todos los precios disponibles de todas las fuentes
  */
 export function getAllPrices(
-    tcgPricesJson: string | null | undefined,
-    cardmarketPricesJson: string | null | undefined,
+    tcgPricesInput: unknown,
+    cardmarketPricesInput: unknown,
     variant: Variant = "normal"
 ): { tcgplayer: number | null; cardmarket: number | null } {
-    const tcgPrices = parseTCGPlayerPrices(tcgPricesJson);
-    const cmPrices = parseCardmarketPrices(cardmarketPricesJson);
+    const tcgPrices = parseTCGPlayerPrices(tcgPricesInput);
+    const cmPrices = parseCardmarketPrices(cardmarketPricesInput);
 
     return {
         tcgplayer: getMarketPrice(tcgPrices, variant),

@@ -80,8 +80,8 @@ export default function WishlistPage() {
                         {items.map((item) => {
                             const card = item.card;
                             const image = card?.images ? JSON.parse(card.images).small : "/card-back.png";
-                            const prices = card?.tcgplayerPrices ? JSON.parse(card.tcgplayerPrices) : null;
-                            const price = prices?.holofoil?.market || prices?.normal?.market || 0;
+                            const prices = card?.tcgplayerPrices;
+                            const marketPrice = prices?.marketPrice || prices?.holofoil?.market || prices?.normal?.market || 0;
 
                             return (
                                 <Card key={item.id} className="bg-slate-900/50 border-slate-800 overflow-hidden group hover:border-pink-500/50 transition-all">
@@ -106,9 +106,9 @@ export default function WishlistPage() {
                                                 <h3 className="font-bold text-white truncate pr-2" title={card?.name}>{card?.name}</h3>
                                                 <p className="text-xs text-slate-400">{item.set?.name} · {card?.number}/{item.set?.printedTotal}</p>
                                             </div>
-                                            {price > 0 && (
+                                            {marketPrice > 0 && (
                                                 <div className="text-emerald-400 font-mono font-medium">
-                                                    ${price.toFixed(2)}
+                                                    ${marketPrice.toFixed(2)}
                                                 </div>
                                             )}
                                         </div>

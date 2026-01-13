@@ -265,8 +265,23 @@
             "title": "Empty collection",
             "description": "Add cards from the explorer to start your collection."
         },
+        "deleteConfirm": "Are you sure you want to delete {count} cards from the collection?",
+        "deleteSuccess": "Cards deleted successfully",
+        "deleteError": "Error deleting cards",
         "progressByRarity": "Progress by Rarity",
         "searchCard": "Search card...",
+        "editModeTooltip": "Edit collection (Delete cards)",
+        "deleteSelected": "Delete ({count})",
+        "editMode": "Selection Mode",
+        "refreshPrices": {
+            "noCards": "No cards to update",
+            "updating": "Updating prices for {count} cards...",
+            "processing": "Processing... {current}/{total}",
+            "success": "Prices updated: {refreshed} cards",
+            "errorsSuffix": " ({errors} errors)",
+            "error": "Error updating prices",
+            "button": "Refresh Prices"
+        },
         "allSets": "All Sets",
         "showAll": "All",
         "showOwned": "Owned",
@@ -599,6 +614,13 @@
             "rarity": "Rarity",
             "price": "Price"
         },
+        "subSort": {
+            "label": "Secondary Sort",
+            "priceDesc": "Price (+ to -)",
+            "priceAsc": "Price (- to +)",
+            "dateDesc": "Newest First",
+            "manualWarning": "⚠️ Pokedex sort only applies to predefined collections (e.g. 'Original 151')."
+        },
         "resync": {
             "title": "Resync Cards",
             "description": "Re-fetch cards matching this collection's filters.",
@@ -664,6 +686,72 @@
             "collections": "Collections",
             "budgets": "Budgets",
             "cards": "All Cards"
+        }
+    },
+    "predefined": {
+        "title": "Predefined (Top Picks)",
+        "original151": {
+            "title": "Original 151",
+            "description": "The first generation of Pokémon from Kanto region."
+        },
+        "starters": {
+            "title": "Starters",
+            "description": "All starter Pokémon from all regions."
+        },
+        "pikachu": {
+            "title": "Pikachu Mania",
+            "description": "Collection dedicated to the most famous Pokémon."
+        },
+        "eeveelutions": {
+            "title": "Eeveelutions",
+            "description": "Eevee and its 8 evolutions."
+        },
+        "charizard": {
+            "title": "Charizard Hunter",
+            "description": "Hunt and collect all Charizards."
+        },
+        "illustration": {
+            "title": "Art Gallery",
+            "description": "Cards with special illustrations and full art."
+        },
+        "trainers": {
+            "title": "Full Art Trainers",
+            "description": "Collection of supporter cards with full art."
+        },
+        "shiny": {
+            "title": "Shiny Vault",
+            "description": "Pokémon in their shiny color variants."
+        },
+        "promos": {
+            "title": "Black Star Promos",
+            "description": "Exclusive promotional cards."
+        },
+        "rocket": {
+            "title": "Team Rocket",
+            "description": "Join the dark side with Team Rocket."
+        },
+        "variants": {
+            "all": "All",
+            "vintage": "Vintage (Classic)",
+            "modern151": "Modern (Scarlet & Violet 151)",
+            "fullArt": "Full Art / Illustration Only",
+            "kantoOnly": "Kanto Only",
+            "promos": "Promos Only",
+            "rareOnly": "Rare Only",
+            "mechanics": "Mechanics (V/ex)",
+            "trainerGallery": "Trainer Gallery",
+            "shiny": "Shinies Only",
+            "svEra": "Scarlet & Violet Era",
+            "swshEra": "Sword & Shield Era",
+            "paldeanFates": "Paldean Fates",
+            "shiningFates": "Shining Fates",
+            "hiddenFates": "Hidden Fates",
+            "allShiny": "All Shinies",
+            "svp": "Scarlet & Violet Promos",
+            "swsh": "Sword & Shield Promos",
+            "smp": "Sun & Moon Promos",
+            "wizards": "Wizards Black Star",
+            "rocketReturns": "Team Rocket Returns"
         }
     }
 }

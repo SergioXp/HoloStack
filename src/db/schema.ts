@@ -91,8 +91,8 @@ export const cards = sqliteTable("cards", {
   // Imágenes (JSON con small y large URLs)
   images: text("images"),
   // Precios (JSON)
-  tcgplayerPrices: text("tcgplayer_prices"),
-  cardmarketPrices: text("cardmarket_prices"),
+  tcgplayerPrices: text("tcgplayer_prices", { mode: "json" }),
+  cardmarketPrices: text("cardmarket_prices", { mode: "json" }),
   // Metadatos
   isPartial: integer("is_partial", { mode: "boolean" }).default(false),
   syncedAt: integer("synced_at", { mode: "timestamp" }).$defaultFn(() => new Date()),

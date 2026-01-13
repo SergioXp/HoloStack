@@ -5,12 +5,13 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { Plus, Minus, Sparkles, Heart } from "lucide-react";
+import { Plus, Minus, Sparkles, Heart, CheckCircle2, Circle } from "lucide-react";
 import { updateCollectionItem } from "@/app/actions/collection";
 import { getAvailableVariants } from "@/lib/card-utils";
 import { useI18n } from "@/lib/i18n";
 import { TagManager } from "@/components/TagManager";
 import { CardDetailModal, CardDetailTrigger } from "./CardDetailModal";
+import { convertCurrency, formatPrice, type Currency } from "@/lib/prices";
 
 interface CardData {
     id: string;
@@ -33,6 +34,11 @@ interface CollectionItemManagerProps {
     isInWishlist?: boolean;
     onToggleWishlist?: (cardId: string) => void;
     variant?: 'default' | 'binder';
+    showPrices?: boolean;
+    userCurrency?: Currency;
+    isEditMode?: boolean;
+    isSelected?: boolean;
+    onToggleSelection?: () => void;
 }
 
 export default function CollectionItemManager({
@@ -45,7 +51,12 @@ export default function CollectionItemManager({
     onUpdate,
     variant = 'default',
     isInWishlist: initialInWishlist,
-    onToggleWishlist
+    onToggleWishlist,
+    showPrices,
+    userCurrency = "EUR",
+    isEditMode = false,
+    isSelected = false,
+    onToggleSelection
 }: CollectionItemManagerProps) {
     const { t } = useI18n();
     const [isLoading, setIsLoading] = useState(false);
@@ -155,7 +166,7 @@ export default function CollectionItemManager({
 
     return (
         <>
-            <Popover open={isOpen} onOpenChange={setIsOpen}>
+            <Popover open={!isEditMode && isOpen} onOpenChange={!isEditMode ? setIsOpen : undefined}>
                 <PopoverTrigger asChild>
                     <div
                         className={cn(
@@ -164,12 +175,35 @@ export default function CollectionItemManager({
                                 ? "bg-secondary/50 border-primary/20"
                                 : "bg-muted/30 border-transparent",
                             !isOwned && "grayscale opacity-50 hover:grayscale-0 hover:opacity-100",
-                            isHovered && "scale-[1.03] z-10",
+                            isHovered && !isEditMode && "scale-[1.03] z-10",
+                            isEditMode && isSelected ? "ring-2 ring-blue-500 scale-95 opacity-100 grayscale-0" : "",
+                            isEditMode && !isSelected ? "opacity-60 hover:opacity-100" : "",
                             variant === 'binder' ? "h-full w-full border-0 rounded-md bg-transparent m-0 p-0" : ""
                         )}
-                        onMouseEnter={() => setIsHovered(true)}
-                        onMouseLeave={() => setIsHovered(false)}
+                        onMouseEnter={() => !isEditMode && setIsHovered(true)}
+                        onMouseLeave={() => !isEditMode && setIsHovered(false)}
+                        onClick={(e) => {
+                            if (isEditMode) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                onToggleSelection?.();
+                            }
+                        }}
                     >
+                        {/* Edit Mode Selection Indicator */}
+                        {isEditMode && (
+                            <div className="absolute top-2 right-2 z-30">
+                                {isSelected ? (
+                                    <div className="bg-blue-500 text-white rounded-full p-1 shadow-lg">
+                                        <CheckCircle2 className="h-5 w-5 fill-current" />
+                                    </div>
+                                ) : (
+                                    <div className="bg-slate-900/50 text-slate-400 rounded-full p-1 border border-slate-600">
+                                        <Circle className="h-5 w-5" />
+                                    </div>
+                                )}
+                            </div>
+                        )}
                         {/* Glow Effect for Special Cards */}
                         {isOwned && isSpecialRarity && variant !== 'binder' && (
                             <div className="absolute inset-0 bg-linear-to-br from-yellow-500/10 via-transparent to-purple-500/10 z-0" />
@@ -182,7 +216,7 @@ export default function CollectionItemManager({
                             <div className={cn(
                                 "relative overflow-hidden transition-all duration-300",
                                 variant === 'default' && "aspect-[2.5/3.5] rounded-lg mb-2",
-                                variant === 'binder' && "aspect-[63/88] h-full w-auto max-w-full mx-auto rounded-sm shadow-md",
+                                variant === 'binder' && "aspect-63/88 h-full w-auto max-w-full mx-auto rounded-sm shadow-md",
                                 isHovered && "shadow-xl shadow-black/50"
                             )}>
                                 {/* Owned Badge - Moved Inside */}
@@ -219,80 +253,82 @@ export default function CollectionItemManager({
                                     </div>
                                 )}
 
-                                {/* Quick Action Overlay */}
-                                <div
-                                    className={cn(
-                                        "absolute bg-slate-950/90 backdrop-blur-md rounded-xl transition-all duration-300 ease-out border border-white/10 shadow-xl",
-                                        variant === 'binder' ? "bottom-2 left-2 right-2 p-1.5" : "bottom-2 left-2 right-2 p-2",
-                                        isHovered ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
-                                    )}
-                                    onClick={(e) => e.stopPropagation()}
-                                >
-                                    <div className="flex items-center justify-between gap-1">
-                                        {/* Detail Modal Trigger */}
-                                        <CardDetailTrigger
-                                            onClick={() => setDetailOpen(true)}
-                                            className={cn("bg-transparent hover:bg-slate-800 text-slate-400 hover:text-white", variant === 'binder' ? "h-6 w-6" : "h-8 w-8")}
-                                        />
+                                {/* Quick Action Overlay (Hidden in Edit Mode) */}
+                                {!isEditMode && (
+                                    <div
+                                        className={cn(
+                                            "absolute bg-slate-950/90 backdrop-blur-md rounded-xl transition-all duration-300 ease-out border border-white/10 shadow-xl",
+                                            variant === 'binder' ? "bottom-2 left-2 right-2 p-1.5" : "bottom-2 left-2 right-2 p-2",
+                                            isHovered ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"
+                                        )}
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        <div className="flex items-center justify-between gap-1">
+                                            {/* Detail Modal Trigger */}
+                                            <CardDetailTrigger
+                                                onClick={() => setDetailOpen(true)}
+                                                className={cn("bg-transparent hover:bg-slate-800 text-slate-400 hover:text-white", variant === 'binder' ? "h-6 w-6" : "h-8 w-8")}
+                                            />
 
-                                        {/* Wishlist Button */}
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            className={cn(
-                                                "rounded-full",
-                                                variant === 'binder' ? "h-6 w-6" : "h-8 w-8",
-                                                isWishlist
-                                                    ? "text-pink-500 bg-pink-500/10 hover:bg-pink-500/20"
-                                                    : "text-muted-foreground hover:text-pink-400 hover:bg-pink-500/10"
-                                            )}
-                                            onClick={handleToggleWishlist}
-                                            disabled={wishlistLoading}
-                                        >
-                                            <Heart className={cn(variant === 'binder' ? "h-3 w-3" : "h-4 w-4", isWishlist && "fill-current")} />
-                                        </Button>
+                                            {/* Wishlist Button */}
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className={cn(
+                                                    "rounded-full",
+                                                    variant === 'binder' ? "h-6 w-6" : "h-8 w-8",
+                                                    isWishlist
+                                                        ? "text-pink-500 bg-pink-500/10 hover:bg-pink-500/20"
+                                                        : "text-muted-foreground hover:text-pink-400 hover:bg-pink-500/10"
+                                                )}
+                                                onClick={handleToggleWishlist}
+                                                disabled={wishlistLoading}
+                                            >
+                                                <Heart className={cn(variant === 'binder' ? "h-3 w-3" : "h-4 w-4", isWishlist && "fill-current")} />
+                                            </Button>
 
-                                        <div className="w-px h-4 bg-slate-800 mx-1" />
+                                            <div className="w-px h-4 bg-slate-800 mx-1" />
 
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            className={cn("text-red-400 hover:text-red-300 hover:bg-red-950/50 rounded-full", variant === 'binder' ? "h-6 w-6" : "h-8 w-8")}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                const defaultVariant = possibleVariants[0];
-                                                const currentData = ownedData.get(defaultVariant);
-                                                const currentQty = currentData?.quantity || 0;
-                                                if (currentQty > 0) handleUpdate(defaultVariant, currentQty - 1);
-                                            }}
-                                            disabled={isLoading}
-                                        >
-                                            <Minus className={cn(variant === 'binder' ? "h-3 w-3" : "h-4 w-4")} />
-                                        </Button>
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className={cn("text-red-400 hover:text-red-300 hover:bg-red-950/50 rounded-full", variant === 'binder' ? "h-6 w-6" : "h-8 w-8")}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    const defaultVariant = possibleVariants[0];
+                                                    const currentData = ownedData.get(defaultVariant);
+                                                    const currentQty = currentData?.quantity || 0;
+                                                    if (currentQty > 0) handleUpdate(defaultVariant, currentQty - 1);
+                                                }}
+                                                disabled={isLoading}
+                                            >
+                                                <Minus className={cn(variant === 'binder' ? "h-3 w-3" : "h-4 w-4")} />
+                                            </Button>
 
-                                        <div className="text-center min-w-[20px]">
-                                            <span className={cn("text-white font-mono font-bold leading-none", variant === 'binder' ? "text-sm" : "text-lg")}>
-                                                {(ownedData.get(possibleVariants[0])?.quantity || 0)}
-                                            </span>
+                                            <div className="text-center min-w-[20px]">
+                                                <span className={cn("text-white font-mono font-bold leading-none", variant === 'binder' ? "text-sm" : "text-lg")}>
+                                                    {(ownedData.get(possibleVariants[0])?.quantity || 0)}
+                                                </span>
+                                            </div>
+
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className={cn("text-green-400 hover:text-green-300 hover:bg-green-950/50 rounded-full", variant === 'binder' ? "h-6 w-6" : "h-8 w-8")}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    const defaultVariant = possibleVariants[0];
+                                                    const currentData = ownedData.get(defaultVariant);
+                                                    const currentQty = currentData?.quantity || 0;
+                                                    handleUpdate(defaultVariant, currentQty + 1);
+                                                }}
+                                                disabled={isLoading}
+                                            >
+                                                <Plus className={cn(variant === 'binder' ? "h-3 w-3" : "h-4 w-4")} />
+                                            </Button>
                                         </div>
-
-                                        <Button
-                                            variant="ghost"
-                                            size="icon"
-                                            className={cn("text-green-400 hover:text-green-300 hover:bg-green-950/50 rounded-full", variant === 'binder' ? "h-6 w-6" : "h-8 w-8")}
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                const defaultVariant = possibleVariants[0];
-                                                const currentData = ownedData.get(defaultVariant);
-                                                const currentQty = currentData?.quantity || 0;
-                                                handleUpdate(defaultVariant, currentQty + 1);
-                                            }}
-                                            disabled={isLoading}
-                                        >
-                                            <Plus className={cn(variant === 'binder' ? "h-3 w-3" : "h-4 w-4")} />
-                                        </Button>
                                     </div>
-                                </div>
+                                )}
                             </div>
 
                             {/* Card Info - Hidden in binder mode */}
@@ -321,6 +357,57 @@ export default function CollectionItemManager({
                                     </div>
                                     {showSetInfo && setName && (
                                         <p className="text-[10px] text-slate-600 truncate">{setName}</p>
+                                    )}
+                                    {showPrices && (
+                                        <div className="text-[10px] font-mono mt-0.5">
+                                            {(() => {
+                                                try {
+                                                    let price: number | null = null;
+                                                    let sourceCurrency: Currency = "USD";
+
+                                                    // Try TCGPlayer prices first (USD)
+                                                    const tcgPrices = typeof card.tcgplayerPrices === 'string'
+                                                        ? JSON.parse(card.tcgplayerPrices)
+                                                        : card.tcgplayerPrices;
+
+                                                    const tcgPrice = tcgPrices?.marketPrice ||
+                                                        tcgPrices?.holofoil?.marketPrice ||
+                                                        tcgPrices?.normal?.marketPrice ||
+                                                        tcgPrices?.reverseHolofoil?.marketPrice;
+
+                                                    if (tcgPrice > 0) {
+                                                        price = tcgPrice;
+                                                        sourceCurrency = "USD";
+                                                    } else {
+                                                        // If no TCGPlayer price, try Cardmarket (EUR)
+                                                        const cmPrices = typeof card.cardmarketPrices === 'string'
+                                                            ? JSON.parse(card.cardmarketPrices)
+                                                            : card.cardmarketPrices;
+
+                                                        const cmPrice = cmPrices?.avg || cmPrices?.trend || cmPrices?.low;
+
+                                                        if (cmPrice > 0) {
+                                                            price = cmPrice;
+                                                            sourceCurrency = "EUR";
+                                                        }
+                                                    }
+
+                                                    if (price && price > 0) {
+                                                        // Convert to user's preferred currency
+                                                        const converted = convertCurrency(price, sourceCurrency, userCurrency);
+                                                        return (
+                                                            <span className="text-emerald-400">
+                                                                {formatPrice(converted, userCurrency)}
+                                                            </span>
+                                                        );
+                                                    }
+
+                                                    return null;
+                                                } catch (e) {
+                                                    return null;
+                                                }
+                                            })()}
+                                        </div>
                                     )}
                                 </div>
                             )}

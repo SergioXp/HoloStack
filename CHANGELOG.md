@@ -4,6 +4,35 @@
 
 ---
 
+## [0.5.0] - 2026-01-13
+
+### ✨ Collection Management: Deletion & Advanced Sorting
+
+**Fecha**: 2026-01-13
+
+#### Cambios
+- **Gestión Avanzada de Colecciones**:
+    - **Eliminación y Exclusión**: Nueva funcionalidad para eliminar cartas. En colecciones manuales se borran permanentemente; en automáticas se añaden a una lista negra (`excludedCardIds`) persistente.
+    - **Modo Edición**: Interfaz intuitiva con selección múltiple (checkboxes visuales) y confirmación de seguridad.
+    - **Ordenación Secundaria**: Al ordenar por "Pokédex", ahora es posible definir un criterio de desempate (Precio Asc/Desc, Fecha).
+- **Mejoras Visuales**:
+    - Indicadores de selección claros en `CollectionItemManager`.
+    - Ajuste de `aspect-ratio` en modo Binder para cumplir estándares de Tailwind.
+
+#### Archivos Modificados
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `src/app/api/collections/[id]/items/route.ts` | Nuevo | Endpoint DELETE para manejo dual (manual/auto). |
+| `src/app/collections/[id]/page.tsx` | Modificado | Lógica de filtrado `excludedCardIds` y ordenación secundaria. |
+| `src/components/CollectionDetailClient.tsx` | Modificado | Estado de "Modo Edición" y lógica de selección. |
+| `src/components/CollectionItemManager.tsx` | Modificado | UI de selección y overlays condicionales. |
+| `src/components/CollectionSettings.tsx` | Modificado | UI para selectores de orden secundario. |
+| `src/locales/*.json` | Config | Nuevas traducciones para diálogo de borrado y ordenación. |
+
+#### Notas Técnicas
+- **Estrategia de Exclusión**: Para evitar romper la lógica de colecciones automáticas (basadas en filtros dinámicos), la eliminación se implementa como una "máscara de exclusión" almacenada en el campo JSON `filters`. Esto permite que si el usuario resincroniza la colección, sus exclusiones manuales se respeten.
+
+
 ## [0.4.3] - 2026-01-12
 
 ### ⚡ Performance Optimization: Wishlist Batch Loading

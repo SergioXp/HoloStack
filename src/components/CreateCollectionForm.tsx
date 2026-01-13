@@ -22,9 +22,10 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import { CheckIcon, ChevronsUpDown, ChevronRight, Library, Sparkles, Wand2, Globe } from "lucide-react";
+import { CheckIcon, ChevronsUpDown, ChevronRight, Library, Sparkles, Wand2, Globe, LayoutGrid, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useI18n, CARD_LANGUAGES, type CardLanguage } from "@/lib/i18n";
+import { PREDEFINED_COLLECTIONS, type PredefinedCollection } from "@/lib/predefined-collections";
 
 interface SetOption {
     id: string;
@@ -39,13 +40,20 @@ export default function CreateCollectionForm({ availableSets }: CreateCollection
     const router = useRouter();
     const { t, cardLanguage } = useI18n();
     const [isLoading, setIsLoading] = useState(false);
-    const [mode, setMode] = useState<"manual" | "auto">("manual");
+
+    // Modes: manual, auto, predefined
+    const [mode, setMode] = useState<"manual" | "auto" | "predefined">("predefined");
     const [autoModeType, setAutoModeType] = useState<"set" | "name" | "supertype" | "rarity">("set");
     const [name, setName] = useState("");
 
+    // Auto Mode States
     const [selectedSet, setSelectedSet] = useState("");
     const [selectedRarity, setSelectedRarity] = useState("");
     const [customValue, setCustomValue] = useState("");
+
+    // Predefined Mode States
+    const [selectedPredefinedId, setSelectedPredefinedId] = useState<string | null>(null);
+    const [selectedVariantId, setSelectedVariantId] = useState<string | null>(null);
 
     // Language setting for the collection
     const [useProfileLanguage, setUseProfileLanguage] = useState(true);
@@ -55,8 +63,9 @@ export default function CreateCollectionForm({ availableSets }: CreateCollection
     const [searchResults, setSearchResults] = useState<string[]>([]);
     const [searchLoading, setSearchLoading] = useState(false);
 
+    // Search effect for Auto Name
     useEffect(() => {
-        if (autoModeType !== "name" || !customValue || customValue.length < 2) {
+        if (mode !== "auto" || autoModeType !== "name" || !customValue || customValue.length < 2) {
             setSearchResults([]);
             return;
         }
@@ -77,8 +86,33 @@ export default function CreateCollectionForm({ availableSets }: CreateCollection
         }, 500);
 
         return () => clearTimeout(timer);
-    }, [customValue, autoModeType]);
+    }, [customValue, autoModeType, mode]);
 
+
+    // Handle Predefined Selection
+    const handlePredefinedSelect = (collection: PredefinedCollection) => {
+        setSelectedPredefinedId(collection.id);
+        // Select first variant default
+        if (collection.variants.length > 0) {
+            handleVariantSelect(collection, collection.variants[0].id);
+        }
+    };
+
+    const handleVariantSelect = (collection: PredefinedCollection, variantId: string) => {
+        setSelectedVariantId(variantId);
+
+        // Auto-fill name
+        const variantKey = collection.variants.find(v => v.id === variantId)?.nameKey;
+        const variantName = variantKey ? t(variantKey) : "";
+        const baseName = t(collection.nameKey);
+
+        // If variant name is "All" or "Todo", just use base name, otherwise append
+        if (variantId === "all") {
+            setName(`${baseName}`);
+        } else {
+            setName(`${baseName} (${variantName})`);
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -86,6 +120,7 @@ export default function CreateCollectionForm({ availableSets }: CreateCollection
 
         try {
             let filters = null;
+            let type = mode;
 
             if (mode === "auto") {
                 if (autoModeType === "set") {
@@ -97,11 +132,21 @@ export default function CreateCollectionForm({ availableSets }: CreateCollection
                 } else if (autoModeType === "rarity") {
                     filters = { rarity: customValue };
                 }
+            } else if (mode === "predefined") {
+                type = "auto"; // Treat as auto for backend
+                const collection = PREDEFINED_COLLECTIONS.find(c => c.id === selectedPredefinedId);
+                const variant = collection?.variants.find(v => v.id === selectedVariantId);
+
+                if (collection && variant) {
+                    filters = variant.filterGenerator();
+                } else {
+                    throw new Error("Invalid predefined selection");
+                }
             }
 
             const payload = {
                 name,
-                type: mode,
+                type: type === "predefined" ? "auto" : type, // Normalize
                 filters,
                 language: useProfileLanguage ? null : collectionLanguage
             };
@@ -125,6 +170,8 @@ export default function CreateCollectionForm({ availableSets }: CreateCollection
         }
     };
 
+    const currentPredefined = PREDEFINED_COLLECTIONS.find(c => c.id === selectedPredefinedId);
+
     return (
         <div className="min-h-screen bg-slate-950 relative overflow-hidden">
             {/* Background Effects */}
@@ -135,7 +182,7 @@ export default function CreateCollectionForm({ availableSets }: CreateCollection
             </div>
 
             <div className="relative z-10 p-8">
-                <div className="max-w-xl mx-auto">
+                <div className="max-w-4xl mx-auto">
                     {/* Header */}
                     <div className="mb-8">
                         <Link href="/collections" className="inline-flex items-center text-slate-400 hover:text-white text-sm mb-6 transition-colors">
@@ -162,61 +209,51 @@ export default function CreateCollectionForm({ availableSets }: CreateCollection
                         </CardHeader>
 
                         <CardContent>
-                            <form onSubmit={handleSubmit} className="space-y-6">
-                                {/* Name Input */}
-                                <div className="space-y-2">
-                                    <Label htmlFor="name" className="text-white text-sm font-medium">{t("collectionForm.nameLabel")}</Label>
-                                    <Input
-                                        id="name"
-                                        placeholder={t("collectionForm.namePlaceholder")}
-                                        value={name}
-                                        onChange={(e) => setName(e.target.value)}
-                                        required
-                                        className="bg-slate-800 border-slate-700 text-white h-12 rounded-xl focus:border-purple-500 focus:ring-purple-500/20"
-                                    />
-                                </div>
+                            <form onSubmit={handleSubmit} className="space-y-8">
 
-                                {/* Type Selection */}
+                                {/* 1. Type Selection */}
                                 <div className="space-y-3">
                                     <Label className="text-white text-sm font-medium">{t("collectionForm.typeLabel")}</Label>
-                                    <div className="grid grid-cols-2 gap-4">
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                        {/* Predefined Option */}
                                         <div
-                                            onClick={() => setMode("manual")}
+                                            onClick={() => setMode("predefined")}
                                             className={cn(
-                                                "cursor-pointer p-5 rounded-xl border-2 transition-all duration-200",
-                                                mode === "manual"
-                                                    ? "border-blue-500 bg-blue-500/10 shadow-lg shadow-blue-500/10"
+                                                "cursor-pointer p-5 rounded-xl border-2 transition-all duration-200 relative group",
+                                                mode === "predefined"
+                                                    ? "border-amber-500 bg-amber-500/10 shadow-lg shadow-amber-500/10"
                                                     : "border-slate-700 bg-slate-800/50 hover:border-slate-600"
                                             )}
                                         >
+                                            <Badge className="absolute -top-2 right-3 bg-amber-500 text-black border-0 text-[10px] font-bold">
+                                                Top Picks
+                                            </Badge>
                                             <div className="flex items-center gap-3 mb-2">
                                                 <div className={cn(
-                                                    "w-8 h-8 rounded-lg flex items-center justify-center",
-                                                    mode === "manual" ? "bg-blue-500" : "bg-slate-700"
+                                                    "w-8 h-8 rounded-lg flex items-center justify-center transition-colors",
+                                                    mode === "predefined" ? "bg-amber-500 text-black" : "bg-slate-700 text-slate-400 group-hover:text-white"
                                                 )}>
-                                                    <Library className="h-4 w-4 text-white" />
+                                                    <LayoutGrid className="h-4 w-4" />
                                                 </div>
-                                                <h3 className="font-semibold">{t("collectionForm.manual.title")}</h3>
+                                                <h3 className="font-semibold">{t("predefined.title")}</h3>
                                             </div>
-                                            <p className="text-xs text-slate-400">{t("collectionForm.manual.description")}</p>
+                                            <p className="text-xs text-slate-400">Colecciones populares listas para usar.</p>
                                         </div>
 
+                                        {/* Auto Option */}
                                         <div
                                             onClick={() => setMode("auto")}
                                             className={cn(
-                                                "cursor-pointer p-5 rounded-xl border-2 transition-all duration-200 relative",
+                                                "cursor-pointer p-5 rounded-xl border-2 transition-all duration-200 relative group",
                                                 mode === "auto"
                                                     ? "border-purple-500 bg-purple-500/10 shadow-lg shadow-purple-500/10"
                                                     : "border-slate-700 bg-slate-800/50 hover:border-slate-600"
                                             )}
                                         >
-                                            <Badge className="absolute -top-2 right-3 bg-linear-to-r from-purple-500 to-pink-500 text-white border-0 text-[10px]">
-                                                {t("collectionForm.auto.recommended")}
-                                            </Badge>
                                             <div className="flex items-center gap-3 mb-2">
                                                 <div className={cn(
-                                                    "w-8 h-8 rounded-lg flex items-center justify-center",
-                                                    mode === "auto" ? "bg-purple-500" : "bg-slate-700"
+                                                    "w-8 h-8 rounded-lg flex items-center justify-center transition-colors",
+                                                    mode === "auto" ? "bg-purple-500" : "bg-slate-700 text-slate-400 group-hover:text-white"
                                                 )}>
                                                     <Wand2 className="h-4 w-4 text-white" />
                                                 </div>
@@ -224,8 +261,101 @@ export default function CreateCollectionForm({ availableSets }: CreateCollection
                                             </div>
                                             <p className="text-xs text-slate-400">{t("collectionForm.auto.description")}</p>
                                         </div>
+
+                                        {/* Manual Option */}
+                                        <div
+                                            onClick={() => setMode("manual")}
+                                            className={cn(
+                                                "cursor-pointer p-5 rounded-xl border-2 transition-all duration-200 group",
+                                                mode === "manual"
+                                                    ? "border-blue-500 bg-blue-500/10 shadow-lg shadow-blue-500/10"
+                                                    : "border-slate-700 bg-slate-800/50 hover:border-slate-600"
+                                            )}
+                                        >
+                                            <div className="flex items-center gap-3 mb-2">
+                                                <div className={cn(
+                                                    "w-8 h-8 rounded-lg flex items-center justify-center transition-colors",
+                                                    mode === "manual" ? "bg-blue-500" : "bg-slate-700 text-slate-400 group-hover:text-white"
+                                                )}>
+                                                    <Library className="h-4 w-4 text-white" />
+                                                </div>
+                                                <h3 className="font-semibold">{t("collectionForm.manual.title")}</h3>
+                                            </div>
+                                            <p className="text-xs text-slate-400">{t("collectionForm.manual.description")}</p>
+                                        </div>
                                     </div>
                                 </div>
+
+                                {/* 2. Logic for Predefined */}
+                                {mode === "predefined" && (
+                                    <div className="space-y-6 animate-in fade-in slide-in-from-top-4">
+                                        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                                            {PREDEFINED_COLLECTIONS.map((col) => {
+                                                const Icon = col.icon;
+                                                const isSelected = selectedPredefinedId === col.id;
+                                                return (
+                                                    <div
+                                                        key={col.id}
+                                                        onClick={() => handlePredefinedSelect(col)}
+                                                        className={cn(
+                                                            "cursor-pointer p-3 rounded-xl border transition-all hover:scale-[1.02]",
+                                                            isSelected
+                                                                ? "border-amber-500 bg-amber-500/20 shadow-md"
+                                                                : "border-slate-800 bg-slate-800/50 hover:border-slate-700 hover:bg-slate-800"
+                                                        )}
+                                                    >
+                                                        <div className="flex flex-col items-center text-center gap-2">
+                                                            <div className={cn(
+                                                                "w-10 h-10 rounded-full flex items-center justify-center",
+                                                                isSelected ? "bg-amber-500 text-black" : "bg-slate-700 text-slate-300"
+                                                            )}>
+                                                                <Icon className="h-5 w-5" />
+                                                            </div>
+                                                            <span className="text-xs font-medium leading-tight">{t(col.nameKey)}</span>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+
+                                        {currentPredefined && (
+                                            <div className="bg-slate-800/50 rounded-xl p-5 border border-slate-700 space-y-4">
+                                                <div>
+                                                    <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                                                        {t(currentPredefined.nameKey)}
+                                                        {selectedVariantId && (
+                                                            <span className="text-slate-400 text-sm font-normal">
+                                                                • {t(currentPredefined.variants.find(v => v.id === selectedVariantId)?.nameKey || "")}
+                                                            </span>
+                                                        )}
+                                                    </h3>
+                                                    <p className="text-sm text-slate-400 mt-1">{t(currentPredefined.descriptionKey)}</p>
+                                                </div>
+
+                                                <div className="space-y-2">
+                                                    <Label className="text-xs uppercase text-slate-500 font-bold tracking-wider">{t("cardDetail.variant")}</Label>
+                                                    <div className="flex flex-wrap gap-2">
+                                                        {currentPredefined.variants.map(variant => (
+                                                            <button
+                                                                key={variant.id}
+                                                                type="button"
+                                                                onClick={() => handleVariantSelect(currentPredefined, variant.id)}
+                                                                className={cn(
+                                                                    "px-4 py-2 rounded-lg text-sm transition-all border",
+                                                                    selectedVariantId === variant.id
+                                                                        ? "bg-amber-500 text-black border-amber-500 font-medium"
+                                                                        : "bg-slate-900 text-slate-300 border-slate-700 hover:border-slate-600"
+                                                                )}
+                                                            >
+                                                                {t(variant.nameKey)}
+                                                            </button>
+                                                        ))}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
 
                                 {/* Auto Mode Options */}
                                 {mode === "auto" && (
@@ -393,7 +523,20 @@ export default function CreateCollectionForm({ availableSets }: CreateCollection
                                     </div>
                                 )}
 
-                                {/* Language Selection */}
+                                {/* Common: Name Input */}
+                                <div className="space-y-2">
+                                    <Label htmlFor="name" className="text-white text-sm font-medium">{t("collectionForm.nameLabel")}</Label>
+                                    <Input
+                                        id="name"
+                                        placeholder={t("collectionForm.namePlaceholder")}
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        required
+                                        className="bg-slate-800 border-slate-700 text-white h-12 rounded-xl focus:border-purple-500 focus:ring-purple-500/20"
+                                    />
+                                </div>
+
+                                {/* Common: Language Selection */}
                                 <div className="space-y-3 p-5 bg-slate-800/30 rounded-xl border border-slate-700">
                                     <div className="flex items-center gap-3 mb-3">
                                         <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
@@ -465,7 +608,12 @@ export default function CreateCollectionForm({ availableSets }: CreateCollection
                                 {/* Submit Button */}
                                 <Button
                                     type="submit"
-                                    disabled={isLoading || !name || (mode === "auto" && autoModeType === "set" && !selectedSet)}
+                                    disabled={
+                                        isLoading ||
+                                        !name ||
+                                        (mode === "auto" && autoModeType === "set" && !selectedSet) ||
+                                        (mode === "predefined" && !selectedVariantId)
+                                    }
                                     className="w-full h-14 bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold text-lg rounded-xl shadow-lg shadow-purple-500/20 transition-all hover:scale-[1.02] disabled:opacity-50 disabled:hover:scale-100"
                                 >
                                     {isLoading ? (

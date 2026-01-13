@@ -62,11 +62,19 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
     const [showPrices, setShowPrices] = useState(collection.showPrices !== false);
     const [sortBy, setSortBy] = useState(collection.sortBy || "number");
 
+    // Parse initial filters to get subSort
+    const initialFilters = collection.filters ? JSON.parse(collection.filters) : {};
+    const [subSort, setSubSort] = useState(initialFilters.subSort || "number");
+
     const handleSave = async () => {
         setIsSaving(true);
         setSaved(false);
 
         try {
+            // Update filters with subSort
+            const filters = collection.filters ? JSON.parse(collection.filters) : {};
+            filters.subSort = subSort;
+
             const res = await fetch(`/api/collections/${collection.id}`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
@@ -76,6 +84,7 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                     language: useProfileLanguage ? null : selectedLanguage,
                     showPrices,
                     sortBy,
+                    filters: JSON.stringify(filters)
                 }),
             });
 
@@ -146,6 +155,7 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
 
     const sortOptions = [
         { value: "number", label: t("collectionSettings.sortOptions.number") },
+        { value: "pokedex", label: "Pokédex" },
         { value: "name", label: t("collectionSettings.sortOptions.name") },
         { value: "rarity", label: t("collectionSettings.sortOptions.rarity") },
         { value: "price", label: t("collectionSettings.sortOptions.price") },
@@ -327,7 +337,7 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                                     className={cn(
                                         "flex-1 p-4 rounded-xl border transition-all text-center",
                                         !showPrices
-                                            ? "border-slate-500 bg-slate-500/10"
+                                            ? "border-emerald-500 bg-emerald-500/10"
                                             : "border-slate-700 bg-slate-800/50 hover:border-slate-600"
                                     )}
                                 >
@@ -359,6 +369,49 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                                     </button>
                                 ))}
                             </div>
+                            {sortBy === "pokedex" && (() => {
+                                try {
+                                    const filters = collection.filters ? JSON.parse(collection.filters) : {};
+                                    const hasNames = filters.names && Array.isArray(filters.names) && filters.names.length > 0;
+
+                                    // Secondary Sort UI
+                                    const subSortOptions = [
+                                        { value: "number", label: t("collectionSettings.sortOptions.number") },
+                                        { value: "priceDesc", label: t("collectionSettings.subSort.priceDesc") },
+                                        { value: "priceAsc", label: t("collectionSettings.subSort.priceAsc") },
+                                        { value: "dateDesc", label: t("collectionSettings.subSort.dateDesc") },
+                                    ];
+
+                                    return (
+                                        <div className="mt-3 p-3 bg-slate-800/50 border border-slate-700 rounded-xl space-y-2">
+                                            {!hasNames && (
+                                                <p className="text-xs text-amber-300 mb-2">
+                                                    {t("collectionSettings.subSort.manualWarning")}
+                                                </p>
+                                            )}
+
+                                            <Label className="text-xs text-slate-400">{t("collectionSettings.subSort.label")}</Label>
+                                            <div className="grid grid-cols-2 gap-2">
+                                                {subSortOptions.map((opt) => (
+                                                    <button
+                                                        type="button"
+                                                        key={opt.value}
+                                                        onClick={() => setSubSort(opt.value)}
+                                                        className={cn(
+                                                            "p-2 rounded-lg border text-xs transition-all",
+                                                            subSort === opt.value
+                                                                ? "border-blue-500 bg-blue-500/10 text-white"
+                                                                : "border-slate-700 bg-slate-800/50 text-slate-400 hover:border-slate-600"
+                                                        )}
+                                                    >
+                                                        {opt.label}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    );
+                                } catch { return null; }
+                            })()}
                         </div>
                     </TabsContent>
 
@@ -444,7 +497,7 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                                             </AlertDialogHeader>
                                             <AlertDialogFooter>
                                                 <AlertDialogCancel className="bg-slate-800 border-slate-700 text-white hover:bg-slate-700">
-                                                    Cancelar
+                                                    {t("common.cancel")}
                                                 </AlertDialogCancel>
                                                 <AlertDialogAction
                                                     onClick={handleDelete}
@@ -473,7 +526,7 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                     {saved && (
                         <div className="flex items-center gap-2 text-emerald-400 text-sm mr-auto">
                             <Check className="h-4 w-4" />
-                            Guardado
+                            {t("common.saved")}
                         </div>
                     )}
                     <Button
@@ -481,7 +534,7 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                         onClick={() => setIsOpen(false)}
                         className="border-slate-700 bg-slate-800 text-white hover:bg-slate-700"
                     >
-                        Cerrar
+                        {t("common.close")}
                     </Button>
                     <Button
                         onClick={handleSave}
@@ -491,12 +544,12 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                         {isSaving ? (
                             <>
                                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                Guardando...
+                                {t("common.saving")}
                             </>
                         ) : (
                             <>
                                 <Save className="h-4 w-4 mr-2" />
-                                Guardar cambios
+                                {t("common.saveChanges")}
                             </>
                         )}
                     </Button>

@@ -24,7 +24,26 @@ interface CollectionFilterProps {
     totalCardsCount: number;
     isMultiSet: boolean;
     setNames: Record<string, string>;
+    defaultSort: string;
+    showPrices: boolean;
+    userCurrency: "EUR" | "USD";
+    isEditMode?: boolean;
+    selectedCards?: Set<string>;
+    onToggleSelection?: (cardId: string) => void;
 }
+
+const RARITY_RANK: Record<string, number> = {
+    "Common": 1,
+    "Uncommon": 2,
+    "Rare": 3,
+    "Double Rare": 4,
+    "Ultra Rare": 5,
+    "Illustration Rare": 6,
+    "Special Illustration Rare": 7,
+    "Secret Rare": 8,
+    "Hyper Rare": 9,
+    "SIR": 10
+};
 
 export default function CollectionFilter({
     cards,
@@ -32,7 +51,13 @@ export default function CollectionFilter({
     ownershipData,
     totalCardsCount,
     isMultiSet,
-    setNames
+    setNames,
+    defaultSort,
+    showPrices,
+    userCurrency,
+    isEditMode,
+    selectedCards,
+    onToggleSelection
 }: CollectionFilterProps) {
     const { t } = useI18n();
     const router = useRouter();
@@ -126,7 +151,7 @@ export default function CollectionFilter({
 
     // -- Filtered Cards --
     const filteredCards = useMemo(() => {
-        return cards.filter(card => {
+        const filteredList = cards.filter(card => {
             const matchesName = searchQuery === "" ||
                 card.name.toLowerCase().includes(searchQuery.toLowerCase());
 
@@ -141,7 +166,32 @@ export default function CollectionFilter({
 
             return matchesName && matchesSet && matchesView;
         });
-    }, [cards, searchQuery, selectedSet, viewMode, ownershipData]);
+
+        // Apply Sorting
+        const sorted = [...filteredList];
+
+        if (defaultSort === "pokedex") {
+            // Pokedex sort is handled by the server component `CollectionPage`
+            // and `cards` prop should already be sorted if `defaultSort` is "pokedex".
+            // No client-side re-sorting needed for pokedex here.
+        } else if (defaultSort === "name") {
+            sorted.sort((a, b) => a.name.localeCompare(b.name));
+        } else if (defaultSort === "rarity") {
+            sorted.sort((a, b) => {
+                const rA = RARITY_RANK[a.rarity] || 0;
+                const rB = RARITY_RANK[b.rarity] || 0;
+                return rB - rA; // High rarity first
+            });
+        } else if (defaultSort === "price") {
+            sorted.sort((a, b) => {
+                const priceA = a.tcgplayerPrices?.marketPrice || 0;
+                const priceB = b.tcgplayerPrices?.marketPrice || 0;
+                return priceB - priceA; // High price first
+            });
+        }
+
+        return sorted;
+    }, [cards, searchQuery, selectedSet, viewMode, ownershipData, defaultSort]);
 
     const clearFilters = () => {
         setSearchQuery("");
@@ -393,6 +443,11 @@ export default function CollectionFilter({
                                     setName={setNames[card.setId] || card.setId}
                                     isInWishlist={wishlist.has(card.id)}
                                     onToggleWishlist={toggleWishlist}
+                                    showPrices={showPrices}
+                                    userCurrency={userCurrency}
+                                    isEditMode={isEditMode}
+                                    isSelected={selectedCards?.has(card.id)}
+                                    onToggleSelection={() => onToggleSelection?.(card.id)}
                                 />
                             ))}
                         </div>

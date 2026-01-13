@@ -95,6 +95,7 @@ export async function PUT(
         if (body.language !== undefined) updateData.language = body.language;
         if (body.showPrices !== undefined) updateData.showPrices = body.showPrices;
         if (body.sortBy !== undefined) updateData.sortBy = body.sortBy;
+        if (body.filters !== undefined) updateData.filters = body.filters;
 
         const [updated] = await db.update(collections)
             .set(updateData)
