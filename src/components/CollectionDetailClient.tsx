@@ -9,8 +9,11 @@ import CollectionHydrator from "@/components/CollectionHydrator";
 import CollectionFilter from "@/components/CollectionFilter";
 import CollectionSettings from "@/components/CollectionSettings";
 import RefreshPricesButton from "@/components/RefreshPricesButton";
+// Specialized grid for 151 collection
+import GenericCollectionGrid from "./GenericCollectionGrid";
 import { Badge } from "@/components/ui/badge";
 import { useI18n } from "@/lib/i18n";
+import { getPokemonListByGeneration } from "@/lib/constants/pokemon-generations";
 
 interface CollectionDetailClientProps {
     collection: {
@@ -51,6 +54,54 @@ export default function CollectionDetailClient({
     const [isEditMode, setIsEditMode] = useState(false);
     const [selectedCards, setSelectedCards] = useState<Set<string>>(new Set());
     const [isDeleting, setIsDeleting] = useState(false);
+
+    // Override stats for Generic 151
+
+
+    // ... (existing helper function imports if any, keeping it clean)
+
+    // Inside component
+    // Override stats for Generic 151 / Flexible Collections
+    let isGenericCollection = collection.type === "generic_151";
+    let pokemonList: { id: number, name: string }[] = [];
+
+    // Hoist genId so we can use it in the UI label
+    let currentGenId = "gen1";
+
+    if (isGenericCollection) {
+        // Parse generation from filters or default to Gen 1
+        if (collection.filters) {
+            try {
+                const parsed = JSON.parse(collection.filters);
+                if (parsed.generation) currentGenId = parsed.generation;
+            } catch (e) {
+                // Ignore parse error
+            }
+        }
+
+        pokemonList = getPokemonListByGeneration(currentGenId);
+        totalCardsCount = pokemonList.length;
+
+        // Count how many of the slots have at least one UNIQUE card assigned
+        const usedCardIds = new Set<string>();
+        uniqueOwnedCount = 0;
+
+        pokemonList.forEach((p) => {
+            // Find available match (not already used)
+            const match = displayCards.find((c: any) =>
+                !usedCardIds.has(c.id) &&
+                c.name.toLowerCase().includes(p.name.toLowerCase())
+            );
+            if (match) {
+                uniqueOwnedCount++;
+                usedCardIds.add(match.id);
+            }
+        });
+
+        // Use more precision for generic binders to avoid "0%" on large lists
+        progress = totalCardsCount > 0 ? (uniqueOwnedCount / totalCardsCount) * 100 : 0;
+        isComplete = uniqueOwnedCount === totalCardsCount && totalCardsCount > 0;
+    }
 
     const toggleSelection = (cardId: string) => {
         const newSelected = new Set(selectedCards);
@@ -175,9 +226,18 @@ export default function CollectionDetailClient({
                                         <div className="flex items-center gap-3 mt-2 flex-wrap">
                                             <Badge variant="outline" className={`capitalize border-0 ${collection.type === "auto"
                                                 ? "bg-purple-500/10 text-purple-300"
-                                                : "bg-blue-500/10 text-blue-300"
+                                                : collection.type === "generic_151"
+                                                    ? "bg-emerald-500/10 text-emerald-300"
+                                                    : "bg-blue-500/10 text-blue-300"
                                                 }`}>
-                                                {collection.type === "auto" ? t("collections.auto") : t("collections.manual")}
+                                                {collection.type === "auto"
+                                                    ? t("collections.auto")
+                                                    : collection.type === "generic_151"
+                                                        ? isGenericCollection && currentGenId // Check to ensure we have the ID
+                                                            // @ts-ignore - dynamic key access
+                                                            ? t(`generations.${currentGenId}`)
+                                                            : "151 Genérica"
+                                                        : t("collections.manual")}
                                             </Badge>
                                             {collection.language && (
                                                 <Badge variant="outline" className="capitalize border-0 bg-emerald-500/10 text-emerald-300">
@@ -202,7 +262,7 @@ export default function CollectionDetailClient({
                             <div className="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl p-6 min-w-[200px]">
                                 <div className="text-center mb-4">
                                     <div className={`text-5xl font-black ${isComplete ? "text-emerald-400" : "text-white"}`}>
-                                        {progress}%
+                                        {Number(progress).toFixed(1).replace(/\.0$/, "")}%
                                     </div>
                                     <div className="text-xs text-slate-500 uppercase tracking-wider mt-1">
                                         {isComplete ? t("collectionDetail.completed") : t("collectionDetail.progress")}
@@ -223,7 +283,17 @@ export default function CollectionDetailClient({
                     </div>
 
                     {/* Content */}
-                    {displayCards.length === 0 ? (
+                    {collection.type === "generic_151" ? (
+                        <div className="animate-in fade-in zoom-in-95 duration-500">
+                            <GenericCollectionGrid
+                                collectionId={collection.id}
+                                savedCards={displayCards}
+                                isEditMode={isEditMode}
+                                userCurrency={userCurrency}
+                                pokemonList={pokemonList}
+                            />
+                        </div>
+                    ) : displayCards.length === 0 ? (
                         collection.type === "auto" ? (
                             <CollectionHydrator collectionId={collection.id} hasFilters={!!collection.filters} />
                         ) : (

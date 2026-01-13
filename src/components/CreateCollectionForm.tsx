@@ -22,7 +22,7 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
-import { CheckIcon, ChevronsUpDown, ChevronRight, Library, Sparkles, Wand2, Globe, LayoutGrid, ArrowRight } from "lucide-react";
+import { CheckIcon, ChevronsUpDown, ChevronRight, Library, Sparkles, Wand2, Globe, LayoutGrid, ArrowRight, Album } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useI18n, CARD_LANGUAGES, type CardLanguage } from "@/lib/i18n";
 import { PREDEFINED_COLLECTIONS, type PredefinedCollection } from "@/lib/predefined-collections";
@@ -120,7 +120,7 @@ export default function CreateCollectionForm({ availableSets }: CreateCollection
 
         try {
             let filters = null;
-            let type = mode;
+            let type: string = mode;
 
             if (mode === "auto") {
                 if (autoModeType === "set") {
@@ -133,14 +133,30 @@ export default function CreateCollectionForm({ availableSets }: CreateCollection
                     filters = { rarity: customValue };
                 }
             } else if (mode === "predefined") {
-                type = "auto"; // Treat as auto for backend
-                const collection = PREDEFINED_COLLECTIONS.find(c => c.id === selectedPredefinedId);
-                const variant = collection?.variants.find(v => v.id === selectedVariantId);
+                // Check for Generic 151 special variant inside Original 151
+                if (selectedPredefinedId === "original-151" && selectedVariantId === "generic") {
+                    type = "generic_151";
+                    // No filters needed
+                } else if (selectedPredefinedId === "generational-binder") {
+                    type = "generic_151"; // Use the same slot-based engine
 
-                if (collection && variant) {
-                    filters = variant.filterGenerator();
+                    // But we MUST load the filters (generation) from the variant
+                    const collection = PREDEFINED_COLLECTIONS.find(c => c.id === selectedPredefinedId);
+                    const variant = collection?.variants.find(v => v.id === selectedVariantId);
+
+                    if (variant) {
+                        filters = variant.filterGenerator();
+                    }
                 } else {
-                    throw new Error("Invalid predefined selection");
+                    type = "auto";
+                    const collection = PREDEFINED_COLLECTIONS.find(c => c.id === selectedPredefinedId);
+                    const variant = collection?.variants.find(v => v.id === selectedVariantId);
+
+                    if (collection && variant) {
+                        filters = variant.filterGenerator();
+                    } else {
+                        throw new Error("Invalid predefined selection");
+                    }
                 }
             }
 

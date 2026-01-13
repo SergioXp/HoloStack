@@ -33,6 +33,11 @@ export const PREDEFINED_COLLECTIONS: PredefinedCollection[] = [
         icon: Album,
         variants: [
             {
+                id: "generic",
+                nameKey: "predefined.variants.genericSlots", // New key needed or reuse
+                filterGenerator: () => ({}) // Special handling
+            },
+            {
                 id: "all",
                 nameKey: "predefined.variants.all",
                 filterGenerator: () => ({ names: KANTO_151_NAMES })
@@ -55,6 +60,24 @@ export const PREDEFINED_COLLECTIONS: PredefinedCollection[] = [
                     rarity: ["Illustration Rare", "Special Illustration Rare", "Rare Ultra", "Hyper Rare", "Rare Secret"]
                 })
             }
+        ]
+    },
+    {
+        id: "generational-binder",
+        nameKey: "predefined.generational.title",
+        descriptionKey: "predefined.generational.description",
+        icon: Album,
+        variants: [
+            { id: "all", nameKey: "generations.all", filterGenerator: () => ({ generation: "all" }) },
+            { id: "gen1", nameKey: "generations.1", filterGenerator: () => ({ generation: "gen1" }) },
+            { id: "gen2", nameKey: "generations.2", filterGenerator: () => ({ generation: "gen2" }) },
+            { id: "gen3", nameKey: "generations.3", filterGenerator: () => ({ generation: "gen3" }) },
+            { id: "gen4", nameKey: "generations.4", filterGenerator: () => ({ generation: "gen4" }) },
+            { id: "gen5", nameKey: "generations.5", filterGenerator: () => ({ generation: "gen5" }) },
+            { id: "gen6", nameKey: "generations.6", filterGenerator: () => ({ generation: "gen6" }) },
+            { id: "gen7", nameKey: "generations.7", filterGenerator: () => ({ generation: "gen7" }) },
+            { id: "gen8", nameKey: "generations.8", filterGenerator: () => ({ generation: "gen8" }) },
+            { id: "gen9", nameKey: "generations.9", filterGenerator: () => ({ generation: "gen9" }) }
         ]
     },
     {

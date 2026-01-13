@@ -4,6 +4,52 @@
 
 ---
 
+## [0.6.0] - 2026-01-13
+
+### ✨ Generational Binder & National Dex
+
+**Fecha**: 2026-01-13
+
+#### Cambios
+- **Generational Binders**: Nueva opción en "Top Picks" para crear álbumes basados en generación.
+    - Soporte completo para las 9 Generaciones (Kanto a Paldea).
+    - Opción "Todas las Generaciones" (National Dex) que incluye los 1025+ Pokémon.
+- **Mejoras UI**:
+    - Etiquetas dinámicas en el detalle de la colección (ej. "Gen 2 (Johto)" en lugar de "151 Genérica").
+    - Porcentaje de progreso con decimales (ej. "0.1%") para mayor precisión en colecciones grandes.
+
+#### Archivos Modificados
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `src/lib/predefined-collections.ts` | Modificado | Añadidas variantes para Gen 1-9 y "All". |
+| `src/lib/constants/pokemon-generations.ts` | Nuevo | Definición de rangos y nombres para 9 generaciones. |
+| `src/components/CollectionDetailClient.tsx` | Modificado | Lógica dinámica para rendering de slots y cálculo de progreso. |
+| `src/components/CreateCollectionForm.tsx` | Modificado | Soporte para creación de `generational-binder`. |
+| `src/locales/*.json` | Config | Textos para generaciones y nuevas etiquetas. |
+
+#### Notas Técnicas
+- Se reutilizó el motor de "generic_151" pero inyectando dinámicamente la lista de Pokémon basada en el fitro `generation` guardado en la colección.
+- Para "All Generations", se renderizan más de 1000 slots. El rendimiento en React parece estable sin virtualización por ahora.
+
+---
+
+## [0.5.1] - 2026-01-13
+
+### 🐛 Hydration Fix & UI Polish
+
+**Fecha**: 2026-01-13
+
+#### Cambios
+- **Corrección de Hidratación**: Solucionado error de mismatch entre servidor y cliente en `layout.tsx` causado por extensiones de navegador que inyectan atributos en `body`.
+- **Refinamiento UI**: Ajustes menores en etiquetas y visualización de progreso.
+
+#### Archivos Modificados
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `src/app/layout.tsx` | Fix | Añadido `suppressHydrationWarning`. |
+
+---
+
 ## [0.5.0] - 2026-01-13
 
 ### ✨ Collection Management: Deletion & Advanced Sorting
@@ -512,7 +558,7 @@ CREATE TABLE user_profiles (
 
 ## Estado Actual del Proyecto
 
-**Última verificación**: 2026-01-12
+**Última verificación**: 2026-01-13
 
 | Check | Estado |
 |-------|--------|

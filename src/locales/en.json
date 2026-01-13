@@ -732,6 +732,7 @@
         },
         "variants": {
             "all": "All",
+            "genericSlots": "Flexible (Slots)",
             "vintage": "Vintage (Classic)",
             "modern151": "Modern (Scarlet & Violet 151)",
             "fullArt": "Full Art / Illustration Only",
@@ -752,6 +753,22 @@
             "smp": "Sun & Moon Promos",
             "wizards": "Wizards Black Star",
             "rocketReturns": "Team Rocket Returns"
+        },
+        "generational": {
+            "title": "By Generation",
+            "description": "Complete binders for every Pokemon region and generation."
         }
+    },
+    "generations": {
+        "all": "All Generations",
+        "1": "Gen 1 (Kanto)",
+        "2": "Gen 2 (Johto)",
+        "3": "Gen 3 (Hoenn)",
+        "4": "Gen 4 (Sinnoh)",
+        "5": "Gen 5 (Unova)",
+        "6": "Gen 6 (Kalos)",
+        "7": "Gen 7 (Alola)",
+        "8": "Gen 8 (Galar)",
+        "9": "Gen 9 (Paldea)"
     }
 }

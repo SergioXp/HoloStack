@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import PriceChart from "@/components/PriceChart";
 import { useI18n } from "@/lib/i18n";
+import { useSearchParams } from "next/navigation";
 
 interface CardDetailClientProps {
     card: {
@@ -33,8 +34,13 @@ interface CardDetailClientProps {
     }[];
 }
 
+// ... inside component ...
 export default function CardDetailClientPage({ card, set, currentPrice, priceHistoryData }: CardDetailClientProps) {
     const { t } = useI18n();
+    const searchParams = useSearchParams();
+    const fromPath = searchParams.get("from");
+    const backLink = fromPath || "/explorer";
+    const backText = fromPath?.includes("/collections") ? t("collectionDetail.backToCollections") : t("explorer.set.backToExplorer");
 
     // Parsear datos JSON de la carta
     const cardImages = card.images ? JSON.parse(card.images) : null;
@@ -45,8 +51,8 @@ export default function CardDetailClientPage({ card, set, currentPrice, priceHis
         <div className="min-h-screen bg-slate-950 p-6">
             <div className="max-w-5xl mx-auto">
                 {/* Navegación */}
-                <Link href="/explorer" className="text-slate-400 hover:text-white mb-6 inline-block">
-                    ← {t("explorer.set.backToExplorer")}
+                <Link href={backLink} className="text-slate-400 hover:text-white mb-6 inline-block">
+                    ← {backText}
                 </Link>
 
                 <div className="grid md:grid-cols-2 gap-8">

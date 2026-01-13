@@ -731,6 +731,7 @@
         },
         "variants": {
             "all": "Todo",
+            "genericSlots": "Flexible (Huecos)",
             "vintage": "Vintage (Clásico)",
             "modern151": "Moderno (Scarlet & Violet 151)",
             "fullArt": "Solo Full Art / Ilustración",
@@ -751,6 +752,22 @@
             "smp": "Sun & Moon Promos",
             "wizards": "Wizards Black Star",
             "rocketReturns": "Team Rocket Returns"
+        },
+        "generational": {
+            "title": "Por Generación",
+            "description": "Explora cartas por generación Pokémon"
         }
+    },
+    "generations": {
+        "all": "Todas las Generaciones",
+        "1": "Gen 1 (Kanto)",
+        "2": "Gen 2 (Johto)",
+        "3": "Gen 3 (Hoenn)",
+        "4": "Gen 4 (Sinnoh)",
+        "5": "Gen 5 (Unova)",
+        "6": "Gen 6 (Kalos)",
+        "7": "Gen 7 (Alola)",
+        "8": "Gen 8 (Galar)",
+        "9": "Gen 9 (Paldea)"
     }
 }
