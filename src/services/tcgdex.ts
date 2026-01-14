@@ -335,7 +335,15 @@ export function transformCardToSchema(card: TCGdexCard) {
         hp: card.hp ? String(card.hp) : null,
         types: JSON.stringify(card.types || []),
         evolvesFrom: card.evolveFrom || null,
-        // Game rules removed (abilities, attacks, weaknesses, resistances, retreat)
+
+        // Gameplay Fields mapping
+        attacks: card.attacks ? JSON.stringify(card.attacks) : null,
+        abilities: card.abilities ? JSON.stringify(card.abilities) : null,
+        weaknesses: card.weaknesses ? JSON.stringify(card.weaknesses) : null,
+        retreatCost: card.retreat ? JSON.stringify(Array(card.retreat).fill("Colorless")) : null, // TCGdex gives number, converting to array representation if needed or just storing number? Schema says json. Let's store as is or convert. Proxy usually needs cost array. TCGdex gives number. Let's start with null if undefined. Wait, TextProxyCard expects string[] for retreatCost.
+        // TCGdex "retreat" is a number (e.g. 2). TextProxyCard expects string[].
+        // Let's converting number to array of "Colorless".
+
         setId: card.set.id,
         number: card.localId,
         artist: card.illustrator || null,

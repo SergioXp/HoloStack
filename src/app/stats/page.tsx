@@ -1,12 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { PageHeader } from "@/components/PageHeader";
 import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
     PieChart, Pie, Cell
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { ChevronRight, TrendingUp, CreditCard, Layers, Award } from "lucide-react";
+import { ChevronRight, TrendingUp, CreditCard, Layers, Award, BarChart3 } from "lucide-react";
 import Link from "next/link";
 import { useI18n } from "@/lib/i18n";
 import { CardDetailModal } from "@/components/CardDetailModal";
@@ -47,16 +48,15 @@ export default function StatsPage() {
 
     return (
         <div className="min-h-screen bg-slate-950 p-8 pb-24">
-            <div className="max-w-6xl mx-auto space-y-8">
+            <div className="max-w-7xl mx-auto space-y-8">
                 {/* Header */}
-                <div>
-                    <Link href="/" className="inline-flex items-center text-slate-400 hover:text-white text-sm mb-4 transition-colors">
-                        <ChevronRight className="h-4 w-4 mr-1 rotate-180" />
-                        {t("common.backToHome")}
-                    </Link>
-                    <h1 className="text-3xl font-bold text-white mb-2">{t("stats.title")}</h1>
-                    <p className="text-slate-400">{t("stats.subtitle")}</p>
-                </div>
+                {/* Header */}
+                <PageHeader
+                    title={t("stats.title")}
+                    description={t("stats.subtitle")}
+                    icon={BarChart3}
+                    iconColor="from-amber-500 to-orange-500"
+                />
 
                 {/* KPI Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

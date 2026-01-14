@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useI18n } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import CollectionItemManager from "@/components/CollectionItemManager";
+import { PageHeader } from "@/components/PageHeader";
 
 interface Collection {
     id: string;
@@ -178,7 +179,7 @@ export default function BinderPage() {
     const renderCard = (card: Card) => {
         if (!card.name) {
             return (
-                <div key={card.id} className="relative aspect-[63/88] rounded-md bg-white/5 border border-white/10 flex items-center justify-center">
+                <div key={card.id} className="relative aspect-63/88 rounded-md bg-white/5 border border-white/10 flex items-center justify-center">
                     <div className="w-8 h-8 rounded-full border-2 border-white/10 opacity-30" />
                 </div>
             );
@@ -220,49 +221,51 @@ export default function BinderPage() {
     return (
         <div className="min-h-screen bg-slate-950 flex flex-col overflow-hidden">
             {/* Header */}
-            <div className="h-16 border-b border-slate-800 bg-slate-900/80 backdrop-blur-md px-6 flex items-center justify-between shrink-0 z-20">
-                <div className="flex items-center gap-4">
-                    <Link href="/" className="text-slate-400 hover:text-white transition-colors">
-                        <ArrowLeft className="h-5 w-5" />
-                    </Link>
-                    <h1 className="text-xl font-bold text-white flex items-center gap-2">
-                        <BookOpen className="h-5 w-5 text-amber-400" />
-                        {t("binder.title")}
-                    </h1>
-                </div>
-                <div className="flex items-center gap-4">
-                    {/* View Controls */}
-                    <div className="flex items-center bg-slate-800 rounded-lg p-1 border border-slate-700">
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            className={cn("h-7 px-2 text-xs", layout.rows === 3 && "bg-slate-700 text-white shadow-sm")}
-                            onClick={() => setLayout({ rows: 3, cols: 3 })}
-                        >
-                            3x3
-                        </Button>
-                        <Button
-                            variant="ghost"
-                            size="sm"
-                            className={cn("h-7 px-2 text-xs", layout.cols === 4 && "bg-slate-700 text-white shadow-sm")}
-                            onClick={() => setLayout({ rows: 3, cols: 4 })}
-                        >
-                            4x3
-                        </Button>
-                    </div>
+            <div className="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 z-20 px-8 pt-8 pb-4">
+                <div className="max-w-7xl mx-auto">
+                    <PageHeader
+                        title={t("binder.title")}
+                        description={t("binder.subtitle")}
+                        icon={BookOpen}
+                        iconColor="from-amber-500 to-orange-500"
+                        className="mb-0" // Reduce margin for Binder to maximize space
+                        actions={
+                            <div className="flex items-center gap-4">
+                                {/* View Controls */}
+                                <div className="flex items-center bg-slate-800 rounded-lg p-1 border border-slate-700">
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className={cn("h-7 px-2 text-xs", layout.rows === 3 && "bg-slate-700 text-white shadow-sm")}
+                                        onClick={() => setLayout({ rows: 3, cols: 3 })}
+                                    >
+                                        3x3
+                                    </Button>
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className={cn("h-7 px-2 text-xs", layout.cols === 4 && "bg-slate-700 text-white shadow-sm")}
+                                        onClick={() => setLayout({ rows: 3, cols: 4 })}
+                                    >
+                                        4x3
+                                    </Button>
+                                </div>
 
-                    <Select value={selectedCollection || ""} onValueChange={setSelectedCollection}>
-                        <SelectTrigger className="w-56 bg-slate-800 border-slate-700 text-white h-9">
-                            <SelectValue placeholder={t("binder.selectCollection")} />
-                        </SelectTrigger>
-                        <SelectContent className="bg-slate-800 border-slate-700">
-                            {collections.map((col) => (
-                                <SelectItem key={col.id} value={col.id} className="text-white hover:bg-slate-700">
-                                    {col.name}
-                                </SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
+                                <Select value={selectedCollection || ""} onValueChange={setSelectedCollection}>
+                                    <SelectTrigger className="w-56 bg-slate-800 border-slate-700 text-white h-9">
+                                        <SelectValue placeholder={t("binder.selectCollection")} />
+                                    </SelectTrigger>
+                                    <SelectContent className="bg-slate-800 border-slate-700">
+                                        {collections.map((col) => (
+                                            <SelectItem key={col.id} value={col.id} className="text-white hover:bg-slate-700">
+                                                {col.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        }
+                    />
                 </div>
             </div>
 
@@ -317,7 +320,7 @@ export default function BinderPage() {
                                 {/* Rings */}
                                 {[1, 2, 3].map(i => (
                                     <div key={i} className="relative w-[140%] h-5 md:h-6 bg-linear-to-b from-slate-300 via-slate-100 to-slate-400 rounded-full shadow-lg transform -rotate-3 flex items-center justify-center">
-                                        <div className="w-full h-[1px] bg-black/10" />
+                                        <div className="w-full h-px bg-black/10" />
                                     </div>
                                 ))}
                             </div>

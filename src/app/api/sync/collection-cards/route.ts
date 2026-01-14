@@ -4,19 +4,10 @@ import { db } from "@/db";
 import { collections, cards, sets } from "@/db/schema";
 import { eq, inArray, sql } from "drizzle-orm";
 import { fetchSetCardsDetailed, transformCardToSchema, fetchCardsByRarity, fetchCardsByCategory, fetchDetailedCards, fetchAllSets, fetchCardsByName, fetchSet, TCGdexCard, TCGdexCardBrief } from "@/services/tcgdex";
+import { filterCardsInMemory, CollectionFilter } from "@/lib/sync-logic";
 
 export const runtime = "nodejs";
 export const maxDuration = 300; // 5 minutos
-
-interface CollectionFilter {
-    set?: string;
-    series?: string | string[];
-    name?: string;
-    names?: string[];
-    rarity?: string | string[];
-    supertype?: string;
-    subtypes?: string | string[];
-}
 
 /**
  * Endpoint para hidratar (sincronizar) una colección automática
@@ -259,70 +250,7 @@ export async function GET(request: NextRequest) {
                 // 3. Filtrado en Memoria (Fine-grained filtering)
                 sendEvent({ status: "progress", message: `Filtrando ${candidateCards.length} candidatas...` });
 
-                const filteredApiCards = candidateCards.filter(card => {
-                    // Name filter (Array)
-                    if (filters.names) {
-                        const nameMatch = filters.names.some(n => card.name.toLowerCase().includes(n.toLowerCase()));
-                        if (!nameMatch) return false;
-                    }
-                    // Name filter (Single)
-                    if (filters.name) {
-                        if (!card.name.toLowerCase().includes(filters.name.toLowerCase())) return false;
-                    }
-
-                    // Series Filter (if checking strictly logic inside card, usually handled by source strategy but good to double check)
-                    if (filters.series) {
-                        const seriesList = Array.isArray(filters.series) ? filters.series : [filters.series];
-                        // Need detailed set info to curb check series? 
-                        // card.set.serie is not always populated in card object from TCGDex? 
-                        // TCGDexCard type has: `set: { id, name }`. Does NOT have series in set object within card.
-                        // So we cannot strictly filter by series here unless we fetched set details.
-                        // BUT, if we used Priority 2 (Series), we already guaranteed this.
-                        // If we used Priority 3 (Names) and want to filter by Series?
-                        // We would need to look up the set.
-                        // For now, assume if source was Names, we skip series check or we'd need to fetch set info.
-                        // Let's rely on Source Strategy being correct. 
-                        // "Original 151 Vintage" variant uses `filterGenerator: () => ({ names: [...], series: [...] })`
-                        // In that case, we MUST filter by series.
-                        // Since `candidateCards` logic above prioritizes `filters.series` IF present, 
-                        // it will fetch via series strategy (getting only sets of that series), and THEN we filter by names here.
-                        // So the flow works implicitly!
-                        // Logic: if filters.series is present, we used Priority 2.
-                        // Priority 2 gets cards FROM target series sets.
-                        // So they are valid.
-                        // Then we apply Name filter here. Perfect.
-                    }
-
-                    // Rarity Filter
-                    if (filters.rarity) {
-                        const rList = Array.isArray(filters.rarity) ? filters.rarity : [filters.rarity];
-                        const cardRarity = card.rarity?.toLowerCase() || "";
-                        // Fuzzy match for rarity types ("Illustration Rare" matches "Special Illustration Rare"?)
-                        // Let's do partial includes checking
-                        const rarityMatch = rList.some(r => cardRarity.includes(r.toLowerCase()));
-                        if (!rarityMatch) return false;
-                    }
-
-                    // Supertype
-                    if (filters.supertype && card.category.toLowerCase() !== filters.supertype.toLowerCase()) return false;
-
-                    // Subtypes (Array)
-                    if (filters.subtypes) {
-                        const subsList = Array.isArray(filters.subtypes) ? filters.subtypes : [filters.subtypes];
-                        // card.subtypes is not directly on TCGdexCard interface in our type def?
-                        // Let's check type.
-                        // transformCardToSchema: subtypes: JSON.stringify([card.stage || "Basic"]),
-                        // TCGDexCard has `stage`. But 'subtypes' like 'Supporter' come from where?
-                        // TCGDex `category` is often "Pokemon", "Trainer".
-                        // `stage` is "Basic", "Stage 1".
-                        // Checks needed if we want "Supporter".
-                        // For "Trainers", category is "Trainer".
-                        // We might need to check name or deeper props if TCGDex doesn't expose subtypes clearly on this object.
-                        // For now, ignore subtypes strict check or assume category covers it.
-                    }
-
-                    return true;
-                });
+                const filteredApiCards = filterCardsInMemory(candidateCards, filters);
 
                 const totalToSync = filteredApiCards.length;
                 console.log(`[CollectionSync] ${totalToSync} cards match all filters`);
@@ -364,7 +292,26 @@ export async function GET(request: NextRequest) {
                     await db.insert(cards).values(cardData)
                         .onConflictDoUpdate({
                             target: cards.id,
-                            set: { ...cardData, syncedAt: new Date() }
+                            set: {
+                                name: cardData.name,
+                                supertype: cardData.supertype,
+                                subtypes: cardData.subtypes,
+                                hp: cardData.hp,
+                                types: cardData.types,
+                                evolvesFrom: cardData.evolvesFrom,
+                                number: cardData.number,
+                                artist: cardData.artist,
+                                rarity: cardData.rarity,
+                                images: cardData.images,
+                                tcgplayerPrices: cardData.tcgplayerPrices,
+                                cardmarketPrices: cardData.cardmarketPrices,
+                                // New gameplay fields
+                                attacks: cardData.attacks,
+                                abilities: cardData.abilities,
+                                weaknesses: cardData.weaknesses,
+                                retreatCost: cardData.retreatCost,
+                                syncedAt: new Date()
+                            }
                         });
 
                     processedCount++;
@@ -424,11 +371,11 @@ async function upsertSet(fullSetData: any) {
 /** Helper Check DB for existing cards */
 async function filterNeededBriefs(briefs: TCGdexCardBrief[]): Promise<TCGdexCardBrief[]> {
     if (briefs.length === 0) return [];
-    
+
     const ids = briefs.map(b => b.id);
     const BATCH = 500; // SQLite limit variable params
     const existingIds = new Set<string>();
-    
+
     for (let i = 0; i < ids.length; i += BATCH) {
         const chunk = ids.slice(i, i + BATCH);
         try {
@@ -438,7 +385,7 @@ async function filterNeededBriefs(briefs: TCGdexCardBrief[]): Promise<TCGdexCard
             console.error("Error checking existing cards:", e);
         }
     }
-    
+
     return briefs.filter(b => !existingIds.has(b.id));
 }
 

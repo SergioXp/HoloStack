@@ -48,8 +48,8 @@ export default function CardDetailClientPage({ card, set, currentPrice, priceHis
     const cardSubtypes = card.subtypes ? JSON.parse(card.subtypes) : [];
 
     return (
-        <div className="min-h-screen bg-slate-950 p-6">
-            <div className="max-w-5xl mx-auto">
+        <div className="min-h-screen bg-slate-950 p-8">
+            <div className="max-w-6xl mx-auto">
                 {/* Navegación */}
                 <Link href={backLink} className="text-slate-400 hover:text-white mb-6 inline-block">
                     ← {backText}

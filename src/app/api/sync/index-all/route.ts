@@ -110,6 +110,17 @@ export async function GET(request: NextRequest) {
                                         syncedAt: new Date(),
                                         tcgplayerPrices: cardData.tcgplayerPrices,
                                         cardmarketPrices: cardData.cardmarketPrices,
+                                        // New gameplay fields
+                                        attacks: cardData.attacks,
+                                        abilities: cardData.abilities,
+                                        weaknesses: cardData.weaknesses,
+                                        retreatCost: cardData.retreatCost,
+                                        hp: cardData.hp,
+                                        types: cardData.types,
+                                        supertype: cardData.supertype,
+                                        subtypes: cardData.subtypes,
+                                        evolvesFrom: cardData.evolvesFrom,
+                                        images: cardData.images
                                     }
                                 });
                         }

@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { PlusIcon, Library, Sparkles, ArrowRight, BarChart3 } from "lucide-react";
+import { PlusIcon, Library, Sparkles, ArrowRight } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useI18n } from "@/lib/i18n";
+import { PageHeader } from "@/components/PageHeader";
 
 interface CollectionWithStats {
     id: string;
@@ -46,44 +47,33 @@ export default function CollectionsIndexClient({ collections, sets }: Collection
             </div>
 
             <div className="relative z-10 p-8">
-                <div className="max-w-6xl mx-auto">
+                <div className="max-w-7xl mx-auto">
                     {/* Header */}
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-                        <div>
-                            <div className="flex items-center gap-4 mb-4">
-                                <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
-                                    <Library className="h-7 w-7 text-white" />
+                    <PageHeader
+                        title={t("collections.title")}
+                        description={t("collections.subtitle")}
+                        icon={Library}
+                        stats={collections.length > 0 ? (
+                            <div className="flex gap-4">
+                                <div className="bg-slate-900/50 border border-slate-800 rounded-xl px-4 py-2 backdrop-blur-sm">
+                                    <span className="text-xl font-bold text-white">{collections.length}</span>
+                                    <span className="text-slate-400 ml-2 text-sm">{t("common.collections")}</span>
                                 </div>
-                                <div>
-                                    <h1 className="text-4xl font-bold text-white tracking-tight">{t("collections.title")}</h1>
-                                    <p className="text-slate-400 text-lg">{t("collections.subtitle")}</p>
+                                <div className="bg-slate-900/50 border border-slate-800 rounded-xl px-4 py-2 backdrop-blur-sm">
+                                    <span className="text-xl font-bold text-emerald-400">{totalCards}</span>
+                                    <span className="text-slate-400 ml-2 text-sm">{t("collections.uniqueCards")}</span>
                                 </div>
                             </div>
-
-                            {/* Quick Stats */}
-                            {collections.length > 0 && (
-                                <div className="flex gap-4 mt-6">
-                                    <div className="bg-slate-900/50 border border-slate-800 rounded-xl px-4 py-2 backdrop-blur-sm">
-                                        <span className="text-xl font-bold text-white">{collections.length}</span>
-                                        <span className="text-slate-400 ml-2 text-sm">{t("common.collections")}</span>
-                                    </div>
-                                    <div className="bg-slate-900/50 border border-slate-800 rounded-xl px-4 py-2 backdrop-blur-sm">
-                                        <span className="text-xl font-bold text-emerald-400">{totalCards}</span>
-                                        <span className="text-slate-400 ml-2 text-sm">{t("collections.uniqueCards")}</span>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-
-                        {collections.length > 0 && (
+                        ) : null}
+                        actions={collections.length > 0 ? (
                             <Link href="/collections/new">
                                 <Button className="bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold px-6 h-12 rounded-xl shadow-lg shadow-purple-500/20 transition-all hover:scale-105">
                                     <PlusIcon className="mr-2 h-5 w-5" />
                                     {t("collections.newCollection")}
                                 </Button>
                             </Link>
-                        )}
-                    </div>
+                        ) : null}
+                    />
 
                     {/* Content */}
                     {collections.length === 0 ? (

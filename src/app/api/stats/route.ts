@@ -1,7 +1,7 @@
 import { db } from "@/db";
 import { collectionItems, cards, sets } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { getBestPrice, type Variant } from "@/lib/prices";
+import { calculateStats } from "@/lib/stats-logic";
 
 export const dynamic = "force-dynamic";
 
@@ -27,76 +27,8 @@ export async function GET() {
             .leftJoin(cards, eq(collectionItems.cardId, cards.id))
             .leftJoin(sets, eq(cards.setId, sets.id));
 
-        let totalValue = 0;
-        let totalCards = 0;
-        const rarityMap = new Map<string, number>();
-        const seriesMap = new Map<string, number>();
-        const valuableCards: any[] = [];
-
-        for (const item of allItems) {
-            if (!item.cardName) continue; // Skip orphan items
-
-            const qty = item.quantity || 1;
-            totalCards += qty;
-
-            // Calcular valor usando el módulo de precios centralizado
-            const priceInfo = getBestPrice(
-                item.tcgplayerPrices,
-                item.cardmarketPrices,
-                (item.variant || "normal") as Variant,
-                "EUR" // Usar EUR por defecto para stats
-            );
-
-            const price = priceInfo?.price || 0;
-            const source = priceInfo?.source || null;
-            const itemTotalValue = price * qty;
-            totalValue += itemTotalValue;
-
-            if (price > 0) {
-                valuableCards.push({
-                    id: item.cardId,
-                    name: item.cardName,
-                    number: item.cardNumber,
-                    setId: item.setId,
-                    setName: item.setName,
-                    rarity: item.rarity,
-                    value: price,
-                    source: source,
-                    image: item.images ? JSON.parse(item.images).small : null,
-                    tcgplayerPrices: item.tcgplayerPrices,
-                    cardmarketPrices: item.cardmarketPrices,
-                });
-            }
-
-            // Agregaciones
-            const rarity = item.rarity || "Unknown";
-            rarityMap.set(rarity, (rarityMap.get(rarity) || 0) + qty);
-
-            const series = item.setSeries || "Other";
-            seriesMap.set(series, (seriesMap.get(series) || 0) + qty);
-        }
-
-        // Formatear datos para gráficos
-        const rarityData = Array.from(rarityMap.entries())
-            .map(([name, value]) => ({ name, value }))
-            .sort((a, b) => b.value - a.value);
-
-        const seriesData = Array.from(seriesMap.entries())
-            .map(([name, value]) => ({ name, value }))
-            .sort((a, b) => b.value - a.value);
-
-        // Top 5 cartas
-        valuableCards.sort((a, b) => b.value - a.value);
-        const topCards = valuableCards.slice(0, 5);
-
-        return Response.json({
-            totalValue,
-            totalCards,
-            uniqueSeries: seriesMap.size,
-            rarityData,
-            seriesData,
-            topCards
-        });
+        const stats = calculateStats(allItems as any);
+        return Response.json(stats);
 
     } catch (error) {
         console.error("Error fetching stats:", error);

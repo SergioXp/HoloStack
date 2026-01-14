@@ -93,6 +93,13 @@ export const cards = sqliteTable("cards", {
   // Precios (JSON)
   tcgplayerPrices: text("tcgplayer_prices", { mode: "json" }),
   cardmarketPrices: text("cardmarket_prices", { mode: "json" }),
+
+  // Gameplay Fields for Proxies
+  attacks: text("attacks", { mode: "json" }),
+  abilities: text("abilities", { mode: "json" }),
+  weaknesses: text("weaknesses", { mode: "json" }),
+  retreatCost: text("retreat_cost", { mode: "json" }),
+
   // Metadatos
   isPartial: integer("is_partial", { mode: "boolean" }).default(false),
   syncedAt: integer("synced_at", { mode: "timestamp" }).$defaultFn(() => new Date()),

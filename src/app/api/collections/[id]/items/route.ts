@@ -106,11 +106,28 @@ export async function DELETE(
                 .where(eq(collections.id, id));
 
         } else {
-            // Para colecciones manuales, borramos los items directamente
-            await db.delete(collectionItems)
-                .where(
-                    inArray(collectionItems.cardId, cardIds)
-                );
+            // Para colecciones manuales, decrementar cantidad o eliminar si es 1
+            // Iteramos porque inArray borraría todas las copias de golpe, y queremos borrar de 1 en 1
+            // Si el frontend envía IDs repetidos, procesamos cada uno
+
+            for (const cardId of cardIds) {
+                const item = await db.query.collectionItems.findFirst({
+                    where: (table, { and, eq }) => and(
+                        eq(table.collectionId, id),
+                        eq(table.cardId, cardId)
+                    )
+                });
+
+                if (item) {
+                    if ((item.quantity || 1) > 1) {
+                        await db.update(collectionItems)
+                            .set({ quantity: (item.quantity || 1) - 1 })
+                            .where(eq(collectionItems.id, item.id));
+                    } else {
+                        await db.delete(collectionItems).where(eq(collectionItems.id, item.id));
+                    }
+                }
+            }
         }
 
         // Revalidar caché

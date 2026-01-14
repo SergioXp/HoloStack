@@ -72,8 +72,8 @@ describe('getAvailableVariants', () => {
             const variants = getAvailableVariants(rarity, "Pokémon");
             expect(variants.has("normal")).toBe(true);
             expect(variants.has("reverseHolofoil")).toBe(true);
-            expect(variants.has("holofoil")).toBe(false);
-            expect(variants.size).toBe(2);
+            expect(variants.has("holofoil")).toBe(true);
+            expect(variants.size).toBe(3);
         });
 
         // Trainers

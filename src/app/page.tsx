@@ -1,6 +1,6 @@
 import { db } from "@/db";
 import { cards, collectionItems, collections, sets } from "@/db/schema";
-import { sql, desc, eq, count, countDistinct } from "drizzle-orm";
+import { sql, desc, eq, count, countDistinct, and, isNotNull, or, like } from "drizzle-orm";
 import HomePageClient from "@/components/HomePageClient";
 import { calculateTotalValue, Variant } from "@/lib/prices";
 
@@ -73,8 +73,60 @@ async function getGlobalStats() {
   }
 }
 
-export default async function HomePage() {
-  const stats = await getGlobalStats();
+// Cartas para el fondo animado (Full Arts, Raras, etc.)
+async function getBackgroundCards() {
+  try {
+    // 1. Intentamos buscar cartas "top" (Illustration, Secret, etc.)
+    let backgroundCards = await db.select({
+      id: cards.id,
+      name: cards.name,
+      images: cards.images
+    })
+      .from(cards)
+      .where(
+        and(
+          isNotNull(cards.images),
+          or(
+            like(cards.rarity, '%Illustration%'),
+            like(cards.rarity, '%Secret%'),
+            like(cards.rarity, '%Ultra%'),
+            like(cards.rarity, '%Hyper%'),
+            like(cards.rarity, '%Rare%') // Añadimos Raras normales para tener más pool
+          )
+        )
+      )
+      .orderBy(sql`RANDOM()`)
+      .limit(40);
 
-  return <HomePageClient stats={stats} />;
+    // 2. Si no encontramos suficientes (menos de 20), rellenamos con CUALQUIER carta que tenga imagen
+    if (backgroundCards.length < 20) {
+      const moreCards = await db.select({
+        id: cards.id,
+        name: cards.name,
+        images: cards.images
+      })
+        .from(cards)
+        .where(isNotNull(cards.images))
+        .orderBy(sql`RANDOM()`)
+        .limit(40 - backgroundCards.length);
+
+      backgroundCards = [...backgroundCards, ...moreCards];
+    }
+
+    // 3. Mezclar resultados
+    return backgroundCards.sort(() => Math.random() - 0.5);
+
+  } catch (e) {
+    console.error("Error fetching background cards", e);
+    return [];
+  }
+}
+
+export default async function HomePage() {
+  const [stats, backgroundCards] = await Promise.all([
+    getGlobalStats(),
+    getBackgroundCards()
+  ]);
+
+  return <HomePageClient stats={stats} backgroundCards={backgroundCards} />;
 }

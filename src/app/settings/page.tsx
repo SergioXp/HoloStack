@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
+import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -198,22 +199,13 @@ export default function SettingsPage() {
             <div className="relative z-10 p-8">
                 <div className="max-w-2xl mx-auto">
                     {/* Header */}
-                    <div className="mb-10">
-                        <Link href="/" className="inline-flex items-center text-muted-foreground hover:text-foreground text-sm mb-6 transition-colors">
-                            <ChevronRight className="h-4 w-4 mr-1 rotate-180" />
-                            {t("common.back")}
-                        </Link>
-
-                        <div className="flex items-center gap-4">
-                            <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center shadow-lg shadow-primary/20 border border-primary/20">
-                                <Settings className="h-7 w-7 text-primary" />
-                            </div>
-                            <div>
-                                <h1 className="text-3xl font-bold text-foreground tracking-tight">{t("settings.title")}</h1>
-                                <p className="text-muted-foreground">{t("settings.subtitle")}</p>
-                            </div>
-                        </div>
-                    </div>
+                    {/* Header */}
+                    <PageHeader
+                        title={t("settings.title")}
+                        description={t("settings.subtitle")}
+                        icon={Settings}
+                        iconColor="from-slate-700 to-slate-600"
+                    />
 
                     <div className="space-y-6">
                         {/* Profile Section */}

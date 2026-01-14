@@ -1,103 +1,89 @@
-# HoloStack - Roadmap & Future Features 🚀
+# HoloStack - Roadmap & Project Status 🚀
 
-Este documento detalla la visión del proyecto centrada exclusivamente en el **coleccionismo**, priorizando la organización, exhibición y valoración de cartas, sin elementos de juego competitivo.
+Este documento es la fuente de verdad sobre el estado del proyecto, las funcionalidades implementadas y la visión futura.
 
-## ✅ Fase 1: Core Experience (Completada Q1 2026)
-
-### 🌓 Temas Personalizados
-- [x] Selector de temas basado en Tipos Pokémon.
-- [x] Variables CSS dinámicas.
-
-### 📊 Estadísticas Básicas
-- [x] Dashboard gráfico con distribución por rareza y series.
-- [x] Visualización de valor total estimado.
-
-### 📱 PWA & Instalación
-- [x] Soporte básico para instalación como App nativa.
+> **Versión Actual**: 0.8.0
+> **Última Actualización**: 15 Enero 2026
 
 ---
 
-## ✅ Fase 2: Gestión Avanzada (Completada Q2 2026)
+## ✅ Funcionalidades Completadas
 
-### 🏷️ Sistema de Etiquetas Pro
-- [x] Etiquetas personalizadas globales y por item.
-- [x] Filtrado avanzado por etiquetas.
+### 1. Experiencia de Usuario (Core UX)
+- [x] **Diseño Premium**: Interfaz moderna con gradientes, animaciones fluidas y modo oscuro profundo.
+- [x] **Responsive Design**: Adaptación completa a móvil, tablet y escritorio con menú de navegación inteligente.
+- [x] **PWA (Progressive Web App)**: Soporte para instalación en dispositivos móviles.
 
-### ❤️ Lista de Deseos (Wishlist)
-- [x] Sistema de wishlist con prioridades.
-- [x] Integración en explorador.
+### 2. Gestión de Colecciones
+- [x] **Creación Flexible**: Colecciones Manuales (carta a carta) o Automáticas (basadas en filtros dinámicos).
+- [x] **Colecciones Predefinidas (Top Picks)**: Plantillas listas para usar (ej: "Original 151", "Charizard Hunter", "Generational Binders").
+- [x] **Modo Binder (Álbum)**: Visualización realista de carpetas con paginación, slot placeholders y vista de doble página.
+- [x] **Modo Tabla**: Vista densa para gestión de inventario con edición rápida.
+- [x] **Filtros Avanzados**: Búsqueda por nombre, rareza, serie, y estado de posesión.
 
-### 📦 Herramientas de Gestión
-- [x] Acciones masivas (Bulk) para inventario.
-- [x] Importación/Exportación CSV.
-- [x] Generador de Proxies para impresión física (organización de huecos).
+### 3. Herramientas Avanzadas
+- [x] **Entrada Masiva (Bulk Entry)**:
+    - Modo texto rápido (ej: "102, 105 x4") para digitalizar inventario rápidamente.
+    - Detección difusa (fuzzy matching) para números de carta.
+- [x] **Gestión de Duplicados**: Dashboard dedicado para identificar excedentes (>4 copias) y optimizar el inventario.
+- [x] **Centro de Impresión (Proxies)**:
+    - Generador de hojas A4 para imprimir proxies de prueba.
+    - Modo "Ahorro de Tinta" (Proxies de texto).
+    - Importación directa desde colecciones existentes.
 
----
+### 4. Inteligencia de Mercado
+- [x] **Precios en Tiempo Real**: Integración con Cardmarket y TCGPlayer.
+- [x] **Portfolio Inteligente**: Cálculo del valor total de la colección, desglose por rareza/set y conversión de moneda (EUR/USD/GBP).
+- [x] **Lista de Deseos (Wishlist)**: Sistema de prioridades y seguimiento de cartas buscadas.
+- [x] **Control de Presupuestos**: Registro de gastos y sistema de arrastre mensual (*carry-over*) automático.
 
-## ✅ Fase 2.5: Precisión y Datos (Completada)
-
-*Objetivo: Asegurar que los datos financieros sean fiables antes de escalar.*
-
-### 💰 Revisión Integral de Precios
-- [x] Módulo centralizado de precios (`src/lib/prices.ts`).
-- [x] Soporte multimoneda real (EUR/USD/GBP con conversión).
-- [x] Selector de moneda preferida en Settings.
-- [x] Funciones para obtener precios de TCGPlayer y Cardmarket.
-- [x] Tests unitarios completos (21 tests).
-
----
-
-## ✅ Fase 3: La Experiencia "Binder" (Completada)
-
-*Objetivo: Replicar la satisfacción visual de hojear una carpeta física.*
-
-### 📖 Vista de Carpeta Virtual (Binder View)
-- [x] Visualización en cuadrícula realista (3x3) paginada.
-- [x] Navegación entre páginas con controles.
-- [x] Placeholders visuales para cartas faltantes (modo silueta).
-- [x] Indicador de cantidad en cartas duplicadas.
-- [x] Selector de colección integrado.
+### 5. Infraestructura y Datos
+- [x] **Base de Datos Local**: SQLite optimizado con Drizzle ORM.
+- [x] **Sincronización Global**: Descarga de metadatos de cartas de TCGDex.
+- [x] **Sistema de Backups**: Exportación e importación completa de datos de usuario en JSON.
+- [x] **Internacionalización (i18n)**: Soporte completo Español/Inglés en toda la interfaz y datos.
+- [x] **Docker**: Despliegue contenerizado listo para producción.
 
 ---
 
-## ✅ Fase 4: Portfolio Global y Valoración (Completada)
+## 🚧 En Progreso / Próximos Pasos (Short Term)
 
-*Objetivo: Gestión profesional de activos y finanzas.*
+### 📊 Análisis Avanzado
+- [x] **Historial de Precios Gráfico**: Visualización de la tendencia de valor de cartas individuales. (Implementado vía `PriceChart`).
+- [ ] **Profit/Loss Real**: Capacidad de registrar el precio de compra para calcular ganancias reales vs valor de mercado.
+- [ ] **Market Movers**: Dashboard con las cartas que más han subido/bajado de precio en las últimas 24h/30d.
 
-### 💼 Smart Portfolio (Cartera Global)
-- [x] **Vista Unificada**: Lista de TODAS las cartas que posees en todas las colecciones.
-- [x] **Análisis Financiero**:
-    - Valor total del portfolio en tiempo real.
-    - Top 10 cartas más valiosas.
-    - Desglose de valor por Set y Rareza.
-- [x] **Selector de Moneda**: Vista en EUR/USD/GBP según preferencia.
+### 🏷️ Metadatos Privados
+- [ ] **Gestión de Estado y Grados**: Campos nativos para condición (NM, LP, MP) y certificación profesional (PSA 10, BGS 9.5).
+- [ ] **Notas por Carta**: Campo de texto libre para anotaciones privadas.
 
 ---
 
-## ✅ Fase 5: Infraestructura e Internacionalización (Completada)
+## 🔮 Futuro (Long Term / Ideas)
 
-*Objetivo: Robustez técnica, despliegue y alcance global.*
+### 🔌 Conectividad
+- [ ] **Comparador de Mercados**: Visualización simultánea de precios de múltiples fuentes (eBay, CM, TCGPlayer).
+- [ ] **Importador Universal**: Carga masiva desde CSVs exportados de otras apps (Collectr, Dragon Shield).
+- [ ] **Escáner de Cartas**: Uso de cámara para identificar cartas automáticamente (OCR/ML).
 
-### 📚 Colecciones Generacionales (National Dex)
-- [x] Soporte para las 9 generaciones (Kanto - Paldea).
-- [x] Modo "National Dex" (Todas las generaciones, 1000+ cartas).
-- [x] Etiquetas y filtros dinámicos en la UI.
+### 📱 Experiencia Móvil
+- [ ] **Modo Offline Real**: Capacidad de consultar la colección sin conexión (cacheando imágenes clave).
+- [ ] **Modo Quiosco**: Interfaz simplificada para exhibición en tablets.
 
-### 🌐 Internacionalización (i18n)
-- [x] Soporte completo Español/Inglés en toda la app.
-- [x] Traducción dinámica de datos de cartas (nombre, flavor text).
-- [x] Recordatorio de preferencia de idioma.
+### 👥 Social (Nuevas Ideas)
+- [ ] **Perfiles Públicos**: Capacidad de compartir una colección mediante un enlace de solo lectura (ej: `holostack.app/u/ashreborn`).
+- [ ] **Calculadora de Intercambios**: Herramienta para comparar el valor de mercado de dos grupos de cartas para trades justos.
 
-### 🛡️ Seguridad y Datos
-- [x] Sistema de Backups (Importar/Exportar JSON).
-- [x] Validación de tipos estricta y Tests Unitarios (Vitest).
+---
 
-### 🐳 Despliegue
-- [x] Dockerización completa (Alpine images, Docker Compose).
-- [x] Persistencia de datos en volúmenes.
+## 📦 Estructura del Proyecto
 
-### 🎯 Próximos Pasos (Futuro)
-- [ ] Comparador de Mercados (eBay, Cardmarket, TCGPlayer).
-- [ ] Soporte nativo para cartas graduadas (Slabs: PSA, BGS, CGC).
-- [ ] Historial de precios con gráficos de evolución.
-- [ ] "Modo Quiosco" para exhibición en tablets.
+```
+src/
+├── app/            # Next.js App Router (Páginas y API Routes)
+├── components/     # Componentes React (UI, Features)
+├── db/             # Esquema Drizzle y conexión SQLite
+├── lib/            # Utilidades, Hooks, Constantes
+├── locales/        # Archivos de traducción (es.json, en.json)
+└── ...
+```

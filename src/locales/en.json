@@ -112,6 +112,8 @@
         "chinese": "Chinese"
     },
     "nav": {
+        "market": "Market",
+        "inventory": "Inventory",
         "home": "Home",
         "explorer": "Explorer",
         "collections": "Collections",
@@ -120,7 +122,57 @@
         "budgets": "Budgets",
         "settings": "Settings",
         "sync": "Sync",
-        "syncing": "Syncing"
+        "syncing": "Syncing",
+        "bulk": "Bulk Entry"
+    },
+    "bulk": {
+        "title": "Bulk Entry Mode",
+        "subtitle": "Mass inventory management and pack opening.",
+        "tabs": {
+            "entry": "Bulk Entry",
+            "duplicates": "Duplicates"
+        },
+        "entry": {
+            "setLabel": "Set / Expansion",
+            "setPlaceholder": "Select a Set...",
+            "collectionLabel": "Target Collection",
+            "collectionPlaceholder": "Select collection...",
+            "fastEntryLabel": "Fast Entry",
+            "fastEntryHelp": "Ex: 001, 105 x2, 150*4",
+            "inputPlaceholder": "Select a set first...",
+            "inputPlaceholderActive": "Enter card numbers...",
+            "detectedCards": "Detected:",
+            "detectedCardsSuffix": "cards",
+            "clearButton": "Clear",
+            "addButton": "Add to Collection",
+            "alerts": {
+                "selectCollection": "Select a target collection",
+                "success": "{count} cards added successfully!",
+                "error": "Error adding cards",
+                "connection": "Connection error"
+            },
+            "preview": {
+                "title": "Preview",
+                "noSet": "Select a set to start",
+                "instructions": "Type card numbers to see preview...",
+                "notFound": "Not found"
+            }
+        },
+        "duplicates": {
+            "collectionLabel": "Collection to Analyze",
+            "selectPlaceholder": "Select collection...",
+            "thresholdLabel": "Copy Threshold (Playset)",
+            "thresholdHelp": "Cards with more than {threshold} copies will be shown.",
+            "excessLabel": "Excess Cards",
+            "extra": "Extra",
+            "total": "Total",
+            "manage": "Manage",
+            "manageView": "View Details",
+            "emptyState": {
+                "title": "No excess duplicates",
+                "description": "Your collection is clean based on the selected threshold."
+            }
+        }
     },
     "home": {
         "title": "HoloStack",
@@ -535,6 +587,7 @@
     },
     "proxies": {
         "title": "Card Printing",
+        "subtitle": "Generate high quality proxies for play testing",
         "selected": "{count} cards selected",
         "clear": "Clear",
         "print": "Print",
@@ -542,10 +595,23 @@
         "noResults": "No cards found",
         "readyTitle": "Ready to print",
         "readyDesc": "Search cards in the left panel to add them to your print sheet. Fits 9 cards per A4 page.",
-        "confirmClear": "Are you sure you want to clear all cards?"
+        "confirmClear": "Are you sure you want to clear all cards?",
+        "toolbar": {
+            "mode": "Mode",
+            "margin": "Margin",
+            "gap": "Gap",
+            "inkSaving": "Ink Saving",
+            "import": "Import Collection"
+        },
+        "textCard": {
+            "weak": "Weakness",
+            "retreat": "Retreat",
+            "rarity": "Rarity"
+        }
     },
     "binder": {
         "title": "My Binder",
+        "subtitle": "Visualize your cards like in real life",
         "page": "Page",
         "cardsCollected": "cards collected",
         "noCollections": "You have no collections",
@@ -556,6 +622,7 @@
     },
     "portfolio": {
         "title": "My Portfolio",
+        "subtitle": "Analyze the market value of your collection",
         "loading": "Loading portfolio...",
         "totalValue": "Total Value",
         "totalCards": "Total Cards",
@@ -612,6 +679,7 @@
         "exploreButton": "Explore Sets",
         "viewButton": "View",
         "deleteButton": "Delete",
+        "printView": "Print View",
         "priorities": {
             "high": "High",
             "normal": "Normal",
@@ -663,6 +731,10 @@
         "title": "Delete collection?",
         "descriptionPre": "You are about to permanently delete the collection",
         "descriptionPost": ". This action cannot be undone."
+    },
+    "collectionSelector": {
+        "button": "Import from Collection",
+        "title": "Select Collection to Import"
     },
     "tableView": {
         "title": "Table View",

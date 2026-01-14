@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { useI18n } from "@/lib/i18n";
 import { GlobalSearchResult } from "@/lib/global-search";
+import { PageHeader } from "@/components/PageHeader";
 
 interface SearchResultsClientProps {
     query: string;
@@ -47,10 +48,12 @@ export function SearchResultsClient({ query, results }: SearchResultsClientProps
     return (
         <div className="min-h-screen bg-slate-950 p-4 md:p-8">
             <div className="max-w-7xl mx-auto space-y-8">
-                <div>
-                    <h1 className="text-3xl font-bold text-white mb-2">{t("search.resultsTitle")}</h1>
-                    <p className="text-slate-400">{t("search.foundMatches", { count: results.length, query: query })}</p>
-                </div>
+                <PageHeader
+                    title={t("search.resultsTitle")}
+                    description={t("search.foundMatches", { count: results.length, query: query })}
+                    icon={Search}
+                    iconColor="from-slate-700 to-slate-600"
+                />
 
                 {sections.length === 0 ? (
                     <div className="text-center py-20 bg-slate-900/50 rounded-xl border border-dashed border-slate-800">

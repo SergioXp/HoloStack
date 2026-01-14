@@ -4,7 +4,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { LayoutGrid, Layers, Library as LibraryIcon, Database, Sparkles, Settings, Wallet, Heart, ChartBar, Printer, BookOpen, BarChart3, Menu } from "lucide-react";
+import { ChevronDown, LayoutGrid, Layers, Library as LibraryIcon, Database, Sparkles, Settings, Wallet, Heart, ChartBar, Printer, BookOpen, BarChart3, Menu, PackageOpen } from "lucide-react";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+// ...
+
+
 
 import { useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -57,16 +67,19 @@ export default function Header() {
         }
     };
 
-    const navItems = [
-        { name: t("nav.home"), href: "/", icon: LayoutGrid },
-        { name: t("nav.explorer"), href: "/explorer", icon: Layers },
+    const inventoryItems = [
         { name: t("nav.collections"), href: "/collections", icon: LibraryIcon },
+        { name: t("binder.title"), href: "/binder", icon: BookOpen },
         { name: t("nav.wishlist"), href: "/wishlist", icon: Heart },
+        { name: t("nav.bulk"), href: "/bulk", icon: PackageOpen },
+        { name: t("proxies.print"), href: "/proxies", icon: Printer },
+    ];
+
+    const marketItems = [
+        { name: t("nav.explorer"), href: "/explorer", icon: Layers },
+        { name: t("portfolio.title"), href: "/portfolio", icon: BarChart3 },
         { name: t("nav.stats"), href: "/stats", icon: ChartBar },
         { name: t("nav.budgets"), href: "/budgets", icon: Wallet },
-        { name: t("portfolio.title"), href: "/portfolio", icon: BarChart3 },
-        { name: t("binder.title"), href: "/binder", icon: BookOpen },
-        { name: t("proxies.print"), href: "/proxies", icon: Printer },
     ];
 
     const isHome = pathname === "/";
@@ -107,30 +120,73 @@ export default function Header() {
                                     Menú Principal
                                 </DialogDescription>
                             </DialogHeader>
-                            <div className="flex-1 overflow-y-auto px-6 py-6 space-y-2">
-                                {navItems.map((item) => {
-                                    const isActive = pathname === item.href ||
-                                        (item.href !== "/" && pathname.startsWith(item.href));
+                            <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
+                                {/* Dashboard */}
+                                <Link
+                                    href="/"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className="flex items-center p-3 rounded-xl bg-slate-900/50 hover:bg-slate-900 text-slate-200"
+                                >
+                                    <LayoutGrid className="h-5 w-5 mr-3 text-blue-400" />
+                                    {t("nav.home")}
+                                </Link>
 
-                                    return (
-                                        <Link
-                                            key={item.href}
-                                            href={item.href}
-                                            onClick={() => setMobileMenuOpen(false)}
-                                            className={cn(
-                                                "flex items-center p-4 rounded-xl text-lg font-medium transition-all",
-                                                isActive
-                                                    ? "bg-slate-800 text-white shadow-lg ring-1 ring-white/10"
-                                                    : "text-slate-400 hover:text-white hover:bg-slate-900"
-                                            )}
-                                        >
-                                            <item.icon className="h-6 w-6 mr-4" />
-                                            {item.name}
-                                        </Link>
-                                    );
-                                })}
+                                {/* Inventory Group */}
+                                <div>
+                                    <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 px-1">{t("nav.inventory")}</h4>
+                                    <div className="space-y-1">
+                                        {inventoryItems.map((item) => (
+                                            <Link
+                                                key={item.href}
+                                                href={item.href}
+                                                onClick={() => setMobileMenuOpen(false)}
+                                                className={cn(
+                                                    "flex items-center p-3 rounded-lg text-base font-medium transition-all",
+                                                    pathname.startsWith(item.href)
+                                                        ? "bg-slate-800 text-white"
+                                                        : "text-slate-400 hover:text-white hover:bg-slate-900"
+                                                )}
+                                            >
+                                                <item.icon className="h-5 w-5 mr-3" />
+                                                {item.name}
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Market Group */}
+                                <div>
+                                    <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 px-1">{t("nav.market")}</h4>
+                                    <div className="space-y-1">
+                                        {marketItems.map((item) => (
+                                            <Link
+                                                key={item.href}
+                                                href={item.href}
+                                                onClick={() => setMobileMenuOpen(false)}
+                                                className={cn(
+                                                    "flex items-center p-3 rounded-lg text-base font-medium transition-all",
+                                                    pathname.startsWith(item.href)
+                                                        ? "bg-slate-800 text-white"
+                                                        : "text-slate-400 hover:text-white hover:bg-slate-900"
+                                                )}
+                                            >
+                                                <item.icon className="h-5 w-5 mr-3" />
+                                                {item.name}
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </div>
                             </div>
-                            <div className="p-6 border-t border-slate-800 bg-slate-900/50">
+                            <div className="p-6 border-t border-slate-800 bg-slate-900/50 flex flex-col gap-3">
+                                <Link href="/settings" onClick={() => setMobileMenuOpen(false)}>
+                                    <Button
+                                        className="w-full bg-slate-800 hover:bg-slate-700 text-white h-12 text-lg"
+                                        variant="default"
+                                    >
+                                        <Settings className="h-5 w-5 mr-3" />
+                                        {t("nav.settings")}
+                                    </Button>
+                                </Link>
                                 <Button
                                     className="w-full bg-slate-800 hover:bg-slate-700 text-white h-12 text-lg"
                                     onClick={() => setOpenDialog(true)}
@@ -144,28 +200,62 @@ export default function Header() {
                 </div>
 
                 {/* Desktop Navigation */}
-                <nav className="hidden md:flex items-center gap-1 flex-1">
-                    {navItems.map((item) => {
-                        const isActive = pathname === item.href ||
-                            (item.href !== "/" && pathname.startsWith(item.href));
+                <nav className="hidden md:flex items-center gap-2 flex-1">
+                    {/* Inicio */}
+                    <Link
+                        href="/"
+                        className={cn(
+                            "flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                            pathname === "/"
+                                ? "bg-primary/10 text-primary shadow-lg shadow-primary/5 ring-1 ring-primary/20"
+                                : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                        )}
+                    >
+                        <LayoutGrid className="h-4 w-4 mr-2" />
+                        <span>{t("nav.home")}</span>
+                    </Link>
 
-                        return (
-                            <Link
-                                key={item.href}
-                                href={item.href}
-                                title={item.name}
-                                className={cn(
-                                    "flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 whitespace-nowrap",
-                                    isActive
-                                        ? "bg-primary/10 text-primary shadow-lg shadow-primary/5 ring-1 ring-primary/20"
-                                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50 drop-shadow-md"
-                                )}
-                            >
-                                <item.icon className="h-4 w-4 mr-2" />
-                                <span className="hidden xl:inline">{item.name}</span>
-                            </Link>
-                        );
-                    })}
+                    {/* Inventario Dropdown */}
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-9 px-3 text-muted-foreground hover:text-foreground hover:bg-muted/50 gap-1.5 ring-slate-700">
+                                <LibraryIcon className="h-4 w-4" />
+                                <span>{t("nav.inventory")}</span>
+                                <ChevronDown className="h-3 w-3 opacity-50" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start" className="w-56 bg-slate-950 border-slate-800 text-slate-300">
+                            {inventoryItems.map((item) => (
+                                <DropdownMenuItem key={item.href} asChild className="focus:bg-slate-900 focus:text-white cursor-pointer hover:bg-slate-900">
+                                    <Link href={item.href} className="w-full flex items-center py-2">
+                                        <item.icon className="h-4 w-4 mr-3 text-slate-500" />
+                                        <span>{item.name}</span>
+                                    </Link>
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+
+                    {/* Mercado Dropdown */}
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" className="h-9 px-3 text-muted-foreground hover:text-foreground hover:bg-muted/50 gap-1.5 ring-slate-700">
+                                <BarChart3 className="h-4 w-4" />
+                                <span>{t("nav.market")}</span>
+                                <ChevronDown className="h-3 w-3 opacity-50" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start" className="w-56 bg-slate-900 border-slate-800 text-slate-300">
+                            {marketItems.map((item) => (
+                                <DropdownMenuItem key={item.href} asChild className="focus:bg-slate-900 focus:text-white cursor-pointer hover:bg-slate-900">
+                                    <Link href={item.href} className="w-full flex items-center py-2">
+                                        <item.icon className="h-4 w-4 mr-3 text-slate-500" />
+                                        <span>{item.name}</span>
+                                    </Link>
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </nav>
 
                 {/* Global Search */}

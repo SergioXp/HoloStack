@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { PageHeader } from "@/components/PageHeader";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -122,25 +123,21 @@ export default function BudgetsPage() {
             <div className="relative z-10 p-8">
                 <div className="max-w-7xl mx-auto">
                     {/* Header */}
-                    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 mb-10">
-                        <div>
-                            <div className="flex items-center gap-4 mb-2">
-                                <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-emerald-500 to-green-500 flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                                    <Wallet className="h-7 w-7 text-white" />
-                                </div>
-                                <div>
-                                    <h1 className="text-3xl font-bold text-white tracking-tight">{t("budgets.title")}</h1>
-                                    <p className="text-slate-400">{t("budgets.subtitle")}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <Link href="/budgets/new">
-                            <Button className="bg-linear-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white px-6 h-12 rounded-xl shadow-lg shadow-emerald-500/20">
-                                <Plus className="h-5 w-5 mr-2" />
-                                {t("budgets.new")}
-                            </Button>
-                        </Link>
-                    </div>
+                    {/* Header */}
+                    <PageHeader
+                        title={t("budgets.title")}
+                        description={t("budgets.subtitle")}
+                        icon={Wallet}
+                        iconColor="from-emerald-500 to-green-500"
+                        actions={
+                            <Link href="/budgets/new">
+                                <Button className="bg-linear-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white px-6 h-12 rounded-xl shadow-lg shadow-emerald-500/20">
+                                    <Plus className="h-5 w-5 mr-2" />
+                                    {t("budgets.new")}
+                                </Button>
+                            </Link>
+                        }
+                    />
 
                     {/* Global Summary */}
                     {budgets.length > 0 && (

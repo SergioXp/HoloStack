@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { PageHeader } from "@/components/PageHeader";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -122,28 +123,14 @@ export default function ExplorerPage() {
             </div>
 
             <div className="relative z-10 p-8">
-                <div className="max-w-6xl mx-auto">
+                <div className="max-w-7xl mx-auto">
                     {/* Header */}
-                    <div className="mb-12">
-                        <Link href="/" className="inline-flex items-center text-slate-400 hover:text-white text-sm mb-6 transition-colors">
-                            <ChevronRight className="h-4 w-4 mr-1 rotate-180" />
-                            {t("common.backToHome")}
-                        </Link>
-
-                        <div className="flex items-center gap-4 mb-4">
-                            <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-purple-500 to-blue-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
-                                <Layers className="h-7 w-7 text-white" />
-                            </div>
-                            <div>
-                                <h1 className="text-4xl font-bold text-white tracking-tight">
-                                    {t("explorer.title")}
-                                </h1>
-                                <p className="text-slate-400 text-lg">
-                                    {t("explorer.subtitle")}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                    <PageHeader
+                        title={t("explorer.title")}
+                        description={t("explorer.subtitle")}
+                        icon={Layers}
+                        iconColor="from-purple-500 to-blue-500"
+                    />
 
                     {/* Main Content */}
                     {totalSets === 0 ? (

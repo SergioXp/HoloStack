@@ -17,6 +17,14 @@ vi.mock('@/lib/i18n', () => ({
     })
 }));
 
+// Mock fetch global para evitar errores de URL relativa
+global.fetch = vi.fn().mockImplementation(() =>
+    Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve({ inWishlist: false }),
+    })
+);
+
 const mockCard = {
     id: 'card-1',
     name: 'Pikachu',

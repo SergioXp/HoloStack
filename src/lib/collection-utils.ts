@@ -15,3 +15,11 @@ export function getTotalOwned(ownershipData: OwnershipData, cardId: string): num
     if (!data) return 0;
     return Object.values(data).reduce((a, b) => a + b.quantity, 0);
 }
+
+/**
+ * Verifica si se posee al menos una copia de la carta (disponibilidad).
+ */
+export function isCardOwned(ownershipData: OwnershipData, cardId: string): boolean {
+    return getTotalOwned(ownershipData, cardId) > 0;
+}
+

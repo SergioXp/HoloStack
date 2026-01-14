@@ -111,6 +111,8 @@
         "chinese": "Chino"
     },
     "nav": {
+        "market": "Mercado",
+        "inventory": "Inventario",
         "home": "Inicio",
         "explorer": "Explorador",
         "collections": "Colecciones",
@@ -119,7 +121,57 @@
         "budgets": "Presupuestos",
         "settings": "Configuración",
         "sync": "Sincronizar",
-        "syncing": "Sincronizando"
+        "syncing": "Sincronizando",
+        "bulk": "Entrada Masiva"
+    },
+    "bulk": {
+        "title": "Entrada Masiva",
+        "subtitle": "Gestión masiva de inventario y apertura de sobres.",
+        "tabs": {
+            "entry": "Entrada Masiva",
+            "duplicates": "Duplicados"
+        },
+        "entry": {
+            "setLabel": "Set / Expansión",
+            "setPlaceholder": "Selecciona un Set...",
+            "collectionLabel": "Colección Destino",
+            "collectionPlaceholder": "Selecciona colección...",
+            "fastEntryLabel": "Entrada Rápida",
+            "fastEntryHelp": "Ej: 001, 105 x2, 150*4",
+            "inputPlaceholder": "Selecciona un set primero...",
+            "inputPlaceholderActive": "Introduce números de carta...",
+            "detectedCards": "Detectadas:",
+            "detectedCardsSuffix": "cartas",
+            "clearButton": "Limpiar",
+            "addButton": "Añadir a Colección",
+            "alerts": {
+                "selectCollection": "Selecciona una colección destino",
+                "success": "¡{count} cartas añadidas correctamente!",
+                "error": "Error al añadir cartas",
+                "connection": "Error de conexión"
+            },
+            "preview": {
+                "title": "Vista Previa",
+                "noSet": "Selecciona un set para comenzar",
+                "instructions": "Escribe los números de las cartas para ver la vista previa...",
+                "notFound": "No encontrada"
+            }
+        },
+        "duplicates": {
+            "collectionLabel": "Colección a Analizar",
+            "selectPlaceholder": "Selecciona colección...",
+            "thresholdLabel": "Umbral de Copias (Playset)",
+            "thresholdHelp": "Se mostrarán cartas con más de {threshold} copias.",
+            "excessLabel": "Cartas Excedentes",
+            "extra": "Extra",
+            "total": "Total",
+            "manage": "Gestionar",
+            "manageView": "Ver Detalle",
+            "emptyState": {
+                "title": "No hay duplicados excedentes",
+                "description": "Tu colección está limpia según el umbral seleccionado."
+            }
+        }
     },
     "home": {
         "title": "HoloStack",
@@ -534,6 +586,7 @@
     },
     "proxies": {
         "title": "Impresión de Cartas",
+        "subtitle": "Genera proxies de alta calidad para jugar",
         "selected": "{count} cartas seleccionadas",
         "clear": "Limpiar",
         "print": "Imprimir",
@@ -541,10 +594,23 @@
         "noResults": "No se encontraron cartas",
         "readyTitle": "Listo para imprimir",
         "readyDesc": "Busca cartas en el panel izquierdo para añadirlas a tu hoja de impresión. Entran 9 cartas por página A4.",
-        "confirmClear": "¿Estás seguro de querer borrar todas las cartas?"
+        "confirmClear": "¿Estás seguro de querer borrar todas las cartas?",
+        "toolbar": {
+            "mode": "Modo",
+            "margin": "Margen",
+            "gap": "Espacio",
+            "inkSaving": "Ahorro Tinta",
+            "import": "Importar Colección"
+        },
+        "textCard": {
+            "weak": "Debilidad",
+            "retreat": "Retirada",
+            "rarity": "Rareza"
+        }
     },
     "binder": {
         "title": "Mi Carpeta",
+        "subtitle": "Visualiza tus cartas como en la vida real",
         "page": "Página",
         "cardsCollected": "cartas coleccionadas",
         "noCollections": "No tienes colecciones",
@@ -555,6 +621,7 @@
     },
     "portfolio": {
         "title": "Mi Portfolio",
+        "subtitle": "Analiza el valor de mercado de tu colección",
         "loading": "Cargando portfolio...",
         "totalValue": "Valor Total",
         "totalCards": "Total Cartas",
@@ -611,6 +678,7 @@
         "exploreButton": "Explorar Sets",
         "viewButton": "Ver",
         "deleteButton": "Borrar",
+        "printView": "Vista de Impresión",
         "priorities": {
             "high": "Alta",
             "normal": "Normal",
@@ -660,8 +728,11 @@
     },
     "deleteDialog": {
         "title": "¿Borrar colección?",
-        "descriptionPre": "Estás a punto de eliminar permanentemente la colección",
         "descriptionPost": ". Esta acción no se puede deshacer."
+    },
+    "collectionSelector": {
+        "button": "Importar desde Colección",
+        "title": "Seleccionar Colección a Importar"
     },
     "tableView": {
         "title": "Vista de Tabla",

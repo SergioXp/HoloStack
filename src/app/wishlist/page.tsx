@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Heart, Trash2, ShoppingCart, ExternalLink } from "lucide-react";
 import Link from "next/link";
+import { PageHeader } from "@/components/PageHeader";
 import { useI18n } from "@/lib/i18n";
 import { db } from "@/db"; // Server only, can't use here. Need API.
 
@@ -51,18 +52,23 @@ export default function WishlistPage() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-950 p-8 pb-24">
-            <div className="max-w-6xl mx-auto space-y-8">
+        <div className="min-h-screen bg-slate-950 p-8">
+            <div className="max-w-7xl mx-auto space-y-8">
                 {/* Header */}
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-3xl font-bold text-white mb-2 flex items-center gap-3">
-                            <Heart className="h-8 w-8 text-pink-500 fill-pink-500" />
-                            {t("wishlist.pageTitle")}
-                        </h1>
-                        <p className="text-slate-400">{t("wishlist.subtitle", { count: items.length })}</p>
-                    </div>
-                </div>
+                <PageHeader
+                    title={t("wishlist.pageTitle")}
+                    description={t("wishlist.subtitle", { count: items.length })}
+                    icon={Heart}
+                    iconColor="from-pink-500 to-rose-500"
+                    actions={
+                        <Link href="/wishlist/print">
+                            <Button variant="outline" className="border-slate-700 hover:bg-slate-800 text-slate-300">
+                                <ExternalLink className="h-4 w-4 mr-2" />
+                                {t("wishlist.printView")}
+                            </Button>
+                        </Link>
+                    }
+                />
 
                 {items.length === 0 ? (
                     <div className="text-center py-20 px-4 rounded-3xl bg-slate-900/30 border border-slate-800 border-dashed">

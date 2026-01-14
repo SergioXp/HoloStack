@@ -2,7 +2,7 @@
 
 import { db } from "@/db";
 import { collectionItems, collections } from "@/db/schema";
-import { eq, and } from "drizzle-orm";
+import { eq, and, inArray } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
 export async function updateCollectionItem(
@@ -12,8 +12,8 @@ export async function updateCollectionItem(
     quantity: number
 ) {
     try {
-        // 1. Buscar si ya existe el item con esa variante
-        const existingItem = await db.query.collectionItems.findFirst({
+        // 1. Buscar TODOS los items con esa variante (para detectar duplicados)
+        const existingItems = await db.query.collectionItems.findMany({
             where: and(
                 eq(collectionItems.collectionId, collectionId),
                 eq(collectionItems.cardId, cardId),
@@ -22,20 +22,29 @@ export async function updateCollectionItem(
         });
 
         if (quantity <= 0) {
-            // Si la cantidad es 0 o menor, borramos el registro si existe
-            if (existingItem) {
+            // Si la cantidad es 0 o menor, borramos todos los registros asociados
+            if (existingItems.length > 0) {
+                const idsToDelete = existingItems.map(i => i.id);
                 await db.delete(collectionItems)
-                    .where(eq(collectionItems.id, existingItem.id));
+                    .where(inArray(collectionItems.id, idsToDelete));
             }
         } else {
             // Si la cantidad es positiva
-            if (existingItem) {
-                // Actualizar
+            if (existingItems.length > 0) {
+                // Actualizar el PRIMERO con la nueva cantidad total
+                const firstItem = existingItems[0];
                 await db.update(collectionItems)
                     .set({ quantity, addedAt: new Date() })
-                    .where(eq(collectionItems.id, existingItem.id));
+                    .where(eq(collectionItems.id, firstItem.id));
+
+                // Si hay duplicados (más de 1 registro), borrar los sobrantes
+                if (existingItems.length > 1) {
+                    const duplicateIds = existingItems.slice(1).map(i => i.id);
+                    await db.delete(collectionItems)
+                        .where(inArray(collectionItems.id, duplicateIds));
+                }
             } else {
-                // Insertar
+                // Insertar nuevo si no existe
                 await db.insert(collectionItems).values({
                     collectionId,
                     cardId,

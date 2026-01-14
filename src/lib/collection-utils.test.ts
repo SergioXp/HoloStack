@@ -1,5 +1,5 @@
 import { expect, test, describe } from "vitest";
-import { getVariantCount, getTotalOwned, OwnershipData } from "./collection-utils";
+import { getVariantCount, getTotalOwned, isCardOwned, OwnershipData } from "./collection-utils";
 
 describe("Collection Utils", () => {
     const mockData: OwnershipData = {
@@ -40,4 +40,23 @@ describe("Collection Utils", () => {
             expect(getTotalOwned(mockData, "card-2")).toBe(4);
         });
     });
+
+    describe("isCardOwned", () => {
+        test("debería devolver true si se posee al menos una copia", () => {
+            expect(isCardOwned(mockData, "card-1")).toBe(true);
+            expect(isCardOwned(mockData, "card-2")).toBe(true);
+        });
+
+        test("debería devolver false si no se posee la carta", () => {
+            expect(isCardOwned(mockData, "card-999")).toBe(false);
+        });
+
+        test("debería devolver false si la carta está en el objeto pero con cantidad 0", () => {
+            const dataWithZeroValue: OwnershipData = {
+                "card-X": { "normal": { quantity: 0, id: "item-X" } }
+            };
+            expect(isCardOwned(dataWithZeroValue, "card-X")).toBe(false);
+        });
+    });
 });
+

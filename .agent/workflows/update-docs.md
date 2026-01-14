@@ -2,66 +2,53 @@
 description: Workflow para actualizar la documentación al terminar un desarrollo
 ---
 
-# Actualizar Documentación de Desarrollo
+# 📝 Actualizar Documentación y Calidad (Post-Desarrollo)
 
-Ejecuta este workflow cada vez que termines un desarrollo o funcionalidad.
+Ejecuta este workflow cada vez que termines un desarrollo, refactorización o corrección de error significativa para mantener la integridad del proyecto.
 
-## Pasos
+## 📋 Pasos Obligatorios
 
-1. **Actualizar el CHANGELOG.md**
-   - Añadir una nueva entrada bajo la versión actual o crear una nueva versión si aplica
-   - Incluir: fecha, descripción del cambio, archivos modificados/creados
-   - Categorizar como: ✨ Feature, 🐛 Bugfix, 🔧 Config, 📝 Docs, ♻️ Refactor
+### 1. 🧪 Verificación de Calidad
+- **Tests Unitarios**: Ejecutar `npm run test` y asegurar que el 100% de los tests pasan. No se debe documentar nada como "terminado" si los tests fallan.
+- **Tipado Estricto**: Ejecutar `npx tsc --noEmit` para asegurar que no hay errores de TypeScript.
+- **Build**: Ejecutar `npm run build` si el cambio afecta a rutas, layout o lógica core de Next.js.
 
-2. **Verificar Traducciones e Internacionalización**
-   - **Buscar textos hardcoded**: Revisar visualmente o con grep los archivos modificados para asegurar que no quedaron textos sin usar `t()`.
-   - **Sincronización**: Verificar que todas las claves nuevas en `es.json` existen también en `en.json`.
-   - **Integridad JSON**: Asegurar que no hay claves duplicadas en los archivos de traducción.
+### 2. 🗺️ Actualización del ROADMAP.md
+- **Versión**: Incrementar la versión del proyecto si se han añadido features significativas (ej: 0.7.0 -> 0.8.0).
+- **Checkboxes**: Marcar como completadas las tareas correspondientes.
+- **Próximos Pasos**: Si el desarrollo ha revelado nuevas necesidades, añadirlas a la sección "En Progreso" o "Futuro".
 
-3. **Verificar el estado del proyecto**
-   - Ejecutar `npm run build` para confirmar que compila (esto también valida los tipos de i18n)
-   - Ejecutar `npx tsc --noEmit` para verificar tipos
-   - Anotar cualquier warning o error pendiente
+### 3. 🏗️ Actualización de ARCHITECTURE.md
+- **Estructura de Carpetas**: Si se han creado archivos en `src/lib`, `src/services` o `src/db`, actualizar el árbol de directorios.
+- **Lógica de Negocio**: Describir nuevas funciones puras, utilidades o procesos complejos (ej: sistemas de arrastre, lógica de precios).
+- **Diagramas**: Actualizar diagramas Mermaid si ha cambiado la relación entre tablas o el flujo de datos principal.
 
-3. **Documentar decisiones técnicas importantes**
-   - Si hay decisiones de arquitectura, añadirlas al CHANGELOG
-   - Documentar cualquier workaround o solución temporal
+### 4. 🔌 Actualización de API_REFERENCE.md
+- **Nuevos Endpoints**: Registrar cada nueva ruta API con su verbo HTTP, descripción y ejemplo de Body/Response.
+- **Cambios en Payload**: Si se ha modificado la respuesta de un endpoint existente (ej: añadir campos de histórico), reflejarlo en el documento.
 
-4. **Generar resumen del estado actual**
-   - Listar features completados
-   - Listar features pendientes
-   - Anotar dependencias añadidas
+### 5. 🛡️ Actualización de TESTS.md
+- **Nuevas Suites**: Añadir descripción de los nuevos archivos `.test.ts` creados.
+- **Fases de Calidad**: Marcar los items correspondientes en el "Plan de Testing Futuro".
+- **Estrategia**: Si se ha cambiado la forma de testear algo (ej: mockear global fetch), anotarlo en la sección de estrategia.
 
-## Formato de Entrada en CHANGELOG
+### 6. 🌐 Internacionalización (i18n)
+- **Sincronización**: Verificar que todas las claves nuevas en `src/locales/es.json` han sido portadas y traducidas en `src/locales/en.json`.
+- **Hardcoding**: Asegurar que no hay textos literales en la UI; todo debe pasar por el hook `useI18n`.
 
-```markdown
-### [Emoji] Nombre del Desarrollo
+### 7. 📜 CHANGELOG.md (Si existe)
+- Añadir entrada bajo la categoría correspondiente (✨ Feature, ♻️ Refactor, 🐛 Bugfix).
 
-**Fecha**: YYYY-MM-DD
+## 🚀 Emojis para Commit/Documentación
 
-#### Cambios
-- Descripción del cambio 1
-- Descripción del cambio 2
-
-#### Archivos Modificados
-| Archivo | Tipo | Descripción |
-|---------|------|-------------|
-| `path/to/file` | Nuevo/Modificado/Eliminado | Descripción |
-
-#### Notas Técnicas
-- Cualquier decisión importante o workaround
-```
-
-## Emojis de Categoría
-
-| Emoji | Categoría |
-|-------|-----------|
+| Emoji | Significado |
+|-------|-------------|
 | ✨ | Nueva funcionalidad |
 | 🐛 | Corrección de bug |
-| 🔧 | Configuración |
+| ♻️ | Refactorización (sin cambio de lógica) |
+| 🛡️ | Añadir/Actualizar tests |
 | 📝 | Documentación |
-| ♻️ | Refactorización |
-| 🗑️ | Eliminación de código |
-| 🔒 | Seguridad |
 | ⚡ | Mejora de rendimiento |
-| 🎨 | Estilos/UI |
+| 🎨 | Estilos / UI |
+| 🔧 | Configuración / Infraestructura |
+| 🌐 | Traducciones / i18n |

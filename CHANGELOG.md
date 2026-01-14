@@ -1,3 +1,68 @@
+### [0.7.0] - 2026-01-14
+
+### ✨ Internacionalización Completa y Estandarización de Layouts
+
+**Fecha**: 2026-01-14
+
+#### Cambios
+- **Internacionalización y Textos Hardcoded**: 
+    - Se han eliminado prácticamente todos los textos *hardcodeados* detectados en la aplicación (Bulk Entry, Proxies, Wishlist, Collection Selector).
+    - Actualización y sincronización completa de `en.json` para reflejar todas las nuevas claves añadidas a `es.json`, evitando errores de visualización de claves en inglés.
+- **Estandarización de Layouts**:
+    - Unificación del diseño de headers y contenedores principales usando `PageHeader` compartido y estructura `max-w-7xl` consistente en todas las páginas clave (`Binder`, `Proxies`, `Explorer`, `Settings`, etc.).
+    - Se eliminaron discrepancias visuales de padding y margenes entre secciones.
+- **Mejoras UX**:
+    - Añadidos subtítulos descriptivos faltantes en varias páginas principales.
+    - Traducción de componentes complejos como la barra de herramientas de proxies y alertas de entrada masivas.
+
+#### Archivos Modificados
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `src/locales/es.json` | Config | Adición de todas las claves faltantes (40+). |
+| `src/locales/en.json` | Config | Sincronización completa con estructura en español. |
+| `src/components/PageHeader.tsx` | UI | Refactor para uso universal y props flexibles. |
+| `src/app/bulk/page.tsx` | Page | I18n completo. |
+| `src/components/BulkEntryClient.tsx` | UI | I18n de formularios y alertas. |
+| `src/components/BulkDuplicatesClient.tsx` | UI | I18n de dashboard de duplicados. |
+| `src/app/proxies/page.tsx` | Page | Estilos de toolbar e I18n. |
+| `src/app/wishlist/page.tsx` | Page | I18n faltante (Botones de acción). |
+| `src/components/CollectionSelectorModal.tsx` | UI | I18n de títulos y botones. |
+
+#### Notas Técnicas
+- **PageHeader Component**: Se extrajo lógica cliente (`use client`) innecesaria cuando era posible para permitir server rendering de partes estáticas, aunque muchas páginas padre siguen siendo Client Components por necesidad de interactividad.
+- **I18n Strategy**: Se reforzó el uso de claves anidadas (ej: `bulk.entry.alerts.success`) para mejor organización semántica.
+### [0.6.2] - 2026-01-14
+
+### ✨ Duplicate Management Dashboard
+
+**Fecha**: 2026-01-14
+
+#### Cambios
+- **Dashboard de Gestión de Duplicados**: Nueva herramienta integrada para gestión de inventario masivo.
+    - **Detección Automática**: Identifica cartas con excedente de copias basado en un umbral personalizado (Playset por defecto: 4).
+    - **Cálculo Inteligente**: Agrega cantidades de variantes separadas y calcula el exceso exacto para facilitar ventas o intercambios.
+    - **Interfaz Tabulada**: Separación limpia entre "Entrada Masiva" y "Duplicados" en la página `/bulk`.
+- **Mejora en Entrada Masiva (Fuzzy Matching)**:
+    - Soporte para números de carta sin ceros a la izquierda (ej: `1` detecta `004/165` o `001/165` correctamente).
+    - Algoritmo de normalización de números para coincidencia flexible en base de datos.
+- **Correcciones de Inventario**:
+    - **Fusión de Duplicados**: Corrección crítica en la actualización de cantidades. Al modificar una carta, el sistema ahora busca y fusiona automáticamente registros duplicados de la misma carta+variante en la base de datos, garantizando integridad de datos.
+    - **Lógica de Borrado de Ítems**: El borrado masivo ahora decremente cantidades inteligentemente (restar 1 copia si hay múltiples) antes de eliminar el registro completo.
+
+#### Archivos Modificados
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `src/app/api/bulk/duplicates/route.ts` | Nuevo | Endpoint con agregación SQL para detectar excedentes. |
+| `src/components/BulkDuplicatesClient.tsx` | Nuevo | UI del dashboard de duplicados. |
+| `src/app/bulk/page.tsx` | Modificado | Implementación de Tabs y montaje de componentes. |
+| `src/app/api/bulk/validate/route.ts` | Modificado | Lógica "fuzzy match" para números de carta. |
+| `src/app/actions/collection.ts` | Refactor | Lógica de fusión de ítems duplicados en `updateCollectionItem`. |
+| `src/app/api/collections/[id]/items/route.ts` | Fix | Lógica DELETE corregida para decrementar antes de borrar. |
+| `src/locales/*.json` | Config | Textos para dashboard de duplicados y navegación. |
+
+#### Notas Técnicas
+- **Agregación SQL**: Para la detección de duplicados se usa `HAVING SUM(quantity) > threshold` en SQL, delegando el cálculo pesado a la base de datos en lugar de procesar en memoria.
+- **Integridad de Datos**: Se detectó que versiones anteriores podían crear múltiples filas para la misma carta+variante. `updateCollectionItem` ahora actúa como un "Auto-Fixer", limpiando proactivamente la base de datos con cada interacción de usuario.
 # PokemonTCG - Changelog de Desarrollo
 
 > Registro cronológico de todos los cambios realizados en la aplicación.

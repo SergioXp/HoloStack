@@ -23,6 +23,12 @@ export async function GET(req: NextRequest) {
             number: cards.number,
             rarity: cards.rarity,
             images: cards.images,
+            hp: cards.hp,
+            types: cards.types,
+            attacks: cards.attacks,
+            abilities: cards.abilities,
+            weaknesses: cards.weaknesses,
+            retreatCost: cards.retreatCost,
             setId: cards.setId,
             setName: sets.name,
             setSeries: sets.series

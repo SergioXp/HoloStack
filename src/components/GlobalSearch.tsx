@@ -113,12 +113,18 @@ export function GlobalSearch() {
     };
 
     return (
-        <div ref={containerRef} className="relative w-full max-w-xl mx-auto">
-            <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+        <div ref={containerRef} className="relative w-full sm:max-w-xl mx-auto group">
+            <div className={cn(
+                "relative transition-all duration-300 ease-in-out",
+                "w-full sm:w-auto"
+            )}>
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none z-10" />
                 <Input
                     ref={inputRef}
-                    className="pl-10 pr-12 bg-slate-900/50 border-slate-700 text-white placeholder:text-slate-400 focus-visible:ring-blue-500 focus-visible:border-blue-500 h-10 w-full rounded-md transition-all"
+                    className={cn(
+                        "pl-10 pr-12 bg-slate-900/50 border-slate-700 text-white placeholder:text-slate-400 focus-visible:ring-blue-500 focus-visible:border-blue-500 h-10 rounded-md transition-all",
+                        "w-full sm:min-w-[300px] focus:min-w-[320px]"
+                    )}
                     placeholder={t("search.placeholder")}
                     value={query}
                     onChange={(e) => {
@@ -137,10 +143,11 @@ export function GlobalSearch() {
                         </kbd>
                     </div>
                 )}
+
             </div>
 
             {isOpen && (results.length > 0 || debouncedQuery.length >= 2) && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-[#1e2330] border border-slate-700 rounded-lg shadow-2xl z-50 overflow-hidden text-sm animate-in fade-in zoom-in-95 duration-100">
+                <div className="absolute top-full right-0 mt-2 bg-[#1e2330] border border-slate-700 rounded-lg shadow-2xl z-50 overflow-hidden text-sm animate-in fade-in zoom-in-95 duration-100 min-w-[300px] max-w-[90vw] w-full sm:w-auto sm:min-w-full origin-top-right">
                     <div className="max-h-[60vh] overflow-y-auto custom-scrollbar">
                         {results.length === 0 && !loading ? (
                             <div className="p-4 text-center text-slate-400">
