@@ -42,7 +42,8 @@
             "daysAgo": "hace {n}d",
             "hoursAgo": "hace {n}h",
             "justNow": "reciente"
-        }
+        },
+        "didYouKnow": "¿Sabías que?"
     },
     "cardDetail": {
         "market": "Mercado",
@@ -52,6 +53,7 @@
         "trendUp": "Tendencia Alcista",
         "trendDown": "Tendencia Bajista",
         "trendStable": "Estable",
+        "related": "Otras cartas relacionadas",
         "cmReference": "Principal referencia europea",
         "minPrice": "Precio Mínimo",
         "avg30": "Media 30 días",
@@ -144,6 +146,9 @@
             "viewCollections": "Ver colecciones",
             "autoUpdate": "Actualización automática"
         },
+        "recent": {
+            "title": "Últimas Adquisiciones"
+        },
         "howItWorks": {
             "title": "Cómo Funciona",
             "subtitle": "Tres simples pasos para empezar",
@@ -164,6 +169,7 @@
             "cardsIndexed": "cartas indexadas",
             "setsAvailable": "sets disponibles",
             "inCollection": "en tu colección",
+            "totalValue": "Valor Portfolio",
             "collections": "colecciones",
             "rarityDistribution": "Distribución por Rareza",
             "cardsBySeries": "Cartas por Serie",
@@ -250,10 +256,24 @@
         "select": "Selecciona...",
         "globalRarity": "Rareza Global",
         "manyCardsWarning": "Esto puede incluir miles de cartas.",
+        "predefined": {
+            "description": "Colecciones populares listas para usar."
+        },
         "createButton": "Crear Colección",
         "creating": "Creando...",
         "languageLabel": "Idioma de las cartas",
-        "useProfileDefault": "Usar idioma del perfil"
+        "useProfileDefault": "Usar idioma del perfil",
+        "preview": {
+            "title": "Vista Previa",
+            "exampleCards": "Cartas de Ejemplo",
+            "generating": "Generando...",
+            "showingMatches": "Mostrando {count} coincidencias aleatorias..."
+        },
+        "tips": {
+            "auto": "Las colecciones automáticas se sincronizan solas cuando añades cartas nuevas.",
+            "manual": "Las colecciones manuales te dan control total sobre qué cartas incluir.",
+            "predefined": "Las colecciones predefinidas son la forma más rápida de empezar."
+        }
     },
     "collectionDetail": {
         "backToCollections": "Volver a Mis Colecciones",
@@ -269,6 +289,8 @@
         "deleteError": "Error al eliminar las cartas",
         "progressByRarity": "Progreso por Rareza",
         "searchCard": "Buscar carta...",
+        "changeCard": "Cambiar Carta",
+        "removeCard": "Quitar Carta",
         "editModeTooltip": "Editar colección (Eliminar cartas)",
         "deleteSelected": "Eliminar ({count})",
         "editMode": "Modo Selección",

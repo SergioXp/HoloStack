@@ -155,14 +155,14 @@ export default function GenericCollectionGrid({ collectionId, savedCards, isEdit
                                         <button
                                             onClick={(e) => { e.stopPropagation(); handleSlotClick(poke); }}
                                             className="p-2 bg-slate-800 text-white rounded-full hover:bg-emerald-600 transition-colors"
-                                            title="Change Card"
+                                            title={t("collectionDetail.changeCard")}
                                         >
                                             <Search className="h-4 w-4" />
                                         </button>
                                         <button
                                             onClick={(e) => handleRemoveCard(e, assignedCard.id)}
                                             className="p-2 bg-slate-800 text-red-400 rounded-full hover:bg-red-600 hover:text-white transition-colors"
-                                            title="Remove Card"
+                                            title={t("collectionDetail.removeCard")}
                                         >
                                             <Trash2 className="h-4 w-4" />
                                         </button>

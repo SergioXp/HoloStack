@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { LayoutGrid, Layers, Library as LibraryIcon, Database, Sparkles, Settings, Wallet, Heart, ChartBar, Printer, BookOpen, BarChart3 } from "lucide-react";
+import { LayoutGrid, Layers, Library as LibraryIcon, Database, Sparkles, Settings, Wallet, Heart, ChartBar, Printer, BookOpen, BarChart3, Menu } from "lucide-react";
 
 import { useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -18,6 +18,7 @@ export default function Header() {
     const [indexProgress, setIndexProgress] = useState(0);
     const [indexStatus, setIndexStatus] = useState("");
     const [openDialog, setOpenDialog] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     const runGlobalIndex = async () => {
         setIsIndexing(true);
@@ -89,8 +90,61 @@ export default function Header() {
                     </span>
                 </Link>
 
-                {/* Navigation */}
-                <nav className="flex items-center gap-1 flex-1">
+                {/* Mobile Menu Trigger */}
+                <div className="md:hidden mr-auto">
+                    <Dialog open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                        <DialogTrigger asChild>
+                            <Button variant="ghost" size="icon" className="text-slate-300">
+                                <Menu className="h-6 w-6" />
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent className="w-screen h-screen max-w-none m-0 rounded-none bg-slate-950/95 backdrop-blur-xl border-none flex flex-col pt-12">
+                            <DialogHeader className="px-6 text-left">
+                                <DialogTitle className="text-2xl font-bold text-white flex items-center gap-3">
+                                    <span>🎴</span> HoloStack
+                                </DialogTitle>
+                                <DialogDescription className="text-slate-400">
+                                    Menú Principal
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className="flex-1 overflow-y-auto px-6 py-6 space-y-2">
+                                {navItems.map((item) => {
+                                    const isActive = pathname === item.href ||
+                                        (item.href !== "/" && pathname.startsWith(item.href));
+
+                                    return (
+                                        <Link
+                                            key={item.href}
+                                            href={item.href}
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className={cn(
+                                                "flex items-center p-4 rounded-xl text-lg font-medium transition-all",
+                                                isActive
+                                                    ? "bg-slate-800 text-white shadow-lg ring-1 ring-white/10"
+                                                    : "text-slate-400 hover:text-white hover:bg-slate-900"
+                                            )}
+                                        >
+                                            <item.icon className="h-6 w-6 mr-4" />
+                                            {item.name}
+                                        </Link>
+                                    );
+                                })}
+                            </div>
+                            <div className="p-6 border-t border-slate-800 bg-slate-900/50">
+                                <Button
+                                    className="w-full bg-slate-800 hover:bg-slate-700 text-white h-12 text-lg"
+                                    onClick={() => setOpenDialog(true)}
+                                >
+                                    <Database className="h-5 w-5 mr-3" />
+                                    {t("nav.sync")}
+                                </Button>
+                            </div>
+                        </DialogContent>
+                    </Dialog>
+                </div>
+
+                {/* Desktop Navigation */}
+                <nav className="hidden md:flex items-center gap-1 flex-1">
                     {navItems.map((item) => {
                         const isActive = pathname === item.href ||
                             (item.href !== "/" && pathname.startsWith(item.href));

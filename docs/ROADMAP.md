@@ -78,6 +78,11 @@ Este documento detalla la visión del proyecto centrada exclusivamente en el **c
 
 *Objetivo: Robustez técnica, despliegue y alcance global.*
 
+### 📚 Colecciones Generacionales (National Dex)
+- [x] Soporte para las 9 generaciones (Kanto - Paldea).
+- [x] Modo "National Dex" (Todas las generaciones, 1000+ cartas).
+- [x] Etiquetas y filtros dinámicos en la UI.
+
 ### 🌐 Internacionalización (i18n)
 - [x] Soporte completo Español/Inglés en toda la app.
 - [x] Traducción dinámica de datos de cartas (nombre, flavor text).

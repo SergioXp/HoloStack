@@ -4,6 +4,33 @@
 
 ---
 
+## [0.6.1] - 2026-01-14
+
+### ✨ Real-time Collection Preview
+
+**Fecha**: 2026-01-14
+
+#### Cambios
+- **Vista Previa en Tiempo Real**: Ahora al crear una colección (Automática o Predefinida), se muestra una previsualización dinámica:
+    - **Fondo animado**: Grid de cartas aleatorias que coinciden con los filtros.
+    - **Cartas de Ejemplo**: 4 cartas destacadas con detalle completo (nombre, imagen, rareza).
+    - **Contador Dinámico**: Estimación del número total de cartas que compondrán la colección.
+- **Mejoras en Colecciones Predefinidas**:
+    - Soporte completo de vista previa para colecciones complejas ("Original 151", "Generational", etc.).
+    - Lógica inteligente para mostrar cartas representativas (ej: Al seleccionar "Gen 1", se muestran Charizard, Pikachu, etc.).
+
+#### Archivos Modificados
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `src/app/api/cards/preview/route.ts` | Nuevo | Endpoint para obtener muestras aleatorias de cartas según filtros complejos (arrays de nombres, rarezas, etc). |
+| `src/components/CreateCollectionForm.tsx` | Modificado | Implementación de UI de preview y lógica de debounce (500ms). |
+| `src/lib/predefined-collections.ts` | Modificado | Añadido campo `estimatedCount` para mejorar la precisión del contador en el preview. |
+| `src/locales/*.json` | Config | Textos para la sección de vista previa. |
+
+#### Notas Técnicas
+- **Estrategia de Preview**: El endpoint devuelve un subconjunto aleatorio (`ORDER BY RANDOM() LIMIT 4`) para mantener la respuesta rápida (<200ms).
+- **Mapeo de Generaciones**: Dado que la API no tiene filtro directo de generación, el frontend transforma la selección de generación en una lista de nombres representativos (iniciales + legendarios) para la vista previa, o en filtros de rango de series para la creación real.
+
 ## [0.6.0] - 2026-01-13
 
 ### ✨ Generational Binder & National Dex

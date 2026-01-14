@@ -14,6 +14,7 @@ interface CollectionWithStats {
     filters: string | null;
     createdAt: Date | null;
     uniqueCardCount: number;
+    totalValue: number;
 }
 
 interface SetBasicInfo {
@@ -164,6 +165,12 @@ export default function CollectionsIndexClient({ collections, sets }: Collection
                                             </CardHeader>
 
                                             <CardContent className="mt-auto pt-0">
+                                                <div className="mb-4 flex items-center gap-2">
+                                                    <Badge variant="secondary" className="bg-slate-800/50 text-slate-300 font-normal hover:bg-slate-800">
+                                                        {new Intl.NumberFormat(undefined, { style: 'currency', currency: 'EUR' }).format(collection.totalValue)}
+                                                    </Badge>
+                                                </div>
+
                                                 {collection.type === 'auto' ? (
                                                     <div className="space-y-4">
                                                         <div className="flex justify-between items-end">

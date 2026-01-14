@@ -121,7 +121,7 @@ export default function SetCardsClientPage({ setKeywords: set, cards }: PageProp
                             {/* Set Logo & Symbol */}
                             <div className="flex items-center gap-4">
                                 {setImages?.logo && (
-                                    <div className="relative h-16 w-48 flex-shrink-0">
+                                    <div className="relative h-16 w-48 shrink-0">
                                         <Image
                                             src={setImages.logo}
                                             alt={`${set.name} logo`}
@@ -132,7 +132,7 @@ export default function SetCardsClientPage({ setKeywords: set, cards }: PageProp
                                     </div>
                                 )}
                                 {setImages?.symbol && (
-                                    <div className="relative h-12 w-12 flex-shrink-0 bg-slate-800/50 rounded-xl p-2">
+                                    <div className="relative h-12 w-12 shrink-0 bg-slate-800/50 rounded-xl p-2">
                                         <Image
                                             src={setImages.symbol}
                                             alt={`${set.name} symbol`}
@@ -282,6 +282,30 @@ export default function SetCardsClientPage({ setKeywords: set, cards }: PageProp
                             cardmarketPrices: selectedCard.cardmarketPrices,
                             quantity: ownership[selectedCard.id] || 0,
                         } : null}
+                        onWishlistChange={(isInWishlist) => {
+                            if (selectedCard) {
+                                const newWishlist = new Set(wishlist);
+                                if (isInWishlist) {
+                                    newWishlist.add(selectedCard.id);
+                                } else {
+                                    newWishlist.delete(selectedCard.id);
+                                }
+                                setWishlist(newWishlist);
+                            }
+                        }}
+                        relatedCards={selectedCard ? cards
+                            .filter(c => c.id !== selectedCard.id && (c.rarity === selectedCard.rarity || Math.random() > 0.7))
+                            .slice(0, 6)
+                            .map(c => ({
+                                id: c.id,
+                                name: c.name,
+                                image: c.images ? JSON.parse(c.images).small : "",
+                                rarity: c.rarity || undefined
+                            })) : []}
+                        onSelectRelated={(related) => {
+                            const fullCard = cards.find(c => c.id === related.id);
+                            if (fullCard) setSelectedCard(fullCard);
+                        }}
                     />
                 </div>
             </div>

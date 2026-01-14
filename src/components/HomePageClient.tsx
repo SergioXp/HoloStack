@@ -11,6 +11,15 @@ interface HomePageClientProps {
         totalSets: number;
         totalCollections: number;
         totalOwnedCards: number;
+        totalValue: number;
+        recentCards: {
+            id: string;
+            name: string;
+            images: string | null;
+            rarity: string | null;
+            set: string | null;
+            addedAt: Date | null;
+        }[];
     }
 }
 
@@ -84,6 +93,12 @@ export default function HomePageClient({ stats }: HomePageClientProps) {
                             <div className="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl px-6 py-4">
                                 <div className="text-3xl font-bold text-emerald-400">{stats.totalOwnedCards}</div>
                                 <div className="text-sm text-slate-400 uppercase tracking-wider">{t("home.stats.inCollection")}</div>
+                            </div>
+                            <div className="bg-slate-900/50 backdrop-blur-sm border border-slate-800 rounded-2xl px-6 py-4">
+                                <div className="text-3xl font-bold text-yellow-400">
+                                    {new Intl.NumberFormat(undefined, { style: 'currency', currency: 'EUR' }).format(stats.totalValue)}
+                                </div>
+                                <div className="text-sm text-slate-400 uppercase tracking-wider">{t("home.stats.totalValue")}</div>
                             </div>
                         </div>
                     )}

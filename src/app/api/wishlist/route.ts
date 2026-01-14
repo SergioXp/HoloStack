@@ -4,9 +4,12 @@ import { eq, desc } from "drizzle-orm";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(req: Request) {
+    const { searchParams } = new URL(req.url);
+    const cardId = searchParams.get("cardId");
+
     try {
-        const items = await db
+        let query = db
             .select({
                 id: wishlistItems.id,
                 cardId: wishlistItems.cardId,
@@ -19,8 +22,14 @@ export async function GET() {
             .from(wishlistItems)
             .leftJoin(cards, eq(wishlistItems.cardId, cards.id))
             .leftJoin(sets, eq(cards.setId, sets.id))
-            .orderBy(desc(wishlistItems.addedAt));
+            .orderBy(desc(wishlistItems.addedAt))
+            .$dynamic();
 
+        if (cardId) {
+            query = query.where(eq(wishlistItems.cardId, cardId));
+        }
+
+        const items = await query;
         return Response.json(items);
     } catch (error) {
         console.error("Error fetching wishlist:", error);

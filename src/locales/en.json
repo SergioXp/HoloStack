@@ -42,15 +42,17 @@
             "daysAgo": "{n}d ago",
             "hoursAgo": "{n}h ago",
             "justNow": "just now"
-        }
+        },
+        "didYouKnow": "Did you know?"
     },
     "cardDetail": {
         "market": "Market",
         "detailsTab": "Details",
         "updated": "Updated:",
         "trend": "Trend",
-        "trendUp": "Upward Trend",
-        "trendDown": "Downward Trend",
+        "trendUp": "Trending Up",
+        "trendDown": "Trending Down",
+        "related": "Related Cards",
         "trendStable": "Stable",
         "cmReference": "European Reference",
         "minPrice": "Min Price",
@@ -145,6 +147,9 @@
             "viewCollections": "View collections",
             "autoUpdate": "Automatic update"
         },
+        "recent": {
+            "title": "Recent Acquisitions"
+        },
         "howItWorks": {
             "title": "How It Works",
             "subtitle": "Three simple steps to start",
@@ -165,6 +170,7 @@
             "cardsIndexed": "cards indexed",
             "setsAvailable": "sets available",
             "inCollection": "in your collection",
+            "totalValue": "Portfolio Value",
             "collections": "collections",
             "rarityDistribution": "Rarity Distribution",
             "cardsBySeries": "Cards by Series",
@@ -251,10 +257,24 @@
         "select": "Select...",
         "globalRarity": "Global Rarity",
         "manyCardsWarning": "This may include thousands of cards.",
+        "predefined": {
+            "description": "Popular collections ready to use."
+        },
         "createButton": "Create Collection",
         "creating": "Creating...",
         "languageLabel": "Card language",
-        "useProfileDefault": "Use profile language"
+        "useProfileDefault": "Use profile language",
+        "preview": {
+            "title": "Preview",
+            "exampleCards": "Example Cards",
+            "generating": "Generating preview...",
+            "showingMatches": "Showing {count} random matches..."
+        },
+        "tips": {
+            "auto": "Automatic collections sync themselves when you add new cards.",
+            "manual": "Manual collections give you full control over which cards to include.",
+            "predefined": "Predefined collections are the fastest way to get started."
+        }
     },
     "collectionDetail": {
         "backToCollections": "Back to My Collections",
@@ -270,6 +290,8 @@
         "deleteError": "Error deleting cards",
         "progressByRarity": "Progress by Rarity",
         "searchCard": "Search card...",
+        "changeCard": "Change Card",
+        "removeCard": "Remove Card",
         "editModeTooltip": "Edit collection (Delete cards)",
         "deleteSelected": "Delete ({count})",
         "editMode": "Selection Mode",

@@ -15,6 +15,7 @@ export interface CollectionVariant {
     id: string;
     nameKey: string; // Translation key
     filterGenerator: () => CollectionFilter;
+    estimatedCount?: number;
 }
 
 export interface PredefinedCollection {
@@ -35,12 +36,14 @@ export const PREDEFINED_COLLECTIONS: PredefinedCollection[] = [
             {
                 id: "generic",
                 nameKey: "predefined.variants.genericSlots", // New key needed or reuse
-                filterGenerator: () => ({}) // Special handling
+                filterGenerator: () => ({}), // Special handling
+                estimatedCount: 151
             },
             {
                 id: "all",
                 nameKey: "predefined.variants.all",
-                filterGenerator: () => ({ names: KANTO_151_NAMES })
+                filterGenerator: () => ({ names: KANTO_151_NAMES }),
+                estimatedCount: 151
             },
             {
                 id: "vintage",
@@ -68,16 +71,16 @@ export const PREDEFINED_COLLECTIONS: PredefinedCollection[] = [
         descriptionKey: "predefined.generational.description",
         icon: Album,
         variants: [
-            { id: "all", nameKey: "generations.all", filterGenerator: () => ({ generation: "all" }) },
-            { id: "gen1", nameKey: "generations.1", filterGenerator: () => ({ generation: "gen1" }) },
-            { id: "gen2", nameKey: "generations.2", filterGenerator: () => ({ generation: "gen2" }) },
-            { id: "gen3", nameKey: "generations.3", filterGenerator: () => ({ generation: "gen3" }) },
-            { id: "gen4", nameKey: "generations.4", filterGenerator: () => ({ generation: "gen4" }) },
-            { id: "gen5", nameKey: "generations.5", filterGenerator: () => ({ generation: "gen5" }) },
-            { id: "gen6", nameKey: "generations.6", filterGenerator: () => ({ generation: "gen6" }) },
-            { id: "gen7", nameKey: "generations.7", filterGenerator: () => ({ generation: "gen7" }) },
-            { id: "gen8", nameKey: "generations.8", filterGenerator: () => ({ generation: "gen8" }) },
-            { id: "gen9", nameKey: "generations.9", filterGenerator: () => ({ generation: "gen9" }) }
+            { id: "all", nameKey: "generations.all", filterGenerator: () => ({ generation: "all" }), estimatedCount: 1025 },
+            { id: "gen1", nameKey: "generations.1", filterGenerator: () => ({ generation: "gen1" }), estimatedCount: 151 },
+            { id: "gen2", nameKey: "generations.2", filterGenerator: () => ({ generation: "gen2" }), estimatedCount: 100 },
+            { id: "gen3", nameKey: "generations.3", filterGenerator: () => ({ generation: "gen3" }), estimatedCount: 135 },
+            { id: "gen4", nameKey: "generations.4", filterGenerator: () => ({ generation: "gen4" }), estimatedCount: 107 },
+            { id: "gen5", nameKey: "generations.5", filterGenerator: () => ({ generation: "gen5" }), estimatedCount: 156 },
+            { id: "gen6", nameKey: "generations.6", filterGenerator: () => ({ generation: "gen6" }), estimatedCount: 72 },
+            { id: "gen7", nameKey: "generations.7", filterGenerator: () => ({ generation: "gen7" }), estimatedCount: 88 },
+            { id: "gen8", nameKey: "generations.8", filterGenerator: () => ({ generation: "gen8" }), estimatedCount: 96 },
+            { id: "gen9", nameKey: "generations.9", filterGenerator: () => ({ generation: "gen9" }), estimatedCount: 120 }
         ]
     },
     {

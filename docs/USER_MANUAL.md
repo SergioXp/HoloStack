@@ -48,7 +48,13 @@ Aquí es donde ocurre la magia.
 - **Seguimiento**: Marca las variantes que tienes (Normal, Holo, Reverse) y la cantidad.
 - **Progreso**: Visualiza barras de progreso para ver cuánto te falta para completar un set.
 
-### 4. Presupuestos
+### 4. Colecciones Generacionales (National Dex)
+Para los coleccionistas de eras completas:
+1. Al crear colección, elige **"Por Generación"** en Top Picks.
+2. Selecciona una generación específica (ej: Johto) o **"Todas las Generaciones"** para un National Dex completo.
+3. El sistema creará automáticamente los huecos para todos los Pokémon de esa era (ej: 1-151 para Kanto, 152-251 para Johto).
+
+### 5. Presupuestos
 Controla tus gastos.
 - Crea presupuestos mensuales o por colección.
 - Añade gastos manualmente indicando descripción, precio y categoría.

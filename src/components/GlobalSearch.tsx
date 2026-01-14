@@ -25,6 +25,19 @@ export function GlobalSearch() {
     const [results, setResults] = useState<SearchResult[]>([]);
     const [loading, setLoading] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    // Keyboard shortcut CMD+K
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+                e.preventDefault();
+                inputRef.current?.focus();
+            }
+        };
+        document.addEventListener("keydown", handleKeyDown);
+        return () => document.removeEventListener("keydown", handleKeyDown);
+    }, []);
 
     // Debounce manual
     const [debouncedQuery, setDebouncedQuery] = useState(query);
@@ -104,7 +117,8 @@ export function GlobalSearch() {
             <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <Input
-                    className="pl-10 bg-slate-900/50 border-slate-700 text-white placeholder:text-slate-400 focus-visible:ring-blue-500 focus-visible:border-blue-500 h-10 w-full rounded-md transition-all"
+                    ref={inputRef}
+                    className="pl-10 pr-12 bg-slate-900/50 border-slate-700 text-white placeholder:text-slate-400 focus-visible:ring-blue-500 focus-visible:border-blue-500 h-10 w-full rounded-md transition-all"
                     placeholder={t("search.placeholder")}
                     value={query}
                     onChange={(e) => {
@@ -115,6 +129,13 @@ export function GlobalSearch() {
                 />
                 {loading && (
                     <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-blue-500 animate-spin" />
+                )}
+                {!loading && (
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center gap-1 pointer-events-none">
+                        <kbd className="hidden sm:inline-flex h-5 select-none items-center gap-1 rounded border border-slate-700 bg-slate-800 px-1.5 font-mono text-[10px] font-medium text-slate-400">
+                            <span className="text-xs">⌘</span>K
+                        </kbd>
+                    </div>
                 )}
             </div>
 
@@ -133,7 +154,7 @@ export function GlobalSearch() {
                                         className="flex items-center px-4 py-2 hover:bg-slate-800/80 cursor-pointer group border-b border-transparent hover:border-slate-800 last:border-0 transition-colors"
                                         onClick={() => handleSelect(result)}
                                     >
-                                        <div className="flex-shrink-0 w-8 h-8 mr-3 relative flex items-center justify-center bg-slate-800 rounded overflow-hidden border border-slate-700">
+                                        <div className="shrink-0 w-8 h-8 mr-3 relative flex items-center justify-center bg-slate-800 rounded overflow-hidden border border-slate-700">
                                             {result.image ? (
                                                 <Image
                                                     src={result.image}
@@ -157,7 +178,7 @@ export function GlobalSearch() {
                                             </div>
                                         </div>
 
-                                        <div className="flex-shrink-0 ml-3 text-xs bg-slate-800 text-slate-400 px-2 py-1 rounded border border-slate-700 group-hover:bg-slate-700 group-hover:text-white transition-colors">
+                                        <div className="shrink-0 ml-3 text-xs bg-slate-800 text-slate-400 px-2 py-1 rounded border border-slate-700 group-hover:bg-slate-700 group-hover:text-white transition-colors">
                                             {getCategoryLabel(result.type)}
                                         </div>
                                     </div>

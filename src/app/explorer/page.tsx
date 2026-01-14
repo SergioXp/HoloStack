@@ -5,8 +5,11 @@ import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Layers, Calendar, ChevronRight, Sparkles } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Layers, Calendar, ChevronRight, Sparkles, LayoutGrid, List } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
+import { TimelineView } from "@/components/TimelineView";
+import { Button } from "@/components/ui/button";
 
 interface DbSet {
     id: string;
@@ -41,7 +44,9 @@ export default function ExplorerPage() {
     const { t, locale } = useI18n();
     const [loading, setLoading] = useState(true);
     const [series, setSeries] = useState<[string, SeriesInfo][]>([]);
+    const [allSets, setAllSets] = useState<DbSet[]>([]);
     const [totalSets, setTotalSets] = useState(0);
+    const [viewMode, setViewMode] = useState<"series" | "timeline">("series");
 
     const loadSets = async () => {
         try {
@@ -77,6 +82,7 @@ export default function ExplorerPage() {
             );
 
             setSeries(sorted);
+            setAllSets(data.sets);
             setTotalSets(data.count);
             setLoading(false);
         } catch (error) {
@@ -164,49 +170,84 @@ export default function ExplorerPage() {
                                 </div>
                             </div>
 
-                            {/* Grid de Eras/Series */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {series.map(([seriesName, info], index) => {
-                                    const colorClass = seriesColors[seriesName] || "from-slate-700/20 to-slate-600/20 border-slate-600/30";
-
-                                    return (
-                                        <Link
-                                            key={seriesName}
-                                            href={`/explorer/${encodeURIComponent(seriesName)}`}
-                                            className="group"
-                                            style={{ animationDelay: `${index * 50}ms` }}
-                                        >
-                                            <Card className={`bg-linear-to-br ${colorClass} border hover:border-white/20 transition-all duration-300 cursor-pointer overflow-hidden group-hover:scale-[1.02] group-hover:shadow-xl`}>
-                                                <CardHeader className="p-6">
-                                                    <div className="flex items-start justify-between gap-4">
-                                                        <div className="flex-1">
-                                                            <CardTitle className="text-xl font-bold text-white group-hover:text-white/90 transition-colors mb-2">
-                                                                {seriesName}
-                                                            </CardTitle>
-                                                            <CardDescription className="text-slate-400 flex items-center gap-2">
-                                                                <Calendar className="h-4 w-4" />
-                                                                {new Date(info.latestRelease).toLocaleDateString(locale, {
-                                                                    year: "numeric",
-                                                                    month: "long",
-                                                                })}
-                                                            </CardDescription>
-                                                        </div>
-                                                        <Badge variant="secondary" className="bg-slate-900/50 text-white border-0 font-semibold shrink-0">
-                                                            {info.count} {info.count === 1 ? t("common.set") : t("common.sets")}
-                                                        </Badge>
-                                                    </div>
-
-                                                    {/* Hover indicator */}
-                                                    <div className="mt-4 flex items-center text-sm text-slate-500 group-hover:text-white/70 transition-colors">
-                                                        <span>{t("explorer.viewExpansions")}</span>
-                                                        <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
-                                                    </div>
-                                                </CardHeader>
-                                            </Card>
-                                        </Link>
-                                    );
-                                })}
+                            {/* View Toggle */}
+                            <div className="flex justify-end mb-8">
+                                <div className="bg-slate-900 border border-slate-800 p-1 rounded-lg inline-flex">
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => setViewMode("series")}
+                                        className={cn(
+                                            "h-8 px-3 rounded-md transition-all gap-2 text-xs",
+                                            viewMode === "series" ? "bg-slate-700 text-white shadow-sm" : "text-slate-400 hover:text-white"
+                                        )}
+                                    >
+                                        <LayoutGrid className="h-4 w-4" />
+                                        Series
+                                    </Button>
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        onClick={() => setViewMode("timeline")}
+                                        className={cn(
+                                            "h-8 px-3 rounded-md transition-all gap-2 text-xs",
+                                            viewMode === "timeline" ? "bg-slate-700 text-white shadow-sm" : "text-slate-400 hover:text-white"
+                                        )}
+                                    >
+                                        <List className="h-4 w-4" />
+                                        Timeline
+                                    </Button>
+                                </div>
                             </div>
+
+                            {/* Content */}
+                            {viewMode === "timeline" ? (
+                                <TimelineView sets={allSets} />
+                            ) : (
+                                /* Grid de Eras/Series */
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {series.map(([seriesName, info], index) => {
+                                        const colorClass = seriesColors[seriesName] || "from-slate-700/20 to-slate-600/20 border-slate-600/30";
+
+                                        return (
+                                            <Link
+                                                key={seriesName}
+                                                href={`/explorer/${encodeURIComponent(seriesName)}`}
+                                                className="group"
+                                                style={{ animationDelay: `${index * 50}ms` }}
+                                            >
+                                                <Card className={`bg-linear-to-br ${colorClass} border hover:border-white/20 transition-all duration-300 cursor-pointer overflow-hidden group-hover:scale-[1.02] group-hover:shadow-xl`}>
+                                                    <CardHeader className="p-6">
+                                                        <div className="flex items-start justify-between gap-4">
+                                                            <div className="flex-1">
+                                                                <CardTitle className="text-xl font-bold text-white group-hover:text-white/90 transition-colors mb-2">
+                                                                    {seriesName}
+                                                                </CardTitle>
+                                                                <CardDescription className="text-slate-400 flex items-center gap-2">
+                                                                    <Calendar className="h-4 w-4" />
+                                                                    {new Date(info.latestRelease).toLocaleDateString(locale, {
+                                                                        year: "numeric",
+                                                                        month: "long",
+                                                                    })}
+                                                                </CardDescription>
+                                                            </div>
+                                                            <Badge variant="secondary" className="bg-slate-900/50 text-white border-0 font-semibold shrink-0">
+                                                                {info.count} {info.count === 1 ? t("common.set") : t("common.sets")}
+                                                            </Badge>
+                                                        </div>
+
+                                                        {/* Hover indicator */}
+                                                        <div className="mt-4 flex items-center text-sm text-slate-500 group-hover:text-white/70 transition-colors">
+                                                            <span>{t("explorer.viewExpansions")}</span>
+                                                            <ChevronRight className="h-4 w-4 ml-1 group-hover:translate-x-1 transition-transform" />
+                                                        </div>
+                                                    </CardHeader>
+                                                </Card>
+                                            </Link>
+                                        );
+                                    })}
+                                </div>
+                            )}
                         </>
                     )}
                 </div>
