@@ -31,8 +31,6 @@ COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 # Copy drizzle folder for runtime migrations
 COPY --from=builder --chown=nextjs:nodejs /app/drizzle ./drizzle
-# Copy migration script
-COPY migrate-db.js ./
 
 USER nextjs
 
@@ -40,5 +38,5 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# Run migrations and then start the server
-CMD ["sh", "-c", "node migrate-db.js && node server.js"]
+# El servidor de Next.js ejecutará las migraciones automáticamente al arrancar
+CMD ["node", "server.js"]

@@ -24,7 +24,7 @@ export async function updateCollectionItem(
         if (quantity <= 0) {
             // Si la cantidad es 0 o menor, borramos todos los registros asociados
             if (existingItems.length > 0) {
-                const idsToDelete = existingItems.map(i => i.id);
+                const idsToDelete = existingItems.map((i: any) => i.id);
                 await db.delete(collectionItems)
                     .where(inArray(collectionItems.id, idsToDelete));
             }
@@ -39,7 +39,7 @@ export async function updateCollectionItem(
 
                 // Si hay duplicados (más de 1 registro), borrar los sobrantes
                 if (existingItems.length > 1) {
-                    const duplicateIds = existingItems.slice(1).map(i => i.id);
+                    const duplicateIds = existingItems.slice(1).map((i: any) => i.id);
                     await db.delete(collectionItems)
                         .where(inArray(collectionItems.id, duplicateIds));
                 }

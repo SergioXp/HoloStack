@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   // Exponer variables de entorno al Edge Runtime (proxy)
   env: {
     APP_MODE: process.env.APP_MODE,
+    DATABASE_FILE: process.env.DATABASE_FILE,
   },
   output: "standalone",
   // Configurar dominios permitidos para next/image
