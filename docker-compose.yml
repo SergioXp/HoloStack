@@ -1,26 +1,26 @@
 services:
   app:
-    build: .
+    # Usamos la imagen ya construida en Docker Hub para que no necesites el código fuente
+    image: sgonzalezh/holostack:latest
     container_name: holostack_app
     restart: always
     ports:
       - "3000:3000"
     volumes:
-      # Data Persistence: Mapea la carpeta local ./data a /app/data en el contenedor
+      # Persistencia: Mapea la carpeta local ./data a /app/data en el contenedor
+      # Aquí se guardará tu base de datos y tus cartas
       - ./data:/app/data
     environment:
-      # Database Location: Apunta al volumen persistente
+      # Ubicación de la base de datos dentro del volumen persistente
       - DATABASE_FILE=/app/data/sqlite.db
       
-      # Application Mode:
-      # - LOCAL:  Acceso directo sin contraseña (ideal para uso personal en casa)
-      # - SERVER: Requiere inicio de sesión (ideal para desplegar en internet)
+      # Modo de la aplicación:
+      # - LOCAL: Acceso directo (ideal para uso personal, no pide contraseña)
+      # - SERVER: Requiere inicio de sesión
       - APP_MODE=LOCAL
       
-      # Authentication (Requerido para modo SERVER)
-      # Genera un secreto seguro con: openssl rand -base64 32
-      - NEXTAUTH_SECRET=changeme_in_production
+      # Configuración de seguridad (requerida técnicamente por la app)
+      - NEXTAUTH_SECRET=pokedex_secret_key_change_me_if_deploying_to_internet
       - NEXTAUTH_URL=http://localhost:3000
-
-      # Configuración recomendada
+      
       - NODE_ENV=production
