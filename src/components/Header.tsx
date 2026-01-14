@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -95,7 +96,13 @@ export default function Header() {
                 {/* Logo */}
                 <Link href="/" className="mr-8 flex items-center space-x-3 group">
                     <div className="relative">
-                        <span className="text-2xl group-hover:scale-110 transition-transform inline-block">🎴</span>
+                        <Image
+                            src="/icon.png"
+                            alt="HoloStack Logo"
+                            width={32}
+                            height={32}
+                            className="group-hover:scale-110 transition-transform duration-300 rounded-lg shadow-lg shadow-primary/10"
+                        />
                         <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full scale-150 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </div>
                     <span className="font-bold text-lg text-foreground hidden sm:inline-block tracking-tight drop-shadow-md">
@@ -114,7 +121,7 @@ export default function Header() {
                         <DialogContent className="w-screen h-screen max-w-none m-0 rounded-none bg-slate-950/95 backdrop-blur-xl border-none flex flex-col pt-12">
                             <DialogHeader className="px-6 text-left">
                                 <DialogTitle className="text-2xl font-bold text-white flex items-center gap-3">
-                                    <span>🎴</span> HoloStack
+                                    <Image src="/icon.png" alt="Logo" width={28} height={28} className="rounded-md" /> HoloStack
                                 </DialogTitle>
                                 <DialogDescription className="text-slate-400">
                                     Menú Principal

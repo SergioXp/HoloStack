@@ -1,7 +1,7 @@
 # HoloStack
 
 <div align="center">
-  <img src="public/icon.svg" alt="Logo de HoloStack" width="120" />
+  <img src="public/icon.png" alt="Logo de HoloStack" width="120" />
   <h1>HoloStack</h1>
   <p><strong>El gestor de colecciones Pokémon TCG moderno y auto-alojado.</strong></p>
   

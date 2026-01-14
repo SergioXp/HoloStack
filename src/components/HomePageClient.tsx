@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useI18n } from "@/lib/i18n";
@@ -53,9 +54,15 @@ export default function HomePageClient({ stats, backgroundCards = [] }: HomePage
                 <section className="min-h-[85vh] flex flex-col items-center justify-center px-4 text-center">
 
                     {/* Logo */}
-                    <div className="mb-8 relative">
-                        <div className="text-8xl mb-4 animate-pulse">🎴</div>
-                        <div className="absolute inset-0 blur-2xl bg-yellow-500/20 rounded-full scale-150" />
+                    <div className="mb-8 relative transition-all duration-500 hover:scale-110">
+                        <Image
+                            src="/icon.png"
+                            alt="Logo HoloStack"
+                            width={160}
+                            height={160}
+                            className="relative z-10 drop-shadow-[0_0_20px_rgba(234,179,8,0.3)]"
+                        />
+                        <div className="absolute inset-0 blur-3xl bg-yellow-500/30 rounded-full scale-125 animate-pulse" />
                     </div>
 
                     {/* Title */}
@@ -220,7 +227,7 @@ export default function HomePageClient({ stats, backgroundCards = [] }: HomePage
                     <div className="max-w-6xl mx-auto">
                         <div className="flex flex-col md:flex-row justify-between items-center gap-6">
                             <div className="flex items-center gap-3">
-                                <span className="text-3xl">🎴</span>
+                                <Image src="/icon.png" alt="Logo" width={32} height={32} className="rounded-lg shadow-lg opacity-80 hover:opacity-100 transition-opacity" />
                                 <span className="text-xl font-bold text-white">{t("home.title")}</span>
                             </div>
 
