@@ -89,7 +89,7 @@ erDiagram
 
 2.  **Datos de Usuario**
     *   `collections`: Contenedores. Pueden ser `manual` (lista explícita) o `auto` (basada en filtros dinámicos).
-    *   `collection_items`: Instancias físicas de cartas. Relaciona `Collection` + `Card` + `Variant` (Holo/Reverse) + `Quantity`.
+    *   `collection_items`: Instancias físicas de cartas. Relaciona `Collection` + `Card` + `Variant` (Holo/Reverse) + `Quantity` + `Notes`.
 
 3.  **Finanzas**
     *   `budgets`: Presupuestos (Mensuales/Anuales). Pueden agruparse jerárquicamente.
@@ -164,6 +164,7 @@ Uso extensivo de `framer-motion` para:
 *   Layout Transitions (al cambiar de grid a lista).
 *   Gestos (Swipe para borrar en móvil).
 *   Micro-feedback (Botones pulsados).
+*   **Poker Hand Interaction**: Lógica de abanico para slots con múltiples cartas, gestionando `z-index` dinámico y transformaciones 3D.
 
 ---
 

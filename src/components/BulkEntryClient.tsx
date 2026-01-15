@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { useI18n } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { getAvailableVariants } from "@/lib/card-utils";
 
 interface SetOption {
     id: string;
@@ -117,10 +118,23 @@ export function BulkEntryClient({ sets, collections }: BulkEntryClientProps) {
                 // Merge validation results with local variant info
                 // The API returns the list in order, or we can map by index if strict
                 // Assuming API returns results in same order as inputs
-                const merged = (data.results || []).map((r: any, i: number) => ({
-                    ...r,
-                    variant: inputs[i].variant // Preserve parsed variant
-                }));
+                const merged = (data.results || []).map((r: any, i: number) => {
+                    let variant = inputs[i].variant;
+
+                    // Si el usuario no especificó variante (es normal) pero la carta no admite normal
+                    // (ej: Ultra Raras), asignamos la primera variante disponible.
+                    if (variant === 'normal' && r.card) {
+                        const available = getAvailableVariants(r.card.rarity, r.card.supertype);
+                        if (!available.has('normal') && available.size > 0) {
+                            variant = Array.from(available)[0] as any;
+                        }
+                    }
+
+                    return {
+                        ...r,
+                        variant
+                    };
+                });
                 setParsedCards(merged);
             }
         } catch (error) {

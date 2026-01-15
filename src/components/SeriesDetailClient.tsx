@@ -4,8 +4,10 @@ import Link from "next/link";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ImageOff, CheckCircle2, ChevronRight, Calendar, Package } from "lucide-react";
+import { ImageOff, CheckCircle2, ChevronRight, Calendar, Package, Search, X } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
 
 interface SetData {
     id: string;
@@ -25,6 +27,12 @@ interface SeriesDetailClientProps {
 
 export default function SeriesDetailClient({ seriesName, seriesSets, countsMap }: SeriesDetailClientProps) {
     const { t, locale } = useI18n();
+    const [searchQuery, setSearchQuery] = useState("");
+
+    const filteredSets = seriesSets.filter(set =>
+        set.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        set.id.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     return (
         <div className="min-h-screen bg-slate-950 relative overflow-hidden">
@@ -38,31 +46,55 @@ export default function SeriesDetailClient({ seriesName, seriesSets, countsMap }
             <div className="relative z-10 p-8">
                 <div className="max-w-6xl mx-auto">
                     {/* Header */}
-                    <div className="mb-12">
+                    <div className="mb-8">
                         <Link href="/explorer" className="inline-flex items-center text-slate-400 hover:text-white text-sm mb-6 transition-colors">
                             <ChevronRight className="h-4 w-4 mr-1 rotate-180" />
                             {t("explorer.backToEras")}
                         </Link>
 
-                        <div className="flex items-center gap-4 mb-4">
-                            <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-blue-500 to-purple-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
-                                <Package className="h-7 w-7 text-white" />
+                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                            <div className="flex items-center gap-4">
+                                <div className="w-14 h-14 rounded-2xl bg-linear-to-br from-blue-500 to-purple-500 flex items-center justify-center shadow-lg shadow-purple-500/20">
+                                    <Package className="h-7 w-7 text-white" />
+                                </div>
+                                <div>
+                                    <h1 className="text-4xl font-bold text-white tracking-tight">
+                                        {seriesName}
+                                    </h1>
+                                    <p className="text-slate-400 text-lg">
+                                        {filteredSets.length === seriesSets.length
+                                            ? `${seriesSets.length} ${t("explorer.expansionsInEra")}`
+                                            : `${filteredSets.length} de ${seriesSets.length} encontradas`}
+                                    </p>
+                                </div>
                             </div>
-                            <div>
-                                <h1 className="text-4xl font-bold text-white tracking-tight">
-                                    {seriesName}
-                                </h1>
-                                <p className="text-slate-400 text-lg">
-                                    {seriesSets.length} {t("explorer.expansionsInEra")}
-                                </p>
+
+                            {/* Search Bar within Series */}
+                            <div className="relative w-full md:w-80">
+                                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                                <Input
+                                    type="text"
+                                    placeholder={t("explorer.searchPlaceholder") || "Buscar expansión o ID..."}
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    className="pl-10 bg-slate-900 border-slate-700 text-white h-10 rounded-xl focus:border-purple-500 focus:ring-purple-500/20"
+                                />
+                                {searchQuery && (
+                                    <button
+                                        onClick={() => setSearchQuery("")}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
+                                    >
+                                        <X className="h-4 w-4" />
+                                    </button>
+                                )}
                             </div>
                         </div>
                     </div>
 
                     {/* Sets Grid */}
-                    {seriesSets.length > 0 ? (
+                    {filteredSets.length > 0 ? (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {seriesSets.map((set) => {
+                            {filteredSets.map((set) => {
                                 const images = set.images ? JSON.parse(set.images) : null;
                                 const downloadedCards = countsMap[set.id] || 0;
                                 const isComplete = set.total > 0 && downloadedCards >= set.total;
@@ -164,7 +196,11 @@ export default function SeriesDetailClient({ seriesName, seriesSets, countsMap }
                         </div>
                     ) : (
                         <div className="text-center py-24 border border-dashed border-slate-800 rounded-3xl bg-slate-900/30">
-                            <p className="text-slate-500">{t("explorer.noSetsFound")}</p>
+                            <p className="text-slate-500">
+                                {searchQuery
+                                    ? (t("explorer.noResults.description") || "No se encontraron expansiones que coincidan con tu búsqueda.")
+                                    : (t("explorer.noSetsFound") || "No se encontraron sets para esta era.")}
+                            </p>
                         </div>
                     )}
                 </div>

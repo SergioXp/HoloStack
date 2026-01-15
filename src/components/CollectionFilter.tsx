@@ -20,7 +20,7 @@ import { useI18n } from "@/lib/i18n";
 interface CollectionFilterProps {
     cards: any[];
     collectionId: string;
-    ownershipData: Record<string, Record<string, { quantity: number; id: string }>>;
+    ownershipData: Record<string, Record<string, { quantity: number; id: string; notes?: string | null }>>;
     totalCardsCount: number;
     isMultiSet: boolean;
     setNames: Record<string, string>;
@@ -201,7 +201,7 @@ export default function CollectionFilter({
 
     const hasActiveFilters = searchQuery !== "" || selectedSet !== null || viewMode !== "all";
 
-    const getOwnedVariants = (cardId: string): Map<string, { quantity: number; id: string }> => {
+    const getOwnedVariants = (cardId: string): Map<string, { quantity: number; id: string; notes?: string | null }> => {
         const data = ownershipData[cardId];
         if (!data) return new Map();
         return new Map(Object.entries(data));

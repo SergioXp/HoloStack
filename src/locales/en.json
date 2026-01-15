@@ -43,7 +43,14 @@
             "hoursAgo": "{n}h ago",
             "justNow": "just now"
         },
-        "didYouKnow": "Did you know?"
+        "didYouKnow": "Did you know?",
+        "viewDetail": "View Detail"
+    },
+    "variants": {
+        "normal": "Normal",
+        "holofoil": "Holofoil",
+        "reverseHolofoil": "Reverse Holofoil",
+        "nonHolo": "Non Holo"
     },
     "cardDetail": {
         "market": "Market",
@@ -260,7 +267,14 @@
         },
         "backToEras": "Back to Eras",
         "noLogo": "No logo",
-        "noSetsFound": "No sets found for this era."
+        "noSetsFound": "No sets found for this era.",
+        "searchPlaceholder": "Search expansion or ID (e.g. PFL)...",
+        "viewSeries": "Series",
+        "viewTimeline": "Timeline",
+        "noResults": {
+            "title": "No results",
+            "description": "Try another search term"
+        }
     },
     "collections": {
         "title": "My Collections",
@@ -362,6 +376,9 @@
         "showMissing": "Missing",
         "showing": "Showing",
         "clearFilters": "Clear filters",
+        "addNotes": "Add notes...",
+        "notesPlaceholder": "Private notes about this card...",
+        "privateNotes": "Private Notes",
         "noResults": {
             "title": "No results",
             "description": "Try adjusting your search filters."

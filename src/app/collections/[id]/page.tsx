@@ -21,7 +21,7 @@ export default async function CollectionPage({ params }: { params: Promise<{ id:
         .from(collectionItems)
         .where(eq(collectionItems.collectionId, id));
 
-    const ownershipMap = new Map<string, Map<string, { quantity: number, id: string }>>();
+    const ownershipMap = new Map<string, Map<string, { quantity: number, id: string, notes?: string | null }>>();
 
     ownedItems.forEach(item => {
         if (!ownershipMap.has(item.cardId)) {
@@ -33,7 +33,8 @@ export default async function CollectionPage({ params }: { params: Promise<{ id:
 
         variantsMap.set(item.variant, {
             quantity: newQuantity,
-            id: item.id
+            id: item.id,
+            notes: item.notes
         });
     });
 
@@ -305,6 +306,7 @@ export default async function CollectionPage({ params }: { params: Promise<{ id:
         showPrices: collection.showPrices ?? false,
         sortBy: collection.sortBy,
         filters: collection.filters,
+        notes: collection.notes,
     };
 
     const serializedCards = displayCards.map(c => ({

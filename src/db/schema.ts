@@ -123,6 +123,7 @@ export const collections = sqliteTable("collections", {
   // Configuración de visualización
   showPrices: integer("show_prices", { mode: "boolean" }).default(true),
   sortBy: text("sort_by").default("number"), // number | name | rarity | price
+  notes: text("notes"), // Notas privadas generales de la colección
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
   updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
@@ -143,6 +144,7 @@ export const collectionItems = sqliteTable("collection_items", {
   cardId: text("card_id").notNull().references(() => cards.id),
   variant: text("variant").notNull().default("normal"), // 'normal', 'holofoil', 'reverseHolofoil', etc.
   quantity: integer("quantity").default(1),
+  notes: text("notes"), // Notas privadas del usuario para esta carta específica
   addedAt: integer("added_at", { mode: "timestamp" }).$defaultFn(() => new Date()),
 });
 

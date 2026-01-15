@@ -29,6 +29,12 @@ Búsqueda de texto completo de cartas en la base de datos local.
 - **Query**: `?q=Pikachu`
 - **Respuesta**: `Card[]` (Límite 30)
 
+### `GET /api/search/global`
+Búsqueda multi-entidad (Cartas, Sets, Colecciones). Soporta términos combinados (nombre carta + set).
+- **Query**: `?q=Pikachu+Base&type=card&limit=8`
+- **Respuesta**: `{ results: SearchResult[] }`
+- **SearchResult**: `{ id, title, subtitle, thumbnail, type, category }`
+
 ### `GET /api/cards/preview`
 Obtiene una muestra aleatoria (4 cartas) que coinciden con filtros complejos. Usado para previsualizaciones de UI.
 - **Query**:
@@ -63,7 +69,7 @@ Crea una nueva colección.
 
 ### `GET /api/collections/[id]`
 Obtiene el detalle completo de una colección, incluyendo las cartas que contiene y las cantidades poseídas.
-- **Respuesta**: `{ ...Collection, cards: Card[], ownershipData: Map, setName?: string }`
+- **Respuesta**: `{ ...Collection, cards: Card[], ownershipData: Map<cardId, { [variant]: { quantity, notes } }>, setName?: string }`
 
 ### `PUT /api/collections/[id]`
 Actualiza los metadatos de una colección.
@@ -105,6 +111,7 @@ Añade múltiples cartas a una colección de una sola vez.
 Valida una lista de números de carta contra un Set ID para "fuzzy matching" (coincidencia aproximada).
 - **Body**: `{ setId, inputs: [{ number, quantity }] }`
 - **Respuesta**: `{ results: [{ ...input, status: "valid"|"invalid", card? }] }`
+    - `card` incluye `supertype` para determinar variantes válidas.
 
 ### `GET /api/bulk/duplicates`
 Detecta cartas duplicadas que exceden un umbral (Playset) en una colección.

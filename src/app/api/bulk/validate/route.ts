@@ -27,7 +27,8 @@ export async function POST(req: NextRequest) {
             number: cards.number,
             name: cards.name,
             images: cards.images,
-            rarity: cards.rarity
+            rarity: cards.rarity,
+            supertype: cards.supertype
         })
             .from(cards)
             .where(eq(cards.setId, setId));
@@ -58,7 +59,8 @@ export async function POST(req: NextRequest) {
                         id: match.id,
                         name: match.name,
                         image: images?.small || images?.large,
-                        rarity: match.rarity
+                        rarity: match.rarity,
+                        supertype: match.supertype
                     }
                 };
             } else {

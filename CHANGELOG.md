@@ -1,3 +1,40 @@
+### [0.8.1] - 2026-01-15
+
+### ✨ Coleccionismo Múltiple (Stacking) y Notas Privadas
+
+**Fecha**: 2026-01-15
+
+#### Cambios
+- **Apilamiento de Cartas (Poker Hand)**: 
+    - Rediseño de la rejilla genérica para permitir múltiples variantes/copias de un mismo Pokémon en un único slot.
+    - **Efecto Abanico**: Al pasar el ratón por un slot con varias cartas, estas se abren en abanico dinámicamente.
+    - **Foco Inteligente**: La carta sobre la que está el cursor resalta automáticamente (pasa al frente, se endereza y se agranda) mientras las demás se oscurecen sutilmente.
+    - **Indicador de Cantidad**: Badge visual (+X) que indica cuántas cartas adicionales hay en el montón.
+- **Notas Privadas por Carta**:
+    - Implementación de un campo de texto libre para añadir anotaciones privadas a nivel de variante.
+    - Integración en `CollectionItemManager` con persistencia en base de datos.
+    - Indicador visual (icono de documento) en la rejilla cuando una carta tiene notas.
+- **Buscador Global Potenciado**:
+    - Soporte para búsquedas multi-término (ej: "Pikachu Base" busca por nombre y set simultáneamente).
+    - Optimización de límites de resultados y priorización de categorías.
+- **Mejoras Explorer**:
+    - Implementación de filtros rápidos por Sagas (Series) y Cronología.
+    - Buscador integrado en la lista de expansiones de cada serie.
+
+#### Archivos Modificados
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `src/components/GenericCollectionGrid.tsx` | UI | Implementación del efecto de abanico y lógica de stacking. |
+| `src/db/schema.ts` | DB | Campo `notes` añadido a `collectionItems`. |
+| `src/app/actions/collection.ts` | Server Action | Soporte para actualizar notas. |
+| `src/components/CollectionItemManager.tsx` | UI | Formulario de edición de notas y variante minimal circular. |
+| `src/app/api/search/global/route.ts` | API | Lógica de búsqueda avanzada multi-término. |
+| `src/locales/*.json` | Config | Nuevas traducciones para notas, buscador y explorador. |
+
+#### Notas Técnicas
+- **Z-Index Management**: Se implementó una gestión dinámica de profundidades para asegurar que el abanico no sea tapado por slots adyacentes.
+- **Fuzzy Search API**: El buscador global ahora normaliza los términos de búsqueda y usa operadores AND de Drizzle para combinar condiciones de nombre y set.
+
 ### [0.7.0] - 2026-01-14
 
 ### ✨ Internacionalización Completa y Estandarización de Layouts

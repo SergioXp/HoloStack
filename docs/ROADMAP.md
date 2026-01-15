@@ -2,8 +2,8 @@
 
 Este documento es la fuente de verdad sobre el estado del proyecto, las funcionalidades implementadas y la visión futura.
 
-> **Versión Actual**: 0.8.0
-> **Última Actualización**: 15 Enero 2026
+> **Versión Actual**: 0.8.1
+> **Última Actualización**: 15 Enero 2026 (Refresco UI & Stacking)
 
 ---
 
@@ -20,6 +20,7 @@ Este documento es la fuente de verdad sobre el estado del proyecto, las funciona
 - [x] **Modo Binder (Álbum)**: Visualización realista de carpetas con paginación, slot placeholders y vista de doble página.
 - [x] **Modo Tabla**: Vista densa para gestión de inventario con edición rápida.
 - [x] **Filtros Avanzados**: Búsqueda por nombre, rareza, serie, y estado de posesión.
+- [x] **Stacking de Cartas de Pokémon**: Nueva rejilla genérica que permite apilar múltiples variantes de un mismo Pokémon con efecto "Abanico" (Poker Hand).
 
 ### 3. Herramientas Avanzadas
 - [x] **Entrada Masiva (Bulk Entry)**:
@@ -54,8 +55,8 @@ Este documento es la fuente de verdad sobre el estado del proyecto, las funciona
 - [ ] **Market Movers**: Dashboard con las cartas que más han subido/bajado de precio en las últimas 24h/30d.
 
 ### 🏷️ Metadatos Privados
+- [x] **Notas por Carta**: Campo de texto privado para anotaciones específicas por variante.
 - [ ] **Gestión de Estado y Grados**: Campos nativos para condición (NM, LP, MP) y certificación profesional (PSA 10, BGS 9.5).
-- [ ] **Notas por Carta**: Campo de texto libre para anotaciones privadas.
 
 ---
 

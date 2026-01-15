@@ -7,10 +7,11 @@ import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/ca
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-import { Layers, Calendar, ChevronRight, Sparkles, LayoutGrid, List } from "lucide-react";
+import { Layers, Calendar, ChevronRight, Sparkles, LayoutGrid, List, Search, X } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { TimelineView } from "@/components/TimelineView";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 interface DbSet {
     id: string;
@@ -48,6 +49,30 @@ export default function ExplorerPage() {
     const [allSets, setAllSets] = useState<DbSet[]>([]);
     const [totalSets, setTotalSets] = useState(0);
     const [viewMode, setViewMode] = useState<"series" | "timeline">("series");
+    const [searchQuery, setSearchQuery] = useState("");
+
+    const filteredSets = allSets.filter(set =>
+        set.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        set.id.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    // Recalcular series basadas en los sets filtrados
+    const filteredSeries = (() => {
+        const seriesMap = new Map<string, SeriesInfo>();
+        for (const set of filteredSets) {
+            const existing = seriesMap.get(set.series);
+            const releaseDate = set.releaseDate || "1999-01-01";
+            if (existing) {
+                existing.count++;
+                if (releaseDate > existing.latestRelease) existing.latestRelease = releaseDate;
+            } else {
+                seriesMap.set(set.series, { count: 1, latestRelease: releaseDate });
+            }
+        }
+        return Array.from(seriesMap.entries()).sort(
+            (a, b) => b[1].latestRelease.localeCompare(a[1].latestRelease)
+        );
+    })();
 
     const loadSets = async () => {
         try {
@@ -145,21 +170,30 @@ export default function ExplorerPage() {
                         </div>
                     ) : (
                         <>
-                            {/* Stats Summary */}
-                            <div className="flex flex-wrap gap-4 mb-10">
-                                <div className="bg-slate-900/50 border border-slate-800 rounded-xl px-5 py-3 backdrop-blur-sm">
-                                    <span className="text-2xl font-bold text-white">{series.length}</span>
-                                    <span className="text-slate-400 ml-2">{t("explorer.eras")}</span>
+                            {/* Search and View Toggle Bar */}
+                            <div className="flex flex-col md:flex-row gap-4 mb-8 items-stretch md:items-center justify-between">
+                                {/* Search Bar */}
+                                <div className="relative flex-1 max-w-md">
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                                    <Input
+                                        type="text"
+                                        placeholder={t("explorer.searchPlaceholder") || "Buscar expansión o ID (ej. PFL)..."}
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                        className="pl-10 bg-slate-900 border-slate-700 text-white h-10 rounded-xl focus:border-purple-500 focus:ring-purple-500/20"
+                                    />
+                                    {searchQuery && (
+                                        <button
+                                            onClick={() => setSearchQuery("")}
+                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors"
+                                        >
+                                            <X className="h-4 w-4" />
+                                        </button>
+                                    )}
                                 </div>
-                                <div className="bg-slate-900/50 border border-slate-800 rounded-xl px-5 py-3 backdrop-blur-sm">
-                                    <span className="text-2xl font-bold text-purple-400">{totalSets}</span>
-                                    <span className="text-slate-400 ml-2">{t("explorer.syncedSets")}</span>
-                                </div>
-                            </div>
 
-                            {/* View Toggle */}
-                            <div className="flex justify-end mb-8">
-                                <div className="bg-slate-900 border border-slate-800 p-1 rounded-lg inline-flex">
+                                {/* View Toggle */}
+                                <div className="bg-slate-900 border border-slate-800 p-1 rounded-lg inline-flex self-start md:self-auto">
                                     <Button
                                         variant="ghost"
                                         size="sm"
@@ -170,7 +204,7 @@ export default function ExplorerPage() {
                                         )}
                                     >
                                         <LayoutGrid className="h-4 w-4" />
-                                        Series
+                                        {t("explorer.viewSeries") || "Sagas"}
                                     </Button>
                                     <Button
                                         variant="ghost"
@@ -182,18 +216,36 @@ export default function ExplorerPage() {
                                         )}
                                     >
                                         <List className="h-4 w-4" />
-                                        Timeline
+                                        {t("explorer.viewTimeline") || "Cronología"}
                                     </Button>
                                 </div>
                             </div>
 
+                            {/* Stats Summary */}
+                            <div className="flex flex-wrap gap-4 mb-10">
+                                <div className="bg-slate-900/50 border border-slate-800 rounded-xl px-5 py-3 backdrop-blur-sm">
+                                    <span className="text-2xl font-bold text-white">{filteredSeries.length}</span>
+                                    <span className="text-slate-400 ml-2">{t("explorer.eras")}</span>
+                                </div>
+                                <div className="bg-slate-900/50 border border-slate-800 rounded-xl px-5 py-3 backdrop-blur-sm">
+                                    <span className="text-2xl font-bold text-purple-400">{filteredSets.length}</span>
+                                    <span className="text-slate-400 ml-2">{t("explorer.syncedSets")}</span>
+                                </div>
+                            </div>
+
                             {/* Content */}
-                            {viewMode === "timeline" ? (
-                                <TimelineView sets={allSets} />
+                            {filteredSets.length === 0 ? (
+                                <div className="text-center py-20 border-2 border-dashed border-slate-800 rounded-2xl bg-slate-900/30">
+                                    <div className="text-5xl mb-4">🔍</div>
+                                    <h3 className="text-lg font-semibold text-white mb-2">{t("explorer.noResults.title") || "No hay resultados"}</h3>
+                                    <p className="text-slate-500">{t("explorer.noResults.description") || "Prueba con otro término de búsqueda"}</p>
+                                </div>
+                            ) : viewMode === "timeline" ? (
+                                <TimelineView sets={filteredSets} />
                             ) : (
                                 /* Grid de Eras/Series */
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                    {series.map(([seriesName, info], index) => {
+                                    {filteredSeries.map(([seriesName, info], index) => {
                                         const colorClass = seriesColors[seriesName] || "from-slate-700/20 to-slate-600/20 border-slate-600/30";
 
                                         return (

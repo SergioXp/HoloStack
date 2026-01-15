@@ -4,10 +4,10 @@
         "backToHome": "Volver al Inicio",
         "save": "Guardar",
         "cancel": "Cancelar",
-        "creating": "Creando...",
         "delete": "Eliminar",
         "edit": "Editar",
         "create": "Crear",
+        "creating": "Creando...",
         "search": "Buscar",
         "loading": "Cargando...",
         "error": "Error",
@@ -43,7 +43,14 @@
             "hoursAgo": "hace {n}h",
             "justNow": "reciente"
         },
-        "didYouKnow": "¿Sabías que?"
+        "didYouKnow": "¿Sabías que?",
+        "viewDetail": "Ver detalle"
+    },
+    "variants": {
+        "normal": "Normal",
+        "holofoil": "Holográfica",
+        "reverseHolofoil": "Reverse / Paralela",
+        "nonHolo": "No Holográfica"
     },
     "cardDetail": {
         "market": "Mercado",
@@ -52,8 +59,8 @@
         "trend": "Tendencia",
         "trendUp": "Tendencia Alcista",
         "trendDown": "Tendencia Bajista",
-        "trendStable": "Estable",
         "related": "Otras cartas relacionadas",
+        "trendStable": "Estable",
         "cmReference": "Principal referencia europea",
         "minPrice": "Precio Mínimo",
         "avg30": "Media 30 días",
@@ -99,6 +106,7 @@
         "connectionError": "Error de conexión con el servidor",
         "startError": "Error al iniciar la descarga"
     },
+    "profileLabel": "Perfil",
     "languages": {
         "spanish": "Español",
         "english": "Inglés",
@@ -259,7 +267,14 @@
         },
         "backToEras": "Volver a Eras",
         "noLogo": "Sin logo",
-        "noSetsFound": "No se encontraron sets para esta era."
+        "noSetsFound": "No se encontraron sets para esta era.",
+        "searchPlaceholder": "Buscar expansión o ID (ej. PFL)...",
+        "viewSeries": "Sagas",
+        "viewTimeline": "Cronología",
+        "noResults": {
+            "title": "Sin resultados",
+            "description": "Prueba con otro término de búsqueda"
+        }
     },
     "collections": {
         "title": "Mis Colecciones",
@@ -361,6 +376,9 @@
         "showMissing": "Faltan",
         "showing": "Mostrando",
         "clearFilters": "Limpiar filtros",
+        "addNotes": "Añadir notas...",
+        "notesPlaceholder": "Notas privadas sobre esta carta...",
+        "privateNotes": "Notas Privadas",
         "noResults": {
             "title": "Sin resultados",
             "description": "Intenta ajustar los filtros de búsqueda."
@@ -728,6 +746,7 @@
     },
     "deleteDialog": {
         "title": "¿Borrar colección?",
+        "descriptionPre": "Estás a punto de borrar permanentemente la colección",
         "descriptionPost": ". Esta acción no se puede deshacer."
     },
     "collectionSelector": {

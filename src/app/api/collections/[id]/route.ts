@@ -28,7 +28,11 @@ export async function GET(
         const ownershipData: Record<string, any> = {};
         items.forEach(item => {
             if (!ownershipData[item.cardId]) ownershipData[item.cardId] = {};
-            ownershipData[item.cardId][item.variant] = { quantity: item.quantity };
+            ownershipData[item.cardId][item.variant] = {
+                quantity: item.quantity,
+                id: item.id,
+                notes: item.notes
+            };
         });
 
         let resultCards: any[] = [];
@@ -96,6 +100,7 @@ export async function PUT(
         if (body.showPrices !== undefined) updateData.showPrices = body.showPrices;
         if (body.sortBy !== undefined) updateData.sortBy = body.sortBy;
         if (body.filters !== undefined) updateData.filters = body.filters;
+        if (body.notes !== undefined) updateData.notes = body.notes;
 
         const [updated] = await db.update(collections)
             .set(updateData)

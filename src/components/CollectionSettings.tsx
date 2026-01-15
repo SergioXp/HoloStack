@@ -35,6 +35,7 @@ interface Collection {
     showPrices: boolean | null;
     sortBy: string | null;
     filters: string | null;
+    notes: string | null;
 }
 
 interface CollectionSettingsProps {
@@ -61,6 +62,7 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
     );
     const [showPrices, setShowPrices] = useState(collection.showPrices !== false);
     const [sortBy, setSortBy] = useState(collection.sortBy || "number");
+    const [notes, setNotes] = useState(collection.notes || "");
 
     // Parse initial filters to get subSort
     const initialFilters = collection.filters ? JSON.parse(collection.filters) : {};
@@ -84,6 +86,7 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                     language: useProfileLanguage ? null : selectedLanguage,
                     showPrices,
                     sortBy,
+                    notes: notes || null,
                     filters: JSON.stringify(filters)
                 }),
             });
@@ -230,6 +233,20 @@ export default function CollectionSettings({ collection }: CollectionSettingsPro
                                 onChange={(e) => setDescription(e.target.value)}
                                 placeholder={t("settings.descriptionPlaceholder")}
                                 rows={3}
+                                className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl p-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-purple-500"
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label className="text-sm text-slate-300 flex items-center gap-2">
+                                <Settings className="h-4 w-4" />
+                                {t("collectionDetail.privateNotes") || "Notas Privadas"}
+                            </Label>
+                            <textarea
+                                value={notes}
+                                onChange={(e) => setNotes(e.target.value)}
+                                placeholder={t("collectionDetail.notesPlaceholder") || "Notas privadas..."}
+                                rows={4}
                                 className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl p-3 text-sm resize-none focus:outline-none focus:ring-2 focus:ring-purple-500"
                             />
                         </div>

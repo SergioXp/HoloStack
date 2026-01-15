@@ -21,7 +21,8 @@ import {
     Hash,
     Layers,
     Search,
-    Heart
+    Heart,
+    Pencil
 } from "lucide-react";
 import { getAllPrices, getMarketUrl, formatPrice, type Currency } from "@/lib/prices";
 import { formatPriceAge } from "@/lib/price-refresh";
@@ -40,6 +41,8 @@ interface CardData {
     quantity?: number;
     tcgplayerPrices?: string | null;
     cardmarketPrices?: string | null;
+    notes?: string | null;
+    notesMap?: Record<string, string | null>;
 }
 
 export interface RelatedCard {
@@ -430,6 +433,25 @@ export function CardDetailModal({
                                                             <p className="text-xl font-bold text-emerald-400">
                                                                 {card.quantity} {card.quantity === 1 ? t("cardDetail.copy") : t("cardDetail.copies")}
                                                             </p>
+                                                        </div>
+                                                    </div>
+                                                )}
+
+                                                {card.notesMap && Object.values(card.notesMap).some(n => n) && (
+                                                    <div className="p-4 bg-blue-950/20 rounded-xl border border-blue-900/30">
+                                                        <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                                                            <Pencil className="h-3 w-3" />
+                                                            {t("collectionDetail.privateNotes") || "Notas Privadas"}
+                                                        </h4>
+                                                        <div className="space-y-3">
+                                                            {Object.entries(card.notesMap).filter(([_, note]) => note).map(([variant, note]) => (
+                                                                <div key={variant} className="bg-slate-900/50 p-3 rounded-lg border border-slate-800">
+                                                                    <span className="text-[10px] font-bold text-slate-500 uppercase block mb-1">
+                                                                        {variant.replace(/([A-Z])/g, ' $1').trim()}
+                                                                    </span>
+                                                                    <p className="text-sm text-slate-300 italic">"{note}"</p>
+                                                                </div>
+                                                            ))}
                                                         </div>
                                                     </div>
                                                 )}

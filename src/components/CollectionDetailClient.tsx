@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ChevronRight, Library, Sparkles, Globe, Pencil, Trash2, X, CheckSquare } from "lucide-react";
+import { ChevronRight, Library, Sparkles, Globe, Pencil, Trash2, X, CheckSquare, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CollectionHydrator from "@/components/CollectionHydrator";
 import CollectionFilter from "@/components/CollectionFilter";
@@ -25,9 +25,10 @@ interface CollectionDetailClientProps {
         showPrices: boolean;
         sortBy: string | null;
         filters: string | null;
+        notes: string | null;
     };
     displayCards: any[];
-    ownershipData: Record<string, Record<string, { quantity: number; id: string }>>;
+    ownershipData: Record<string, Record<string, { quantity: number; id: string; notes?: string | null }>>;
     totalCardsCount: number;
     uniqueOwnedCount: number;
     progress: number;
@@ -254,6 +255,17 @@ export default function CollectionDetailClient({
                                                 {collection.description}
                                             </p>
                                         )}
+                                        {collection.notes && (
+                                            <div className="mt-4 p-4 bg-amber-500/5 border border-amber-500/20 rounded-xl max-w-xl">
+                                                <div className="flex items-center gap-2 mb-2 text-amber-400 font-semibold text-xs uppercase tracking-wider">
+                                                    <FileText className="h-3.5 w-3.5" />
+                                                    {t("collectionDetail.privateNotes") || "Notas Privadas"}
+                                                </div>
+                                                <p className="text-slate-300 text-sm italic whitespace-pre-wrap">
+                                                    {collection.notes}
+                                                </p>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -288,6 +300,7 @@ export default function CollectionDetailClient({
                             <GenericCollectionGrid
                                 collectionId={collection.id}
                                 savedCards={displayCards}
+                                ownershipData={ownershipData}
                                 isEditMode={isEditMode}
                                 userCurrency={userCurrency}
                                 pokemonList={pokemonList}

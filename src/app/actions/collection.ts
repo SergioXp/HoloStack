@@ -9,7 +9,8 @@ export async function updateCollectionItem(
     collectionId: string,
     cardId: string,
     variant: string,
-    quantity: number
+    quantity: number,
+    notes?: string | null
 ) {
     try {
         // 1. Buscar TODOS los items con esa variante (para detectar duplicados)
@@ -31,10 +32,13 @@ export async function updateCollectionItem(
         } else {
             // Si la cantidad es positiva
             if (existingItems.length > 0) {
-                // Actualizar el PRIMERO con la nueva cantidad total
+                // Actualizar el PRIMERO con la nueva cantidad total y notas
                 const firstItem = existingItems[0];
+                const updateData: any = { quantity, addedAt: new Date() };
+                if (notes !== undefined) updateData.notes = notes;
+
                 await db.update(collectionItems)
-                    .set({ quantity, addedAt: new Date() })
+                    .set(updateData)
                     .where(eq(collectionItems.id, firstItem.id));
 
                 // Si hay duplicados (más de 1 registro), borrar los sobrantes
@@ -50,6 +54,7 @@ export async function updateCollectionItem(
                     cardId,
                     variant,
                     quantity,
+                    notes: notes || null
                 });
             }
         }
