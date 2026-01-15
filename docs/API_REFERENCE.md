@@ -48,6 +48,11 @@ Obtiene una muestra aleatoria (4 cartas) que coinciden con filtros complejos. Us
 ### `GET /api/sync/index`
 **SSE**. Indexa nombres de Pokémon desde PokeAPI para el autocompletado.
 
+### `GET /api/pokemon/species`
+Busca una especie por nombre para obtener su ID Nacional y arte oficial. Soporta limpieza automática de variantes TCG (V, VMAX, ex, etc).
+- **Query**: `?name=Pikachu`
+- **Respuesta**: `{ id: number, name: string, artwork: string }`
+
 ### `GET /api/sync/collection-cards`
 **SSE**. Hidrata una colección automática descargando las cartas que cumplen sus filtros desde TCGDex.
 - **Query**: `?id=COLLECTION_ID`
@@ -69,7 +74,8 @@ Crea una nueva colección.
 
 ### `GET /api/collections/[id]`
 Obtiene el detalle completo de una colección, incluyendo las cartas que contiene y las cantidades poseídas.
-- **Respuesta**: `{ ...Collection, cards: Card[], ownershipData: Map<cardId, { [variant]: { quantity, notes } }>, setName?: string }`
+- **Respuesta**: `{ ...Collection, cards: (Card & { nationalId?: number })[], ownershipData: Map<cardId, { [variant]: { quantity, notes } }>, setName?: string }`
+    - `nationalId`: ID de la Pokédex Nacional, usado para ordenamiento oficial en colecciones automáticas.
 
 ### `PUT /api/collections/[id]`
 Actualiza los metadatos de una colección.

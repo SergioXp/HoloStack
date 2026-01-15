@@ -2,8 +2,8 @@
 
 Este documento es la fuente de verdad sobre el estado del proyecto, las funcionalidades implementadas y la visión futura.
 
-> **Versión Actual**: 0.8.1
-> **Última Actualización**: 15 Enero 2026 (Refresco UI & Stacking)
+> **Versión Actual**: 0.8.2
+> **Última Actualización**: 15 Enero 2026 (Pokédex Nacional & Matching Mejorado)
 
 ---
 

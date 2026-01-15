@@ -48,7 +48,8 @@ src/
 ├── db/                   # Capa de Datos
 │   ├── index.ts          # Inicialización de cliente Drizzle
 │   └── schema.ts         # Definición de tablas y relaciones
-├── lib/                  # Utilidades y Lógica Core (Pure Functions)
+├── lib/                  # Utilidades y Lógica Core (Pure Functions) - Ver [UTILITIES.md](./UTILITIES.md)
+│   ├── pokemon-utils.ts  # Normalización de nombres para Pokédex
 │   ├── budget-logic.ts   # Cálculo de presupuestos y arrastre mensual
 │   ├── stats-logic.ts    # Agregaciones de portfolio y valor total
 │   ├── proxy-utils.ts    # Procesamiento de metadatos para proxies
@@ -117,6 +118,7 @@ Permiten crear colecciones como "Todos los Pikachu" sin añadir cartas una a una
     2.  El endpoint de sincronización (`/api/sync/collection-cards`) busca en TCGdex cartas que cumplan el filtro.
     3.  Las descarga a la tabla `cards`.
     4.  La vista de colección hace una query dinámica: `SELECT * FROM cards WHERE name LIKE '%Pikachu%'`.
+    5.  **Pokédex Nacional**: Para colecciones globales, se realiza un `LEFT JOIN` ultra-robusto con `pokemon_species`. La lógica normaliza nombres (eliminando espacios, guiones, puntos y acentos) tanto en la tabla de cartas como en la de especies para garantizar un matching del 100% (aprox. 1025 especies).
 
 ### 3. Internacionalización (i18n)
 Sistema híbrido personalizado para máximo rendimiento sin overhead de frameworks pesados.

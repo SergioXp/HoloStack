@@ -1,3 +1,33 @@
+### [0.8.2] - 2026-01-15
+
+### ✨ Pokédex Nacional (1025) y Matching de Especies Potenciado
+
+**Fecha**: 2026-01-15
+
+#### Cambios
+- **Colección Nacional Completa (1025 Pokémon)**: 
+    - Reescritura del algoritmo de matching para colecciones automáticas.
+    - **Normalización Agresiva**: El sistema ahora ignora apóstrofes ("Farfetch'd"), puntos ("Mr. Mime"), géneros ("Nidoran♂"), acentos ("Flabébé") y guiones.
+    - Esto garantiza un matching cercano al 100% de las especies existentes (1025 Pokémon).
+- **Ordenamiento Pokedex Prioritario**:
+    - Integración de `nationalId` en la API de colecciones.
+    - El centro de impresión (Proxies) ahora utiliza el ID Nacional como criterio de ordenación primario, asegurando que Bulbasaur (#001) siempre sea el primero, independientemente del set.
+- **Corrección de Siluetas y Artes**:
+    - Nuevo endpoint `/api/pokemon/species` para resolución de imágenes oficiales.
+    - Soporte para prefijos complejos en el buscador de especies (ej: "Teal Mask", "Bloodmoon", "Rapid Strike").
+    - Corrección de errores 404 al visualizar siluetas en etiquetas de impresión.
+
+#### Archivos Modificados
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `src/app/api/collections/[id]/route.ts` | API | Nueva lógica de JOIN ultra-robusta con `pokemon_species`. |
+| `src/app/api/pokemon/species/route.ts` | API | Endpoint de resolución de especies con limpieza de variantes. |
+| `src/app/proxies/page.tsx` | UI | Ordenación por `nationalId` y limpieza de nombres para siluetas. |
+
+#### Notas Técnicas
+- **JOIN Performance**: Se optimizó la consulta SQL con múltiples niveles de `replace()` para realizar el matching en una sola pasada de base de datos.
+- **Data Integrity**: Se añadió el campo `nationalId` al esquema de respuesta para facilitar el consumo en el frontend sin peticiones adicionales.
+
 ### [0.8.1] - 2026-01-15
 
 ### ✨ Coleccionismo Múltiple (Stacking) y Notas Privadas

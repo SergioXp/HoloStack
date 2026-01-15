@@ -23,20 +23,23 @@ Ejecuta este workflow cada vez que termines un desarrollo, refactorización o co
 - **Lógica de Negocio**: Describir nuevas funciones puras, utilidades o procesos complejos (ej: sistemas de arrastre, lógica de precios).
 - **Diagramas**: Actualizar diagramas Mermaid si ha cambiado la relación entre tablas o el flujo de datos principal.
 
-### 4. 🔌 Actualización de API_REFERENCE.md
+### 4. 📔 Actualización de UTILITIES.md
+- **Nuevas Utilidades**: Si se han creado o modificado funciones en `src/lib`, actualizar su descripción en el diccionario para que otros desarrolladores entiendan su propósito.
+
+### 5. 🔌 Actualización de API_REFERENCE.md
 - **Nuevos Endpoints**: Registrar cada nueva ruta API con su verbo HTTP, descripción y ejemplo de Body/Response.
 - **Cambios en Payload**: Si se ha modificado la respuesta de un endpoint existente (ej: añadir campos de histórico), reflejarlo en el documento.
 
-### 5. 🛡️ Actualización de TESTS.md
+### 6. 🛡️ Actualización de TESTS.md
 - **Nuevas Suites**: Añadir descripción de los nuevos archivos `.test.ts` creados.
 - **Fases de Calidad**: Marcar los items correspondientes en el "Plan de Testing Futuro".
 - **Estrategia**: Si se ha cambiado la forma de testear algo (ej: mockear global fetch), anotarlo en la sección de estrategia.
 
-### 6. 🌐 Internacionalización (i18n)
+### 7. 🌐 Internacionalización (i18n)
 - **Sincronización**: Verificar que todas las claves nuevas en `src/locales/es.json` han sido portadas y traducidas en `src/locales/en.json`.
 - **Hardcoding**: Asegurar que no hay textos literales en la UI; todo debe pasar por el hook `useI18n`.
 
-### 7. 📜 CHANGELOG.md (Si existe)
+### 8. 📜 CHANGELOG.md (Si existe)
 - Añadir entrada bajo la categoría correspondiente (✨ Feature, ♻️ Refactor, 🐛 Bugfix).
 
 ## 🚀 Emojis para Commit/Documentación

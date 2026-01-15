@@ -92,6 +92,9 @@ Para robustecer la aplicación de forma progresiva sin detener el desarrollo de 
 - [x] **API Endpoint Sincronización (`/api/sync/collection-cards`)**:
     - [x] Testear que el filtrado en memoria respeta la lógica (ej: "Solo Pikachus") - *Refactorizado a `src/lib/sync-logic.ts`*.
     - [x] Verificar que no se duplican registros si se corre el sync dos veces.
+- [x] **Matching de Pokédex Nacional**:
+    - [x] Validar normalización de nombres complejos (Mr. Mime, Nidoran♂) en el join SQL.
+    - [x] Asegurar que el conteo total de especies alcanza los 1025 Pokémon esperados.
 
 ### Fase 2: Flujos Críticos de Usuario (Corto Plazo)
 *Objetivo: Proteger las acciones más destructivas o importantes para el usuario.*

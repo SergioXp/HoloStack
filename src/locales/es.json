@@ -618,7 +618,9 @@
             "margin": "Margen",
             "gap": "Espacio",
             "inkSaving": "Ahorro Tinta",
-            "import": "Importar Colección"
+            "import": "Importar Colección",
+            "groupDuplicates": "Agrupar Duplicados",
+            "showSilhouette": "Ver Silueta"
         },
         "textCard": {
             "weak": "Debilidad",

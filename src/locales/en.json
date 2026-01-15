@@ -618,7 +618,9 @@
             "margin": "Margin",
             "gap": "Gap",
             "inkSaving": "Ink Saving",
-            "import": "Import Collection"
+            "import": "Import Collection",
+            "groupDuplicates": "Group Duplicates",
+            "showSilhouette": "Show Silhouette"
         },
         "textCard": {
             "weak": "Weakness",

@@ -16,6 +16,7 @@ import { TextProxyCard } from "@/components/TextProxyCard";
 import { CollectionSelectorModal } from "@/components/CollectionSelectorModal";
 import { cn } from "@/lib/utils";
 import { useI18n } from "@/lib/i18n";
+import { cleanNameForSpecies } from "@/lib/pokemon-utils";
 
 interface SearchResult {
     id: string;
@@ -32,9 +33,36 @@ interface SearchResult {
     abilities?: any[];
     weaknesses?: any[];
     retreatCost?: string[];
+    nationalId?: number;
 }
 
 type PrintMode = "standard" | "text-only" | "label";
+
+function LabelPokemonArt({ name }: { name: string }) {
+    const [art, setArt] = useState<string | null>(null);
+
+    useEffect(() => {
+        const cleanedName = cleanNameForSpecies(name);
+        fetch(`/api/pokemon/species?name=${encodeURIComponent(cleanedName)}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.artwork) setArt(data.artwork);
+            })
+            .catch(() => { });
+    }, [name]);
+
+    if (!art) return null;
+
+    return (
+        <div className="absolute -bottom-1 -right-1 h-16 w-16 overflow-hidden pointer-events-none opacity-15">
+            <img
+                src={art}
+                alt=""
+                className="w-full h-full object-contain grayscale brightness-0 select-none"
+            />
+        </div>
+    );
+}
 
 export default function ProxiesPage() {
     const { t } = useI18n();
@@ -46,6 +74,8 @@ export default function ProxiesPage() {
     // Print Settings
     const [printMode, setPrintMode] = useState<PrintMode>("standard");
     const [inkSaving, setInkSaving] = useState(false);
+    const [groupDuplicates, setGroupDuplicates] = useState(false);
+    const [showSilhouette, setShowSilhouette] = useState(false);
     const [printPadding, setPrintPadding] = useState(10); // mm
     const [printGap, setPrintGap] = useState(1); // mm
 
@@ -109,21 +139,30 @@ export default function ProxiesPage() {
                     let count = 1;
 
                     if (ownership) {
-                        count = Object.values(ownership).reduce((acc: number, val: any) => acc + (val.quantity || 0), 0);
+                        const total = Object.values(ownership).reduce((acc: number, val: any) => acc + (val.quantity || 0), 0);
+                        if (total > 0) count = total;
                     }
 
+                    // Forzar siempre al menos 1 para que salgan los "huecos"
                     if (count < 1) count = 1;
 
                     for (let i = 0; i < count; i++) {
-                        cardsToAdd.push(card);
+                        cardsToAdd.push({
+                            ...card,
+                            nationalId: card.nationalId, // Asegurarnos de pasar el ID de Pokedex
+                            setName: data.setName || card.setName || "Unknown Set",
+                            setSeries: card.setSeries || ""
+                        });
                     }
                 });
 
                 setSelectedCards(prev => [...prev, ...cardsToAdd]);
+            } else {
+                console.warn("[Proxies] No cards found in response or cards is not an array");
             }
         } catch (error) {
             console.error("Error importing collection:", error);
-            alert("Error importing collection");
+            alert("Error importing collection: " + error);
         } finally {
             setIsImporting(false);
         }
@@ -192,6 +231,30 @@ export default function ProxiesPage() {
                                         />
                                         <Label htmlFor="ink-saving" className="text-[10px] text-slate-500 font-medium uppercase tracking-wider cursor-pointer">
                                             {t("proxies.toolbar.inkSaving")}
+                                        </Label>
+                                    </div>
+
+                                    <div className="flex items-center gap-2">
+                                        <Switch
+                                            id="group-duplicates"
+                                            checked={groupDuplicates}
+                                            onCheckedChange={setGroupDuplicates}
+                                            className="scale-75 data-[state=checked]:bg-blue-500"
+                                        />
+                                        <Label htmlFor="group-duplicates" className="text-[10px] text-slate-500 font-medium uppercase tracking-wider cursor-pointer">
+                                            {t("proxies.toolbar.groupDuplicates")}
+                                        </Label>
+                                    </div>
+
+                                    <div className="flex items-center gap-2">
+                                        <Switch
+                                            id="show-silhouette"
+                                            checked={showSilhouette}
+                                            onCheckedChange={setShowSilhouette}
+                                            className="scale-75 data-[state=checked]:bg-purple-500"
+                                        />
+                                        <Label htmlFor="show-silhouette" className="text-[10px] text-slate-500 font-medium uppercase tracking-wider cursor-pointer">
+                                            {t("proxies.toolbar.showSilhouette")}
                                         </Label>
                                     </div>
 
@@ -328,91 +391,123 @@ export default function ProxiesPage() {
                                 className={cn("grid content-start print:block", printMode === "label" ? "grid-cols-4" : "grid-cols-3")}
                                 style={{ gap: `${printGap}mm` }}
                             >
-                                {selectedCards.map((card, idx) => {
-                                    const imgs = getImages(card.images);
-                                    const imgUrl = imgs.large || imgs.small;
+                                {(() => {
+                                    let cardsToRender = [...selectedCards];
 
-                                    if (printMode === "text-only") {
+                                    // Robust grouping
+                                    if (groupDuplicates) {
+                                        const seen = new Set();
+                                        cardsToRender = cardsToRender.filter(card => {
+                                            const key = `${card.id}-${card.number}-${card.name}`;
+                                            if (seen.has(key)) return false;
+                                            seen.add(key);
+                                            return true;
+                                        });
+                                    }
+
+                                    // Numerical sorting for set labels (Pokedex priority)
+                                    cardsToRender.sort((a, b) => {
+                                        if (a.nationalId !== undefined && b.nationalId !== undefined) {
+                                            return a.nationalId - b.nationalId;
+                                        }
+                                        const numA = parseInt(a.number.replace(/\D/g, '')) || 0;
+                                        const numB = parseInt(b.number.replace(/\D/g, '')) || 0;
+                                        if (numA !== numB) return numA - numB;
+                                        return a.number.localeCompare(b.number);
+                                    });
+
+                                    return cardsToRender.map((card, idx) => {
+                                        const imgs = getImages(card.images);
+                                        const imgUrl = imgs.large || imgs.small;
+
+                                        if (printMode === "text-only") {
+                                            return (
+                                                <div
+                                                    key={`${card.id}-${idx}-txt`}
+                                                    className="relative group print:inline-block print:float-left print:m-0 break-inside-avoid"
+                                                    style={{
+                                                        width: "62.5mm",
+                                                        height: "88mm",
+                                                        marginBottom: `${printGap}mm`,
+                                                        marginRight: `${printGap}mm`
+                                                    }}
+                                                >
+                                                    <TextProxyCard card={card} />
+                                                    <div className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity print:hidden z-10">
+                                                        <Button variant="destructive" size="icon" className="h-6 w-6 rounded-full shadow-md" onClick={(e) => { e.stopPropagation(); removeCard(idx); }}>
+                                                            <X className="h-3 w-3" />
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            );
+                                        }
+
+                                        if (printMode === "label") {
+                                            return (
+                                                <div
+                                                    key={`${card.id}-${idx}-lbl`}
+                                                    className="relative group print:inline-block print:float-left print:m-0 border border-black p-2 flex flex-col justify-center items-center text-center break-inside-avoid text-black"
+                                                    style={{
+                                                        width: "44mm",
+                                                        height: "25mm",
+                                                        marginBottom: `${printGap}mm`,
+                                                        marginRight: `${printGap}mm`
+                                                    }}
+                                                >
+                                                    <div className="absolute top-1 left-1.5 text-[8px] font-mono opacity-30">#{card.setId}-{card.number}</div>
+                                                    <div className="font-black text-xl leading-none mt-1">
+                                                        #{(card.nationalId !== undefined ? card.nationalId.toString() : card.number).padStart(3, '0')}
+                                                    </div>
+                                                    <div className="text-[11px] font-bold truncate w-full mt-0.5 px-2">{card.name}</div>
+                                                    <div className="text-[7px] uppercase tracking-widest opacity-40 mt-0.5">{card.setName}</div>
+
+                                                    {showSilhouette && <LabelPokemonArt name={card.name} />}
+
+                                                    <div className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity print:hidden z-10">
+                                                        <Button variant="destructive" size="icon" className="h-5 w-5 rounded-full shadow-md" onClick={(e) => { e.stopPropagation(); removeCard(idx); }}>
+                                                            <X className="h-3 w-3" />
+                                                        </Button>
+                                                    </div>
+                                                </div>
+                                            );
+                                        }
+
+                                        // Standard Image Mode
                                         return (
                                             <div
-                                                key={`${card.id}-${idx}-txt`}
+                                                key={`${card.id}-${idx}`}
                                                 className="relative group print:inline-block print:float-left print:m-0 break-inside-avoid"
                                                 style={{
-                                                    width: "63mm",
+                                                    width: "62.5mm",
                                                     height: "88mm",
                                                     marginBottom: `${printGap}mm`,
                                                     marginRight: `${printGap}mm`
                                                 }}
                                             >
-                                                <TextProxyCard card={card} />
-                                                <div className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity print:hidden z-10">
-                                                    <Button variant="destructive" size="icon" className="h-6 w-6 rounded-full shadow-md" onClick={(e) => { e.stopPropagation(); removeCard(idx); }}>
+                                                {imgUrl && (
+                                                    <img
+                                                        src={imgUrl}
+                                                        alt={card.name}
+                                                        className="w-full h-full object-cover print:object-cover"
+                                                    />
+                                                )}
+                                                <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity print:hidden">
+                                                    <Button
+                                                        variant="destructive"
+                                                        size="icon"
+                                                        className="h-6 w-6 rounded-full shadow-md"
+                                                        onClick={(e) => { e.stopPropagation(); removeCard(idx); }}
+                                                    >
                                                         <X className="h-3 w-3" />
                                                     </Button>
                                                 </div>
+
+                                                {/* Cut Marks (optional visuals for screen) */}
+                                                <div className="absolute inset-0 border border-slate-200 pointer-events-none print:border print:border-slate-300 print:opacity-50" />
                                             </div>
                                         );
-                                    }
-
-                                    if (printMode === "label") {
-                                        return (
-                                            <div
-                                                key={`${card.id}-${idx}-lbl`}
-                                                className="relative group print:inline-block print:float-left print:m-0 border border-black p-2 flex flex-col justify-center items-center text-center break-inside-avoid text-black"
-                                                style={{
-                                                    width: "48mm",
-                                                    height: "25mm",
-                                                    marginBottom: `${printGap}mm`,
-                                                    marginRight: `${printGap}mm`
-                                                }}
-                                            >
-                                                <div className="font-black text-2xl leading-none">#{card.number}</div>
-                                                <div className="text-sm font-bold truncate w-full mt-1">{card.name}</div>
-
-                                                <div className="absolute -top-2 -right-2 opacity-0 group-hover:opacity-100 transition-opacity print:hidden z-10">
-                                                    <Button variant="destructive" size="icon" className="h-5 w-5 rounded-full shadow-md" onClick={(e) => { e.stopPropagation(); removeCard(idx); }}>
-                                                        <X className="h-3 w-3" />
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                        );
-                                    }
-
-                                    // Standard Image Mode
-                                    return (
-                                        <div
-                                            key={`${card.id}-${idx}`}
-                                            className="relative group print:inline-block print:float-left print:m-0 break-inside-avoid"
-                                            style={{
-                                                width: "63mm",
-                                                height: "88mm",
-                                                marginBottom: `${printGap}mm`,
-                                                marginRight: `${printGap}mm`
-                                            }}
-                                        >
-                                            {imgUrl && (
-                                                <img
-                                                    src={imgUrl}
-                                                    alt={card.name}
-                                                    className="w-full h-full object-cover print:object-cover"
-                                                />
-                                            )}
-                                            <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity print:hidden">
-                                                <Button
-                                                    variant="destructive"
-                                                    size="icon"
-                                                    className="h-6 w-6 rounded-full shadow-md"
-                                                    onClick={(e) => { e.stopPropagation(); removeCard(idx); }}
-                                                >
-                                                    <X className="h-3 w-3" />
-                                                </Button>
-                                            </div>
-
-                                            {/* Cut Marks (optional visuals for screen) */}
-                                            <div className="absolute inset-0 border border-slate-200 pointer-events-none print:border print:border-slate-300 print:opacity-50" />
-                                        </div>
-                                    );
-                                })}
+                                    })
+                                })()}
                             </div>
                         </div>
 
