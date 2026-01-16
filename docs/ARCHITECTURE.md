@@ -144,6 +144,11 @@ HoloStack implementa un sistema de presupuesto "inteligente" para coleccionistas
 Permite crear cartas de sustitución para testeo de mazos.
 *   **Parser**: `src/lib/proxy-utils.ts` extrae ataques, habilidades y costes de energía de los metadatos JSON para renderizar la `TextProxyCard` de forma legible y compacta.
 
+### 7. Sistema de Actualizaciones (Docker Hub)
+Para asegurar que los usuarios siempre tengan las últimas correcciones de la Pokédex.
+*   **Backend**: `/api/system/update-check` consulta los tags del repositorio en Docker Hub y compara la versión local (`src/lib/constants/version.ts`) con la remota.
+*   **Frontend**: `UpdateBanner.tsx` muestra un aviso dinámico si hay una versión superior, con instrucciones claras para ejecutar `docker compose pull` y `docker compose up -d` sin pérdida de datos.
+
 ### 5. Autenticación Dual
 Para facilitar el despliegue local (Docker en casa) y remoto (VPS).
 *   **Modo LOCAL**: `APP_MODE=LOCAL`. El backend asume usuario `guest`. No pide login. Ideal para un solo usuario en red casera.

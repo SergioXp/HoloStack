@@ -207,3 +207,10 @@ Añade item.
 ### `DELETE /api/wishlist`
 Elimina item.
 - **Query**: `?id=ID` o `?cardId=CARD_ID`
+
+---
+
+## ⚙️ System
+### `GET /api/system/update-check`
+Comprueba si hay una nueva versión disponible en Docker Hub comparando con la versión local.
+- **Respuesta**: `{ currentVersion, latestVersion, hasUpdate, lastUpdated, dockerImage }`

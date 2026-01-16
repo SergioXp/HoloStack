@@ -61,6 +61,13 @@ Tests básicos de infraestructura.
 
 *   `cn`: Verifica que la utilidad de mezcla de clases Tailwind (clsx + twMerge) resuelva conflictos correctamente (ej: `p-4` vs `p-2`).
 
+### 7. Sistema de Versiones (`src/lib/version-utils.test.ts`)
+Tests para la lógica de detección de actualizaciones.
+
+*   `hasNewerVersion`: Comparación semántica de versiones (major, minor, patch).
+*   `sortVersionTags`: Ordenamiento de tags de Docker Hub de mayor a menor versión.
+*   **Casos Borde**: Manejo de prefijo `v`, versiones iguales, filtrado de tags no semánticos (`latest`, `dev`).
+
 ---
 
 ## 🚀 Cómo Ejecutar los Tests

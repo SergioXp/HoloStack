@@ -73,3 +73,14 @@ Este documento sirve como referencia para entender las funciones puras, lógica 
 ### 🎨 `utils.ts`
 *   **Propósito**: Utilidad `cn` (classnames + tailwind-merge).
 *   **Lógica**: Resolución de conflictos de clases Tailwind.
+
+### 🔢 `constants/version.ts`
+*   **Propósito**: Constantes de versión de la aplicación.
+*   **Exports**: `APP_VERSION` (string) y `DOCKER_IMAGE` (nombre del repositorio Docker Hub).
+*   **Uso**: Comparación con Docker Hub para detectar actualizaciones disponibles.
+
+### 🔄 `version-utils.ts`
+*   **Propósito**: Lógica de comparación de versiones semánticas.
+*   **Funciones**:
+    *   `hasNewerVersion(current, remote)`: Devuelve `true` si la versión remota es mayor.
+    *   `sortVersionTags(tags)`: Ordena un array de tags de versión de mayor a menor.

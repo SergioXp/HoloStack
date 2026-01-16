@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
+import { UpdateBanner } from "@/components/UpdateBanner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { I18nProvider } from "@/lib/i18n";
 
@@ -46,6 +47,7 @@ export default function RootLayout({
           themes={["dark", "light", "fire", "water", "grass", "electric", "psychic"]}
         >
           <I18nProvider>
+            <UpdateBanner />
             <Header />
             {children}
           </I18nProvider>

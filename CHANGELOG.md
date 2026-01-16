@@ -1,3 +1,23 @@
+### [0.8.3] - 2026-01-15
+
+### ✨ Sistema de Comprobación de Actualizaciones (Docker Hub)
+
+**Fecha**: 2026-01-15
+
+#### Cambios
+- **Auto-check de Versiones**: La aplicación ahora consulta automáticamente Docker Hub para verificar si existe una imagen más reciente.
+- **Banner de Notificación**: Implementación de un banner dinámico en el layout principal que avisa cuando hay una actualización disponible.
+- **Guía de Actualización**: Incluido un modal con instrucciones paso a paso para actualizar contenedores Docker (`pull` & `up -d`) sin riesgo de pérdida de datos.
+- **Normalización de Versión**: Sincronización de versiones en `package.json`, Roadmap y constantes internas.
+
+#### Archivos Modificados
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `src/app/api/system/update-check/route.ts` | API | Backend para consulta a Docker Hub. |
+| `src/components/UpdateBanner.tsx` | UI | Componente visual y modal de instrucciones. |
+| `src/lib/constants/version.ts` | Config | Constantes de versión y nombre de imagen. |
+| `src/app/layout.tsx` | UI | Integración del banner en el flujo de renderizado. |
+
 ### [0.8.2] - 2026-01-15
 
 ### ✨ Pokédex Nacional (1025) y Matching de Especies Potenciado

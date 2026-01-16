@@ -883,5 +883,17 @@
         "7": "Gen 7 (Alola)",
         "8": "Gen 8 (Galar)",
         "9": "Gen 9 (Paldea)"
+    },
+    "system": {
+        "updateAvailable": "Nueva versión disponible",
+        "current": "Tu versión",
+        "howToUpdate": "¿Cómo actualizar?",
+        "updateTitle": "Actualizar HoloStack",
+        "updateDesc": "Se ha detectado una versión más reciente en Docker Hub.",
+        "updateSteps": "Pasos para actualizar:",
+        "step1": "Abre una terminal en la carpeta de tu servidor.",
+        "step2": "Descarga la nueva imagen:",
+        "step3": "Reinicia el contenedor:",
+        "updateNote": "Tus datos están seguros en la carpeta /data y no se perderán al actualizar."
     }
 }
