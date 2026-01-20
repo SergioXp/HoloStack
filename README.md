@@ -1,6 +1,6 @@
 <div align="center">
 
-  <img src="https://raw.githubusercontent.com/SergioXp/HoloStack/main/banner.png" alt="HoloStack Banner" width="100%" />
+  <img src="https://raw.githubusercontent.com/SergioXp/HoloStack/main/images_github/main.png" alt="HoloStack Banner" width="100%" />
   
   # HoloStack
   
@@ -14,6 +14,8 @@
     <b>Track. Analyze. Master your Collection.</b><br>
     HoloStack is the definitive tool for serious collectors, combining professional inventory management with real-time market analytics.
   </p>
+
+  **🇺🇸 Read in English** | [🇪🇸 Leer en Español](README.es.md)
 
   [📥 Download Desktop App](#-get-started) • [🐳 Run with Docker](#-self-hosted-docker) • [💬 Join Community](../../discussions)
 
@@ -42,15 +44,27 @@ Forget spreadsheets and slow websites. HoloStack is built for speed, aesthetics,
 
 ---
 
-## 📸 Screenshots
+## 📸 Gallery
 
-| Dashboard & Analytics | Collection View |
+<details>
+<summary><b>Click to expand all screenshots</b></summary>
+<br>
+
+| **Collection Overview** | **Detailed Card Analytics** |
 |:---:|:---:|
-| <img src="https://raw.githubusercontent.com/SergioXp/HoloStack/main/screenshots/dashboard.png" alt="Dashboard" width="400"/> | <img src="https://raw.githubusercontent.com/SergioXp/HoloStack/main/screenshots/collection.png" alt="Collection" width="400"/> |
-| **Card Details & Pricing** | **Bulk Import Tools** |
-| <img src="https://raw.githubusercontent.com/SergioXp/HoloStack/main/screenshots/card-detail.png" alt="Card Detail" width="400"/> | <img src="https://raw.githubusercontent.com/SergioXp/HoloStack/main/screenshots/bulk.png" alt="Bulk Import" width="400"/> |
+| <img src="https://raw.githubusercontent.com/SergioXp/HoloStack/main/images_github/collections.png" alt="Collections" width="400"/> | <img src="https://raw.githubusercontent.com/SergioXp/HoloStack/main/images_github/card_data.png" alt="Card Data" width="400"/> |
 
-> *Note: Place your screenshots in a `screenshots` folder in the repo to make these appear!*
+| **Deep Dive: Inside a Binder** | **Portfolio & Budgeting** |
+|:---:|:---:|
+| <img src="https://raw.githubusercontent.com/SergioXp/HoloStack/main/images_github/collections_inside.png" alt="Inside Collection" width="400"/> | <img src="https://raw.githubusercontent.com/SergioXp/HoloStack/main/images_github/budgets.png" alt="Budgets & Portfolio" width="400"/> |
+
+| **Virtual Binder View** | **Proxy Printing Tools** |
+|:---:|:---:|
+| <img src="https://raw.githubusercontent.com/SergioXp/HoloStack/main/images_github/binder.png" alt="Binder View" width="400"/> | <img src="https://raw.githubusercontent.com/SergioXp/HoloStack/main/images_github/print.png" alt="Proxy Printing" width="400"/> |
+
+</details>
+
+*&nbsp;&nbsp;&nbsp;&nbsp;👆 Click the arrow above to see the full visual tour!*
 
 ---
 
