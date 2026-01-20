@@ -20,7 +20,7 @@ export function hasNewerVersion(current: string, remote: string): boolean {
  */
 export function sortVersionTags(tags: string[]): string[] {
     return tags
-        .filter(name => /^\d+\.\d+\.\d+$/.test(name) || /^v\d+\.\d+\.\d+$/.test(name))
+        .filter(name => /^\d+\.\d+\.\d+$/.test(name) || /^v\d+\.\d+\.\d+$/.test(name) || /^\d{8}-\d{4}$/.test(name))
         .sort((a, b) => {
             const clean = (v: string) => v.replace(/^v/, '').split('.').map(Number);
             const va = clean(a);

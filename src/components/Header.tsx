@@ -91,6 +91,8 @@ export default function Header() {
     return (
         <header className={cn(
             "sticky top-0 z-50 w-full border-b backdrop-blur-xl transition-all duration-300",
+            "sticky top-0 z-50 w-full border-b backdrop-blur-xl transition-all duration-300",
+            // Add padding-left when in Electron mode to avoid traffic lights overlap - Handled in globals.css via body.is-electron
             isHome
                 ? "border-transparent bg-linear-to-b from-background/80 via-background/40 to-transparent"
                 : "border-border bg-background/80"

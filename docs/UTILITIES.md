@@ -81,8 +81,12 @@ Este documento sirve como referencia para entender las funciones puras, lógica 
 
 ### 🔢 `constants/version.ts`
 *   **Propósito**: Constantes de versión de la aplicación.
-*   **Exports**: `APP_VERSION` (string) y `DOCKER_IMAGE` (nombre del repositorio Docker Hub).
-*   **Uso**: Comparación con Docker Hub para detectar actualizaciones disponibles.
+*   **Exports**: `APP_VERSION` (string), `DOCKER_IMAGE` (nombre en ghcr.io) y `GITHUB_REPO` (SergioXp/HoloStack).
+*   **Uso**: Comparación con GitHub Releases para detectar actualizaciones disponibles.
+
+### 🧩 `electron/main.ts`
+*   **Propósito**: Orquestador del modo escritorio.
+*   **Lógica**: Inicia el servidor Next.js como subproceso, asigna un puerto libre dinámicamente, y gestiona la persistencia de la base de datos en las carpetas nativas del sistema operativo.
 
 ### 🔄 `version-utils.ts`
 *   **Propósito**: Lógica de comparación de versiones semánticas.

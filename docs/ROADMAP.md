@@ -2,8 +2,8 @@
 
 Este documento es la fuente de verdad sobre el estado del proyecto, las funcionalidades implementadas y la visión futura.
 
-> **Versión Actual**: 0.9.1
-> **Última Actualización**: 20 Enero 2026 (User Changelog & i18n Fixes)
+> **Versión Actual**: 1.0.0
+> **Última Actualización**: 20 Enero 2026 (Launch: HoloStack Desktop & CI/CD)
 
 ---
 
@@ -50,6 +50,14 @@ Este documento es la fuente de verdad sobre el estado del proyecto, las funciona
 - [x] **Sistema de Backups**: Exportación e importación completa de datos de usuario en JSON.
 - [x] **Internacionalización (i18n)**: Soporte completo Español/Inglés en toda la interfaz y datos.
 - [x] **Docker**: Despliegue contenerizado listo para producción.
+- [x] **CI/CD Global**: Automatización completa con GitHub Actions para builds de Desktop y Docker.
+
+### 6. HoloStack Desktop (Electron)
+- [x] **App Nativa**: Ejecución standalone sin dependencia de navegador o Docker externo.
+- [x] **Persistencia Nativa**: Gestión automática de la base de datos en carpetas del sistema (`%APPDATA%` / `Library`).
+- [x] **Auto-Update**: Sistema de detección de nuevas versiones via GitHub Releases.
+- [x] **Multiplataforma**: Instaladores oficiales para Windows (.exe), Mac (.dmg) y Linux (.AppImage).
+- [x] **Branding**: Iconos personalizados y optimización de ventana nativa.
 
 ---
 

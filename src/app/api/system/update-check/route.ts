@@ -1,42 +1,39 @@
 import { NextResponse } from "next/server";
-import { APP_VERSION, DOCKER_IMAGE } from "@/lib/constants/version";
-import { hasNewerVersion, sortVersionTags } from "@/lib/version-utils";
+import { APP_VERSION, DOCKER_IMAGE, GITHUB_REPO } from "@/lib/constants/version";
+import { hasNewerVersion } from "@/lib/version-utils";
 
 export const dynamic = "force-dynamic";
 
 export async function GET() {
     try {
-        // Consultamos la API pública de Docker Hub para el repositorio
-        const response = await fetch(`https://hub.docker.com/v2/repositories/${DOCKER_IMAGE}/tags?page_size=10&ordering=last_updated`, {
-            next: { revalidate: 3600 } // Cachear 1 hora
+        // Consultamos la API de GitHub Releases
+        const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/releases/latest`, {
+            next: { revalidate: 3600 }, // Cachear 1 hora
+            headers: {
+                'Accept': 'application/vnd.github.v3+json',
+                // Opcional: User-Agent es requerido por GitHub API
+                'User-Agent': 'HoloStack-App'
+            }
         });
 
         if (!response.ok) {
-            return NextResponse.json({ error: "No se pudo consultar Docker Hub" }, { status: 500 });
+            // Si falla GitHub (ej: rate limit), intentamos un fallback silencioso o error controlado
+            return NextResponse.json({ error: "No se pudo consultar GitHub Releases" }, { status: response.status === 403 ? 200 : 500 });
         }
 
         const data = await response.json();
-        const tags = data.results || [];
+        const latestVersion = data.tag_name?.replace('v', '') || data.name?.replace('v', '') || "unknown";
 
-        // Ordenar tags semánticos de mayor a menor
-        const tagNames = tags.map((t: { name: string }) => t.name);
-        const versionTags = sortVersionTags(tagNames);
-
-        const latestVersion = versionTags[0] || "unknown";
-
-        // También podemos ver cuándo se actualizó 'latest'
-        const latestTag = tags.find((t: { name: string }) => t.name === 'latest');
-        const lastUpdated = latestTag ? latestTag.last_updated : null;
-
-        // Comparar versiones usando la utilidad testeada
+        // Comparar versiones
         const hasUpdate = latestVersion !== "unknown" && hasNewerVersion(APP_VERSION, latestVersion);
 
         return NextResponse.json({
             currentVersion: APP_VERSION,
-            latestVersion: latestVersion === "unknown" ? (latestTag ? "latest" : "unknown") : latestVersion,
+            latestVersion: latestVersion,
             hasUpdate,
-            lastUpdated,
-            dockerImage: DOCKER_IMAGE
+            lastUpdated: data.published_at,
+            dockerImage: DOCKER_IMAGE,
+            releaseUrl: data.html_url
         });
     } catch (error) {
         console.error("Update check error:", error);

@@ -886,15 +886,16 @@
     },
     "system": {
         "updateAvailable": "New version available",
-        "current": "Your version",
+        "current": "System version",
         "howToUpdate": "How to update?",
         "updateTitle": "Update HoloStack",
-        "updateDesc": "A newer version has been detected on Docker Hub.",
-        "updateSteps": "Steps to update:",
+        "updateDesc": "A more recent version has been detected.",
+        "updateSteps": "Update steps:",
         "step1": "Open a terminal in your server folder.",
         "step2": "Pull the new image:",
         "step3": "Restart the container:",
-        "updateNote": "Your data is safe in the /data folder and will not be lost during the update."
+        "updateNote": "Your data is safe in the /data folder and will not be lost during the update.",
+        "download": "Download on GitHub"
     },
     "importPage": {
         "title": "Import Cardmarket Order",
@@ -945,9 +946,18 @@
         }
     },
     "changelog": {
-        "title": "What's New & Updates",
-        "action": "See What's New",
+        "title": "News & Updates",
+        "action": "What's New",
         "description": "Discover the latest improvements added to HoloStack.",
+        "v1_0_0": {
+            "title": "HoloStack Desktop Launch",
+            "features": [
+                "Official launch of the native application for Windows, macOS, and Linux.",
+                "Direct installation without Docker or external browsers required.",
+                "Full automation (CI/CD) for containerized and desktop versions.",
+                "Unified update source via GitHub Releases."
+            ]
+        },
         "v0_9_1": {
             "title": "Interactive Changelog History",
             "features": [

@@ -130,6 +130,18 @@ Para robustecer la aplicación de forma progresiva sin detener el desarrollo de 
 - [ ] **E2E (Playwright/Cypress)**:
     - [ ] Flujo completo: Crear Colección -> Añadir Carta -> Ver en Portfolio.
 
+### Fase 5: Aplicación de Escritorio (Electron)
+*Objetivo: Asegurar que el empaquetado y la persistencia nativa funcionan en todos los sistemas.*
+
+- [x] **Persistencia Nativa**:
+    - [x] Verificar que la base de datos se crea en la carpeta de usuario (`userData`).
+    - [x] Comprobar que los datos persisten al cerrar y volver a abrir la app.
+- [x] **Build & Packaging**:
+    - [x] Verificación de la compilación de módulos nativos (`better-sqlite3`).
+    - [x] Test de lanzamiento del subproceso Next.js en entorno empaquetado (.asar).
+- [x] **Auto-Update**:
+    - [x] Test de integración con GitHub API para detección de releases.
+
 ### Fase 4: Funcionalidades Avanzadas (Completado)
 *Objetivo: Cubrir los módulos secundarios pero importantes para la retención del usuario.*
 

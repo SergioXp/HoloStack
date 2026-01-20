@@ -889,12 +889,13 @@
         "current": "Tu versión",
         "howToUpdate": "¿Cómo actualizar?",
         "updateTitle": "Actualizar HoloStack",
-        "updateDesc": "Se ha detectado una versión más reciente en Docker Hub.",
+        "updateDesc": "Se ha detectado una versión más reciente.",
         "updateSteps": "Pasos para actualizar:",
         "step1": "Abre una terminal en la carpeta de tu servidor.",
         "step2": "Descarga la nueva imagen:",
         "step3": "Reinicia el contenedor:",
-        "updateNote": "Tus datos están seguros en la carpeta /data y no se perderán al actualizar."
+        "updateNote": "Tus datos están seguros en la carpeta /data y no se perderán al actualizar.",
+        "download": "Descargar en GitHub"
     },
     "importPage": {
         "title": "Importar Pedido de Cardmarket",
@@ -948,6 +949,15 @@
         "title": "Novedades & Actualizaciones",
         "action": "Ver Novedades",
         "description": "Descubre las últimas mejoras añadidas a HoloStack.",
+        "v1_0_0": {
+            "title": "Lanzamiento HoloStack Desktop",
+            "features": [
+                "Lanzamiento oficial de la aplicación nativa para Windows, macOS y Linux.",
+                "Instalación directa sin necesidad de Docker o navegadores externos.",
+                "Automatización total (CI/CD) para versiones contenerizadas y de escritorio.",
+                "Nueva fuente unificada de actualizaciones vía GitHub Releases."
+            ]
+        },
         "v0_9_1": {
             "title": "Historial de Cambios Interactivo",
             "features": [

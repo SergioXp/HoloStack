@@ -58,4 +58,4 @@ Configurar `electron-builder` para generar los instaladores:
 La migración a Electron es **viable y recomendada** si el público objetivo no tiene conocimientos técnicos. Aunque aumenta la complejidad del desarrollo inicial (especialmente por la compilación de módulos nativos), la experiencia de usuario final es infinitamente superior.
 
 ---
-*Documento generado el 14 de enero de 2026 para el proyecto PokemonTCG Collection Manager.*
+*Documento generado el 14 de enero de 2026 para el proyecto HoloStack Collection Manager.*

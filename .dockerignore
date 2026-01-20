@@ -3,6 +3,11 @@ node_modules
 .next
 build
 dist
+electron
+dist-electron
+win-unpacked
+linux-unpacked
+mac-unpacked
 
 # Control de versiones
 .git

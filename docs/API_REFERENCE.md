@@ -221,5 +221,5 @@ Elimina item.
 
 ## ⚙️ System
 ### `GET /api/system/update-check`
-Comprueba si hay una nueva versión disponible en Docker Hub comparando con la versión local.
-- **Respuesta**: `{ currentVersion, latestVersion, hasUpdate, lastUpdated, dockerImage }`
+Comprueba si hay una nueva versión disponible en GitHub Releases comparando con la versión local. Devuelve la URL de descarga y metadatos de la imagen Docker.
+- **Respuesta**: `{ currentVersion, latestVersion, hasUpdate, lastUpdated, dockerImage, releaseUrl }`

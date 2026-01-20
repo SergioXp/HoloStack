@@ -52,3 +52,13 @@ data/*.sqlite
 *.swp
 *.swo
 
+
+# Electron
+/dist
+/dist-electron
+/win-unpacked
+/linux-unpacked
+/mac-unpacked
+
+# Build temps
+temp_native_build/

@@ -455,3 +455,8 @@
   background: rgba(139, 92, 246, 0.3);
   color: white;
 }
+
+/* Electron Traffic Lights Adjustments */
+body.is-electron header {
+  padding-left: 5rem;
+}

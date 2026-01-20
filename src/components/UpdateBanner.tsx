@@ -19,6 +19,7 @@ interface UpdateInfo {
     hasUpdate: boolean;
     lastUpdated: string | null;
     dockerImage: string;
+    releaseUrl?: string;
 }
 
 export function UpdateBanner() {
@@ -28,7 +29,6 @@ export function UpdateBanner() {
     const [dismissed, setDismissed] = useState(false);
 
     useEffect(() => {
-        // Solo comprobar si es modo producción o si el usuario quiere
         fetch("/api/system/update-check")
             .then(res => res.json())
             .then(data => {
@@ -116,18 +116,32 @@ export function UpdateBanner() {
                     </div>
 
                     <DialogFooter className="sm:justify-between flex items-center gap-2">
-                        <Button
-                            type="button"
-                            variant="secondary"
-                            onClick={() => window.open(`https://hub.docker.com/r/${update.dockerImage}`, '_blank')}
-                            className="text-xs"
-                        >
-                            <ExternalLink className="h-3 w-3 mr-2" />
-                            Docker Hub
-                        </Button>
+                        <div className="flex gap-2 w-full sm:w-auto">
+                            {update.releaseUrl && (
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    onClick={() => window.open(update.releaseUrl, '_blank')}
+                                    className="text-xs flex-1 sm:flex-none"
+                                >
+                                    <Download className="h-3 w-3 mr-2" />
+                                    {t('system.download')}
+                                </Button>
+                            )}
+                            <Button
+                                type="button"
+                                variant="secondary"
+                                onClick={() => window.open(`https://hub.docker.com/r/${update.dockerImage}`, '_blank')}
+                                className="text-xs flex-1 sm:flex-none"
+                            >
+                                <ExternalLink className="h-3 w-3 mr-2" />
+                                Docker Hub
+                            </Button>
+                        </div>
                         <Button
                             type="button"
                             onClick={() => setShowModal(false)}
+                            className="hidden sm:inline-flex"
                         >
                             {t('common.close')}
                         </Button>

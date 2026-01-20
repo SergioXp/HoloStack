@@ -1,10 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google"; // Ensure import exists if it was removed
 import "./globals.css";
 import Header from "@/components/Header";
 import { UpdateBanner } from "@/components/UpdateBanner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { I18nProvider } from "@/lib/i18n";
+import { ElectronDetector } from "@/components/ElectronDetector";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,6 +40,7 @@ export default function RootLayout({
         suppressHydrationWarning // Silence hydration warnings from extensions/fonts
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <ElectronDetector />
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

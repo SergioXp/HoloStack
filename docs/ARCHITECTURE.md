@@ -11,7 +11,8 @@ HoloStack está construido sobre un stack moderno y eficiente, priorizando el re
 ### Core
 *   **Framework**: [Next.js 14](https://nextjs.org/) (App Router) - Renderizado híbrido (SSR/CSR) y API Routes.
 *   **Lenguaje**: [TypeScript](https://www.typescriptlang.org/) - Tipado estático estricto para seguridad y DX.
-*   **Runtime**: Node.js (Compatible con Docker/Alpine).
+*   **Runtime**: Node.js (Compatible con Docker y Electron).
+*   **Desktop App**: [Electron](https://www.electronjs.org/) - Empaquetado nativo multiplataforma.
 
 ### Datos y Almacenamiento
 *   **Base de Datos**: [SQLite](https://www.sqlite.org/) - Base de datos local, ligera y de archivo único (`sqlite.db`). Ideal para auto-alojamiento por ser "zero-config".
@@ -61,8 +62,14 @@ src/
 │   ├── utils.ts          # Helpers generales (cn, formats)
 │   └── changelog-data.ts # Definición de versiones y datos de changelog
 ├── locales/              # Archivos JSON de traducción (es.json, en.json)
-└── services/             # Servicios de integración externa
-    └── tcgdex.ts         # Cliente tipado para API TCGdex
+├── services/             # Servicios de integración externa
+│   └── tcgdex.ts         # Cliente tipado para API TCGdex
+├── electron/             # Lógica del Proceso Principal de Electron
+│   ├── main.ts           # Entry point y gestión de subproceso Next.js
+│   └── tsconfig.json     # Configuración TS específica para Electron
+├── scripts/              # Scripts de build y mantenimiento
+│   └── rebuild-standalone.js # Orquestador de build optimizado para Desktop
+└── ...
 ```
 
 ---
@@ -147,10 +154,10 @@ HoloStack implementa un sistema de presupuesto "inteligente" para coleccionistas
 Permite crear cartas de sustitución para testeo de mazos.
 *   **Parser**: `src/lib/proxy-utils.ts` extrae ataques, habilidades y costes de energía de los metadatos JSON para renderizar la `TextProxyCard` de forma legible y compacta.
 
-### 7. Sistema de Actualizaciones (Docker Hub)
+### 7. Sistema de Actualizaciones (GitHub Releases)
 Para asegurar que los usuarios siempre tengan las últimas correcciones de la Pokédex.
-*   **Backend**: `/api/system/update-check` consulta los tags del repositorio en Docker Hub y compara la versión local (`src/lib/constants/version.ts`) con la remota.
-*   **Frontend**: `UpdateBanner.tsx` muestra un aviso dinámico si hay una versión superior, con instrucciones claras para ejecutar `docker compose pull` y `docker compose up -d` sin pérdida de datos.
+*   **Backend**: `/api/system/update-check` consulta los tags y releases del repositorio en **GitHub** y compara la versión local (`src/lib/constants/version.ts`) con la remota. Soporta tanto SemVer como versiones basadas en fecha.
+*   **Frontend**: `UpdateBanner.tsx` muestra un aviso dinámico si hay una versión superior. En modo Desktop, ofrece el enlace a la descarga directa; en Docker, da instrucciones para `docker compose pull`.
 
 ### 5. Autenticación Dual
 Para facilitar el despliegue local (Docker en casa) y remoto (VPS).

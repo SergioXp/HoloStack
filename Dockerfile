@@ -1,5 +1,9 @@
 FROM node:20-alpine AS deps
 WORKDIR /app
+
+# Install necessary build tools for native modules (gyp, python, make, g++)
+RUN apk add --no-cache libc6-compat python3 make g++
+
 COPY package.json package-lock.json ./
 RUN npm ci
 

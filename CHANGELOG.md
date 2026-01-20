@@ -1,3 +1,34 @@
+### [1.0.0] - 2026-01-20
+
+### ✨ HoloStack Desktop Launch & CI/CD Centralizado
+
+**Fecha**: 2026-01-20
+
+#### Cambios
+- **Modo Escritorio (Electron)**:
+    - Lanzamiento de la aplicación nativa para Windows, macOS y Linux.
+    - Persistencia de datos integrada en carpetas de sistema (`AppData`/`Library`).
+    - Motor de renderizado optimizado con Next.js Standalone.
+- **CI/CD con GitHub Actions**:
+    - Automatización total del empaquetado multiplataforma.
+    - Generación automática de imágenes Docker y subida a GHCR.
+- **Sistema de Actualizaciones Unificado**:
+    - Las versiones de Docker y Escritorio ahora usan GitHub Releases como fuente única de verdad.
+    - Detección automática de versiones basadas en fecha y SemVer.
+- **Branding y UX**:
+    - Icono de aplicación personalizado y pulido de interfaz para escritorio.
+    - Mejora de estabilidad en el build de Docker (compilación nativa Alpine).
+
+#### Archivos Nuevos/Modificados
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `electron/*` | Core | Motor principal de la app de escritorio. |
+| `.github/workflows/build.yml` | Infra | Pipeline de automatización global. |
+| `Dockerfile` | Infra | Soporte para compilación nativa en Alpine. |
+| `scripts/rebuild-standalone.js` | Build | Optimizador de tamaño para la versión Desktop. |
+
+---
+
 ### [0.9.1] - 2026-01-20
 
 ### ✨ Historial de Cambios Interactivo
@@ -201,7 +232,7 @@
 #### Notas Técnicas
 - **Agregación SQL**: Para la detección de duplicados se usa `HAVING SUM(quantity) > threshold` en SQL, delegando el cálculo pesado a la base de datos en lugar de procesar en memoria.
 - **Integridad de Datos**: Se detectó que versiones anteriores podían crear múltiples filas para la misma carta+variante. `updateCollectionItem` ahora actúa como un "Auto-Fixer", limpiando proactivamente la base de datos con cada interacción de usuario.
-# PokemonTCG - Changelog de Desarrollo
+# HoloStack - Changelog de Desarrollo
 
 > Registro cronológico de todos los cambios realizados en la aplicación.
 

@@ -12,7 +12,7 @@ Before starting, make sure you have **Docker Desktop** installed on your system:
 The recommended way to run HoloStack is using `docker-compose`. This ensures your data is persisted even if the container is updated.
 
 ### 1. Create a Project Folder
-Create a folder on your computer where you want to keep your data (e.g., `holostack` or `pokemon-tcg`).
+Create a folder on your computer where you want to keep your data (e.g., `holostack`).
 
 ### 2. Create the `docker-compose.yml` file
 Inside that folder, create a file named `docker-compose.yml` and paste the following:

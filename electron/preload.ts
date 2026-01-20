@@ -1,0 +1,9 @@
+
+import { contextBridge } from 'electron';
+
+// Expose protected methods that allow the renderer process to use
+// the ipcRenderer without exposing the entire object
+contextBridge.exposeInMainWorld('electron', {
+    // Add any needed IPC bridges here
+    // For now, we trust the Next.js app to be self-contained
+});
