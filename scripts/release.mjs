@@ -47,11 +47,20 @@ try {
         execSync(`git tag -d ${tag}`, { stdio: 'ignore' });
     } catch (e) { }
 
-    // Borrar tags remotos para permitir sobreescribir (re-release)
+    // Borrar tags y releases remotos para permitir sobreescribir (re-release)
     try {
-        console.log(`🗑️  Limpiando tags viejos en remotos...`);
+        console.log(`🗑️  Limpiando tags y releases viejos en remotos...`);
+        // Borrar tags
         execSync(`git push origin :refs/tags/${tag}`, { stdio: 'ignore' });
         execSync(`git push public :refs/tags/${tag}`, { stdio: 'ignore' });
+
+        // Intentar borrar releases vía GitHub CLI si está disponible (opcional)
+        try {
+            execSync(`gh release delete ${tag} --repo SergioXp/PokemonTCG -y`, { stdio: 'ignore' });
+            execSync(`gh release delete ${tag} --repo SergioXp/HoloStack -y`, { stdio: 'ignore' });
+        } catch (e) {
+            // Ignorar si no hay gh cli, electron-builder lo sobreescribirá igualmente
+        }
     } catch (e) { }
 
     // Crear y subir nuevo tag

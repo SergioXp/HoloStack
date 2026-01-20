@@ -78,6 +78,7 @@
   "build": {
     "appId": "com.sergiogonzalez.holostack",
     "productName": "HoloStack",
+    "artifactName": "${productName}-${version}-${os}-${arch}.${ext}",
     "files": [
       "dist-electron/**/*",
       ".next/standalone/**/*",
@@ -106,7 +107,8 @@
       {
         "provider": "github",
         "owner": "SergioXp",
-        "repo": "HoloStack"
+        "repo": "HoloStack",
+        "releaseType": "release"
       }
     ]
   }
