@@ -45,24 +45,26 @@ export function UpdateBanner() {
 
     return (
         <>
-            <div className="bg-primary/10 border-b border-primary/20 py-2 px-4 flex items-center justify-between animate-in fade-in slide-in-from-top duration-500">
+            <div className="bg-blue-600/90 backdrop-blur-md text-white border-b border-blue-500 py-2.5 px-4 flex items-center justify-between animate-in fade-in slide-in-from-top duration-500 relative z-[60]">
                 <div className="flex items-center gap-2 text-sm">
-                    <div className="bg-primary/20 p-1 rounded-full">
-                        <RefreshCw className="h-3 w-3 text-primary animate-spin-slow" />
+                    <div className="bg-white/20 p-1 rounded-full">
+                        <RefreshCw className="h-3 w-3 text-white animate-spin-slow" />
                     </div>
-                    <span className="font-medium">
+                    <span className="font-medium drop-shadow-sm">
                         {t('system.updateAvailable')}:
-                        <span className="ml-1 text-primary">v{update.latestVersion}</span>
+                        <span className="ml-1 font-bold bg-white/20 px-1.5 py-0.5 rounded text-white translate-y-[1px] inline-block">
+                            v{update.latestVersion.replace(/^v/, '')}
+                        </span>
                     </span>
-                    <span className="hidden md:inline text-muted-foreground ml-2 italic">
-                        ({t('system.current')}: v{update.currentVersion})
+                    <span className="hidden md:inline text-blue-100 opacity-80 text-xs ml-2">
+                        ({t('system.current')}: v{update.currentVersion.replace(/^v/, '')})
                     </span>
                 </div>
                 <div className="flex items-center gap-2">
                     <Button
                         variant="ghost"
                         size="sm"
-                        className="h-8 text-xs font-bold hover:bg-primary/20"
+                        className="h-8 text-xs font-bold text-white hover:bg-white/20 hover:text-white"
                         onClick={() => setShowModal(true)}
                     >
                         <Download className="h-3 w-3 mr-1" />
@@ -71,7 +73,7 @@ export function UpdateBanner() {
                     <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                        className="h-8 w-8 text-blue-200 hover:text-white hover:bg-white/20"
                         onClick={() => setDismissed(true)}
                     >
                         <X className="h-4 w-4" />
