@@ -3,6 +3,8 @@ import { sets, cards } from "@/db/schema";
 import { eq, sql } from "drizzle-orm";
 import SeriesDetailClient from "@/components/SeriesDetailClient";
 
+export const dynamic = "force-dynamic";
+
 interface PageProps {
     params: Promise<{ seriesName: string }>;
 }

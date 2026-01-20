@@ -4,6 +4,8 @@ import { eq, desc } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import CardDetailClientPage from "@/components/CardDetailClientPage";
 
+export const dynamic = "force-dynamic";
+
 interface CardDetailPageProps {
     params: Promise<{ cardId: string }>;
 }

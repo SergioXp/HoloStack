@@ -5,6 +5,8 @@ import { eq } from "drizzle-orm";
 import SetCardsClientPage from "@/components/SetCardsClientPage";
 import SetNotFound from "@/components/SetNotFound";
 
+export const dynamic = "force-dynamic";
+
 interface PageProps {
     params: Promise<{ setId: string }>;
 }

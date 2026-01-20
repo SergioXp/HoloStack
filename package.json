@@ -100,6 +100,13 @@
     "extraResources": [],
     "asarUnpack": [
       ".next/standalone/**/*"
+    ],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "SergioXp",
+        "repo": "HoloStack"
+      }
     ]
   }
 }

@@ -4,6 +4,8 @@ import { sql, desc, eq, count, countDistinct, and, isNotNull, or, like } from "d
 import HomePageClient from "@/components/HomePageClient";
 import { calculateTotalValue, Variant } from "@/lib/prices";
 
+export const dynamic = 'force-dynamic';
+
 // Estadísticas globales del usuario
 async function getGlobalStats() {
   try {
