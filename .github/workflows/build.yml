@@ -45,7 +45,7 @@ jobs:
           GH_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
         run: |
-          npx electron-builder --publish always -c.publish.provider=github -c.publish.owner=SergioXp -c.publish.repo=HoloStack
+          npx electron-builder --publish always
 
   docker:
     runs-on: ubuntu-latest
