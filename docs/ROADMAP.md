@@ -2,8 +2,8 @@
 
 Este documento es la fuente de verdad sobre el estado del proyecto, las funcionalidades implementadas y la visión futura.
 
-> **Versión Actual**: 0.8.3
-> **Última Actualización**: 15 Enero 2026 (Sistema de Actualizaciones Docker)
+> **Versión Actual**: 0.9.1
+> **Última Actualización**: 20 Enero 2026 (User Changelog & i18n Fixes)
 
 ---
 
@@ -13,6 +13,7 @@ Este documento es la fuente de verdad sobre el estado del proyecto, las funciona
 - [x] **Diseño Premium**: Interfaz moderna con gradientes, animaciones fluidas y modo oscuro profundo.
 - [x] **Responsive Design**: Adaptación completa a móvil, tablet y escritorio con menú de navegación inteligente.
 - [x] **PWA (Progressive Web App)**: Soporte para instalación en dispositivos móviles.
+- [x] **Changelog Interactivo**: Modal de novedades visible para el usuario con historial de versiones.
 
 ### 2. Gestión de Colecciones
 - [x] **Creación Flexible**: Colecciones Manuales (carta a carta) o Automáticas (basadas en filtros dinámicos).
@@ -25,7 +26,12 @@ Este documento es la fuente de verdad sobre el estado del proyecto, las funciona
 ### 3. Herramientas Avanzadas
 - [x] **Entrada Masiva (Bulk Entry)**:
     - Modo texto rápido (ej: "102, 105 x4") para digitalizar inventario rápidamente.
+    - Modo texto rápido (ej: "102, 105 x4") para digitalizar inventario rápidamente.
     - Detección difusa (fuzzy matching) para números de carta.
+- [x] **Importador Cardmarket**:
+    - Parsing inteligente de emails de pedido (texto copiado).
+    - Detección automática de Edición, Idioma, Estado y Rareza (ART, RR, UR).
+    - Validación y corrección automática de variantes (Normal/Holo/Reverse).
 - [x] **Gestión de Duplicados**: Dashboard dedicado para identificar excedentes (>4 copias) y optimizar el inventario.
 - [x] **Centro de Impresión (Proxies)**:
     - Generador de hojas A4 para imprimir proxies de prueba.

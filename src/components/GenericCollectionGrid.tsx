@@ -30,13 +30,16 @@ export default function GenericCollectionGrid({ collectionId, savedCards, isEdit
     const [selectedDetailCard, setSelectedDetailCard] = useState<any | null>(null);
     const [isDetailOpen, setIsDetailOpen] = useState(false);
 
+    // Deduplicate savedCards to ensure uniqueness and prevet key errors
+    const uniqueSavedCards = Array.from(new Map(savedCards.map(item => [item.id, item])).values());
+
     // Map saved cards to their Pokemon name slots
     const slotMap = new Map<number, any[]>();
     const usedCardIds = new Set<string>();
 
     pokemonList.forEach(poke => {
         // Find ALL cards in savedCards that matches this pokemon
-        const matches = savedCards.filter(c =>
+        const matches = uniqueSavedCards.filter(c =>
             !usedCardIds.has(c.id) &&
             c.name.toLowerCase().includes(poke.name.toLowerCase())
         );
@@ -168,6 +171,41 @@ export default function GenericCollectionGrid({ collectionId, savedCards, isEdit
                 ))}
             </div>
 
+            {/* Unmatched Cards Section (Trainers, Energy, etc.) */}
+            {(() => {
+                const unmatchedCards = uniqueSavedCards.filter(c => !usedCardIds.has(c.id));
+                if (unmatchedCards.length === 0) return null;
+
+                return (
+                    <div className="mt-12 pt-8 border-t border-slate-800">
+                        <h3 className="text-lg font-bold text-slate-300 mb-6 flex items-center gap-2">
+                            <Sparkles className="h-5 w-5 text-yellow-500" />
+                            {t("collectionDetail.otherItems") || "Otros Items / Entrenadores / Energías"}
+                            <span className="text-xs font-normal text-slate-500 ml-2 bg-slate-900 px-2 py-1 rounded-full border border-slate-800">
+                                {unmatchedCards.length}
+                            </span>
+                        </h3>
+                        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 md:gap-8">
+                            {unmatchedCards.map(card => (
+                                <GenericCollectionSlot
+                                    key={card.id}
+                                    poke={{ id: 0, name: card.name }} // Dummy poke for layout
+                                    assignedCards={[card]}
+                                    ownershipData={ownershipData}
+                                    collectionId={collectionId}
+                                    userCurrency={userCurrency}
+                                    handleSlotClick={() => { }} // No specific slot action for unmatched
+                                    handleRemoveCard={handleRemoveCard}
+                                    setSelectedDetailCard={setSelectedDetailCard}
+                                    setIsDetailOpen={setIsDetailOpen}
+                                    t={t}
+                                />
+                            ))}
+                        </div>
+                    </div>
+                );
+            })()}
+
             <CardSearchModal
                 isOpen={isSearchOpen}
                 onClose={() => setIsSearchOpen(false)}
@@ -188,9 +226,9 @@ export default function GenericCollectionGrid({ collectionId, savedCards, isEdit
                         cardRarity: selectedDetailCard.rarity,
                         tcgplayerPrices: selectedDetailCard.tcgplayerPrices,
                         cardmarketPrices: selectedDetailCard.cardmarketPrices,
-                        quantity: Object.values((ownershipData[selectedDetailCard.id] || {}) as Record<string, any>).reduce((a, b) => a + (b.quantity || 0), 0),
+                        quantity: Object.values((ownershipData[selectedDetailCard.id] || {}) as Record<string, any>).reduce((a, b: any) => a + (b.quantity || 0), 0),
                         notesMap: Object.fromEntries(
-                            Object.entries((ownershipData[selectedDetailCard.id] || {}) as Record<string, any>).map(([v, d]) => [v, d.notes || null])
+                            Object.entries((ownershipData[selectedDetailCard.id] || {}) as Record<string, any>).map(([v, d]: [string, any]) => [v, d.notes || null])
                         )
                     }}
                 />

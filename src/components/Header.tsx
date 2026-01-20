@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, LayoutGrid, Layers, Library as LibraryIcon, Database, Sparkles, Settings, Wallet, Heart, ChartBar, Printer, BookOpen, BarChart3, Menu, PackageOpen } from "lucide-react";
+import { ChevronDown, LayoutGrid, Layers, Library as LibraryIcon, Database, Sparkles, Settings, Wallet, Heart, ChartBar, Printer, BookOpen, BarChart3, Menu, PackageOpen, ShoppingBag } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -21,6 +21,8 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useI18n } from "@/lib/i18n";
 import { GlobalSearch } from "@/components/GlobalSearch";
+import { ChangelogModal } from "@/components/ChangelogModal";
+
 
 export default function Header() {
     const pathname = usePathname();
@@ -30,6 +32,7 @@ export default function Header() {
     const [indexStatus, setIndexStatus] = useState("");
     const [openDialog, setOpenDialog] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [changelogOpen, setChangelogOpen] = useState(false);
 
     const runGlobalIndex = async () => {
         setIsIndexing(true);
@@ -272,6 +275,17 @@ export default function Header() {
 
                 {/* Actions */}
                 <div className="flex items-center gap-2">
+                    {/* Changelog Button */}
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="text-slate-400 hover:text-yellow-400 hover:bg-slate-800/50 transition-colors"
+                        onClick={() => setChangelogOpen(true)}
+                        title={t('changelog.action')}
+                    >
+                        <Sparkles className="h-5 w-5" />
+                    </Button>
+
                     {/* Settings Button */}
                     <Link href="/settings">
                         <Button
@@ -283,6 +297,20 @@ export default function Header() {
                             )}
                         >
                             <Settings className="h-5 w-5" />
+                        </Button>
+                    </Link>
+                    {/* Market Import Button */}
+                    <Link href="/import">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className={cn(
+                                "text-slate-400 hover:text-white hover:bg-slate-800/50",
+                                pathname === "/import" && "bg-slate-800 text-white"
+                            )}
+                            title="Importar desde Cardmarket"
+                        >
+                            <ShoppingBag className="h-5 w-5" />
                         </Button>
                     </Link>
 
@@ -374,6 +402,7 @@ export default function Header() {
                     </Dialog>
                 </div>
             </div>
+            <ChangelogModal open={changelogOpen} onOpenChange={setChangelogOpen} />
         </header>
     );
 }

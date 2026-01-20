@@ -113,6 +113,10 @@ Para robustecer la aplicación de forma progresiva sin detener el desarrollo de 
 - [x] **Bulk Import**:
     - [x] Testear parser de texto (`102, 105 x4`) - *Nota: El parser de input raw se testeó implícitamente en la lógica de validación fuzzy*.
     - [x] Verificar que IDs inválidos devuelven error y no basura.
+- [x] **Cardmarket Import (`src/lib/import/cardmarket-parser.test.ts`)**:
+    - [x] **Regex**: Verificar extracción de nombre, set (entre paréntesis) y metadatos.
+    - [x] **Variantes**: Testear extracción de variantes desde el nombre (ej: "Reverse Holo").
+    - [x] **Rareza**: Testear extracción de códigos de rareza (ART, RR, UR).
 
 ### Fase 3: Estabilidad UI & E2E (Largo Plazo)
 *Objetivo: Evitar regresiones visuales y de flujo completo.*

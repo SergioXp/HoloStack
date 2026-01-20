@@ -34,14 +34,14 @@ const translations: Record<Locale, typeof esTranslations> = {
 interface I18nContextType {
     locale: Locale;
     setLocale: (locale: Locale) => void;
-    t: (key: string, params?: Record<string, string | number>) => string;
+    t: (key: string, params?: Record<string, string | number>) => any;
     cardLanguage: CardLanguage;
     setCardLanguage: (lang: CardLanguage) => void;
 }
 
 const I18nContext = createContext<I18nContextType | undefined>(undefined);
 
-function getNestedValue(obj: Record<string, any>, path: string): string {
+function getNestedValue(obj: Record<string, any>, path: string): any {
     const keys = path.split(".");
     let result = obj;
 
@@ -53,7 +53,7 @@ function getNestedValue(obj: Record<string, any>, path: string): string {
         }
     }
 
-    return typeof result === "string" ? result : path;
+    return result !== undefined ? result : path;
 }
 
 export function I18nProvider({ children }: { children: ReactNode }) {
@@ -87,9 +87,9 @@ export function I18nProvider({ children }: { children: ReactNode }) {
         localStorage.setItem("card_language", lang);
     };
 
-    const t = (key: string, params?: Record<string, string | number>): string => {
+    const t = (key: string, params?: Record<string, string | number>): any => {
         let text = getNestedValue(translations[locale], key);
-        if (params) {
+        if (typeof text === 'string' && params) {
             Object.entries(params).forEach(([paramKey, value]) => {
                 text = text.replace(`{${paramKey}}`, String(value));
             });

@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
     ChevronRight,
@@ -218,12 +219,18 @@ export default function BudgetDetailPage() {
                                             {formatCurrency(budget.amount, budget.currency)}/{t(`budgets.per.${periodKey}`)}
                                         </Badge>
                                         {budget.collectionName && budget.collectionId && (
-                                            <Link href={`/collections/${budget.collectionId}`}>
-                                                <Badge variant="outline" className="border-0 bg-blue-500/10 text-blue-300 hover:bg-blue-500/20 cursor-pointer transition-colors">
-                                                    <Library className="h-3 w-3 mr-1" />
+                                            <Button
+                                                variant="secondary"
+                                                size="sm"
+                                                className="h-7 text-xs gap-2 bg-blue-500/10 text-blue-300 hover:bg-blue-500/20 border border-blue-500/20"
+                                                asChild
+                                            >
+                                                <Link href={`/collections/${budget.collectionId}`}>
+                                                    <Library className="h-3.5 w-3.5" />
                                                     {budget.collectionName}
-                                                </Badge>
-                                            </Link>
+                                                    <ChevronRight className="h-3 w-3 opacity-50" />
+                                                </Link>
+                                            </Button>
                                         )}
                                     </div>
                                 </div>

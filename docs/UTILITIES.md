@@ -46,6 +46,11 @@ Este documento sirve como referencia para entender las funciones puras, lógica 
 *   **Propósito**: Detección difusa (fuzzy matching) en entrada masiva.
 *   **Lógica**: Permite que el usuario escriba números de carta sin ceros iniciales o con formatos relajados, y los valida contra la base de datos local.
 
+
+### 📧 `cardmarket-parser.ts`
+*   **Propósito**: Importación de pedidos desde emails de Cardmarket.
+*   **Lógica**: Regex avanzado para extraer Nombre, Set, Cantidad, Precio y Metadatos (Condición, Idioma, Rareza) de texto plano. Incluye heurística para detectar variantes especiales ("ART" -> Illustration Rare) y limpieza de nombres.
+
 ### 🔄 `sync-logic.ts`
 *   **Propósito**: Filtrado inteligente durante la sincronización con TCGDex.
 *   **Lógica**: Decide en tiempo de descarga qué cartas pertenecen a una colección automática basada en sus metadatos.
@@ -84,3 +89,7 @@ Este documento sirve como referencia para entender las funciones puras, lógica 
 *   **Funciones**:
     *   `hasNewerVersion(current, remote)`: Devuelve `true` si la versión remota es mayor.
     *   `sortVersionTags(tags)`: Ordena un array de tags de versión de mayor a menor.
+
+### 📝 `changelog-data.ts`
+*   **Propósito**: Definición centralizada del historial de versiones.
+*   **Contenido**: Array tipado de objetos de versión, fechas y claves de traducción para el modal de novedades. Fundamental para mantener el historial ordenado y validado.

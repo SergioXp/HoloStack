@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import { db } from "@/db";
-import { collections, collectionItems, cards, sets, userProfiles } from "@/db/schema";
+import { collections, collectionItems, cards, sets, userProfiles, budgets } from "@/db/schema";
 import { eq, and, sql, inArray, like, notInArray } from "drizzle-orm";
 import CollectionDetailClient from "@/components/CollectionDetailClient";
 
@@ -16,6 +16,11 @@ export default async function CollectionPage({ params }: { params: Promise<{ id:
     if (!collection) {
         notFound();
     }
+
+    // Fetch associated budget if exists
+    const budget = await db.query.budgets.findFirst({
+        where: eq(budgets.collectionId, id)
+    });
 
     const ownedItems = await db.select()
         .from(collectionItems)
@@ -150,6 +155,22 @@ export default async function CollectionPage({ params }: { params: Promise<{ id:
         } else {
             // No valid filters? Return empty to avoid showing all 20k cards accidentally
             displayCards = [];
+        }
+
+        // CRITICAL FIX: Ensure ALL owned items are displayed, even if they don't match the filter
+        // (e.g. user imported a card from another set into a Set-based collection)
+        const displayCardIds = new Set(displayCards.map(c => c.id));
+        const missingCardIds = new Set<string>();
+
+        ownedItems.forEach(item => {
+            if (!displayCardIds.has(item.cardId)) {
+                missingCardIds.add(item.cardId);
+            }
+        });
+
+        if (missingCardIds.size > 0) {
+            const extraCards = await db.select().from(cards).where(inArray(cards.id, Array.from(missingCardIds)));
+            displayCards.push(...extraCards);
         }
 
         // Custom sort for "Original 151" or Pokedex based collections
@@ -331,6 +352,7 @@ export default async function CollectionPage({ params }: { params: Promise<{ id:
             isMultiSet={isMultiSet}
             setNames={Object.fromEntries(setNameMap.entries())}
             userCurrency={preferredCurrency}
+            budget={budget ? { id: budget.id, name: budget.name, currency: budget.currency } : null}
         />
     );
 }

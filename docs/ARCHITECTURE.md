@@ -54,9 +54,12 @@ src/
 │   ├── stats-logic.ts    # Agregaciones de portfolio y valor total
 │   ├── proxy-utils.ts    # Procesamiento de metadatos para proxies
 │   ├── date-utils.ts     # Gestión de caducidad de precios y fechas
-│   ├── card-utils.ts     # Reglas de variantes (Holo, Reverse, etc)
+    ├── card-utils.ts     # Reglas de variantes (Holo, Reverse, etc)
+    ├── import/           # Parsers de importación
+    │   └── cardmarket-parser.ts # Lógica de extracción de texto de pedidos
 │   ├── prices.ts         # Cálculo y normalización de precios
-│   └── utils.ts          # Helpers generales (cn, formats)
+│   ├── utils.ts          # Helpers generales (cn, formats)
+│   └── changelog-data.ts # Definición de versiones y datos de changelog
 ├── locales/              # Archivos JSON de traducción (es.json, en.json)
 └── services/             # Servicios de integración externa
     └── tcgdex.ts         # Cliente tipado para API TCGdex

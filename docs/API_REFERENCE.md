@@ -124,6 +124,15 @@ Detecta cartas duplicadas que exceden un umbral (Playset) en una colección.
 - **Query**: `?collectionId=...&threshold=4`
 - **Respuesta**: `{ duplicates: [{ card, quantity, excess }] }`
 
+### `POST /api/import/bulk-save`
+Guarda una lista de items parseados (ej: desde Cardmarket) en una colección.
+- **Body**: `{ collectionId, items: CardmarketItem[] }`
+- **Lógica**: 
+    - Busca la carta por nombre y set.
+    - Aplica scoring de rareza (ART, RR) para desempate.
+    - Genera gastos (`Expense`) automáticamente si hay precio.
+    - Auto-corrige variantes inválidas usando datos de precios.
+
 ---
 
 ## 👤 User & Settings

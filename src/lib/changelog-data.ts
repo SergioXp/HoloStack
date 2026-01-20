@@ -1,0 +1,32 @@
+export type ChangelogEntry = {
+    version: string;
+    date: string;
+    // Keys for i18n lookup: changelog.{version}.title, changelog.{version}.features[]
+};
+
+export const changelogData: ChangelogEntry[] = [
+    {
+        version: "0.9.1",
+        date: "2026-01-20"
+    },
+    {
+        version: "0.9.0",
+        date: "2026-01-20"
+    },
+    {
+        version: "0.8.3",
+        date: "2026-01-15"
+    },
+    {
+        version: "0.8.2",
+        date: "2026-01-15"
+    },
+    {
+        version: "0.8.1",
+        date: "2026-01-15"
+    },
+    {
+        version: "0.7.0",
+        date: "2026-01-14"
+    }
+];

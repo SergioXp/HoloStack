@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { ChevronRight, Library, Sparkles, Globe, Pencil, Trash2, X, CheckSquare, FileText } from "lucide-react";
+
+import { ChevronRight, Library, Sparkles, Globe, Pencil, Trash2, X, CheckSquare, FileText, PiggyBank } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import CollectionHydrator from "@/components/CollectionHydrator";
 import CollectionFilter from "@/components/CollectionFilter";
@@ -36,6 +37,7 @@ interface CollectionDetailClientProps {
     isMultiSet: boolean;
     setNames: Record<string, string>;
     userCurrency: "EUR" | "USD";
+    budget?: { id: string, name: string, currency: string } | null;
 }
 
 export default function CollectionDetailClient({
@@ -48,7 +50,8 @@ export default function CollectionDetailClient({
     isComplete,
     isMultiSet,
     setNames,
-    userCurrency
+    userCurrency,
+    budget
 }: CollectionDetailClientProps) {
     const { t } = useI18n();
     const router = useRouter();
@@ -249,6 +252,20 @@ export default function CollectionDetailClient({
                                             <span className="text-slate-500 text-sm">
                                                 {uniqueOwnedCount} / {displayCards.length} {t("collectionDetail.cards")}
                                             </span>
+                                            {budget && (
+                                                <Button
+                                                    variant="secondary"
+                                                    size="sm"
+                                                    className="h-7 text-xs gap-2 bg-blue-500/10 text-blue-300 hover:bg-blue-500/20 border border-blue-500/20"
+                                                    asChild
+                                                >
+                                                    <Link href={`/budgets/${budget.id}`}>
+                                                        <PiggyBank className="h-3.5 w-3.5" />
+                                                        {budget.name}
+                                                        <ChevronRight className="h-3 w-3 opacity-50" />
+                                                    </Link>
+                                                </Button>
+                                            )}
                                         </div>
                                         {collection.description && (
                                             <p className="text-slate-400 text-sm mt-3 max-w-xl">

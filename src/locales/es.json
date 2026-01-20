@@ -895,5 +895,107 @@
         "step2": "Descarga la nueva imagen:",
         "step3": "Reinicia el contenedor:",
         "updateNote": "Tus datos están seguros en la carpeta /data y no se perderán al actualizar."
+    },
+    "importPage": {
+        "title": "Importar Pedido de Cardmarket",
+        "step1": {
+            "title": "Paso 1: Pegar contenido del correo",
+            "description": "Abre el correo de confirmación de pedido de Cardmarket, selecciona todo el texto (desde los detalles del pedido hasta el total) y pégalo aquí.",
+            "placeholder": "Detalles del pedido:\n\nPedido 1251993864\nVendedor: MundoDistorsion18\n...",
+            "button": "Procesar Texto",
+            "errorParsing": "Error al procesar el texto"
+        },
+        "actions": {
+            "title": "Acciones Masivas",
+            "assignCollection": "Asignar Colección",
+            "assignCollectionHelp": "Se añadirán todas las cartas detectadas a esta colección (salvo que se especifique otra en la tabla).",
+            "registerExpense": "Registrar Gasto",
+            "registerExpenseHelp": "Se creará un gasto por cada ítem en este presupuesto.",
+            "defaultVariant": "Variante por defecto",
+            "defaultVariantHelp": "Se aplicará si no se detecta otra en el texto.",
+            "totalDetected": "Total Detectado",
+            "saveAll": "Guardar Todo",
+            "back": "Volver / Pegar otro"
+        },
+        "table": {
+            "detectedItems": "Items Detectados",
+            "matched": "emparejados automáticamente",
+            "retryMatch": "Reintentar Match",
+            "headers": {
+                "imgQty": "Img / Cant",
+                "cardSet": "Carta y Set",
+                "variantPrice": "Variante / Precio",
+                "classification": "Clasificación",
+                "data": "Datos Adicionales"
+            },
+            "placeholders": {
+                "cardName": "Nombre de la carta",
+                "selectSet": "Seleccionar Set",
+                "searchSet": "Buscar set...",
+                "noSet": "No se encontró ningún set.",
+                "seller": "Vendedor",
+                "notes": "Notas"
+            }
+        },
+        "alerts": {
+            "confirmSave": "¿Guardar la importación?",
+            "success": "Importación completada!\n- Añadidas a colección: {added}\n- Gastos creados: {expenses}",
+            "errors": "⚠️ Errores ({count}):",
+            "failedToSave": "Error al guardar"
+        }
+    },
+    "changelog": {
+        "title": "Novedades & Actualizaciones",
+        "action": "Ver Novedades",
+        "description": "Descubre las últimas mejoras añadidas a HoloStack.",
+        "v0_9_1": {
+            "title": "Historial de Cambios Interactivo",
+            "features": [
+                "Nueva ventana modal 'What's New' para ver el historial de versiones.",
+                "Resúmenes visuales y fáciles de leer de cada actualización.",
+                "Notificación visual (✨) cuando hay novedades."
+            ]
+        },
+        "v0_9_0": {
+            "title": "Importación Inteligente de Cardmarket",
+            "features": [
+                "Nuevo sistema para importar pedidos copiando el email de confirmación.",
+                "Detección automática de cartas, variantes, idioma y precios.",
+                "Enlace directo entre Presupuestos y Colecciones para mejor seguimiento.",
+                "Notas personales en las cartas importadas."
+            ]
+        },
+        "v0_8_3": {
+            "title": "Actualizaciones Automáticas Seguras",
+            "features": [
+                "Sistema de detección de nuevas versiones en Docker Hub.",
+                "Guía paso a paso integrada para actualizar sin perder datos.",
+                "Avisos visuales cuando hay mejoras disponibles."
+            ]
+        },
+        "v0_8_2": {
+            "title": "Pokédex Nacional Completa",
+            "features": [
+                "Soporte total para los 1025 Pokémon existentes.",
+                "Algoritmo de búsqueda mejorado (ignora acentos, símbolos, etc).",
+                "Imágenes oficiales y siluetas corregidas para todas las especies."
+            ]
+        },
+        "v0_8_1": {
+            "title": "Apilamiento y Notas Privadas",
+            "features": [
+                "Ahora puedes tener múltiples copias/variantes en un mismo espacio (Stacking).",
+                "Efecto visual de 'Abanico' al pasar el ratón por cartas apiladas.",
+                "Añade notas privadas a cualquier carta (estado, historia, precio de compra)."
+            ]
+        },
+        "v0_7_0": {
+            "title": "Internacionalización Global",
+            "features": [
+                "Interfaz traducida al 100% (Español / Inglés).",
+                "Ajustes visuales y unificación de diseño en todas las pantallas.",
+                "Mejor experiencia en dispositivos móviles."
+            ]
+        }
     }
 }

@@ -1,3 +1,54 @@
+### [0.9.1] - 2026-01-20
+
+### ✨ Historial de Cambios Interactivo
+
+**Fecha**: 2026-01-20
+
+#### Cambios
+- **Changelog Modal**: Nueva ventana modal accesible desde el header ("What's New") que muestra el historial de versiones de forma visual.
+- **Contenido Curado**: Resúmenes amigables para el usuario final (no técnicos) de las últimas versiones.
+- **Soporte i18n**: Traducción completa de las notas de la versión.
+
+#### Archivos Nuevos/Modificados
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `src/components/ChangelogModal.tsx` | UI | Modal de historial interactivo. |
+| `src/lib/changelog-data.ts` | Config | Definición de versiones y fechas. |
+| `src/components/Header.tsx` | UI | Nuevo botón de acceso directo (Sparkles). |
+| `src/locales/*.json` | Config | Textos de las notas de versión (v0.9.0, etc). |
+
+---
+
+### [0.9.0] - 2026-01-20
+
+### ✨ Importador de Pedidos Cardmarket y Cross-Linking
+
+**Fecha**: 2026-01-20
+
+#### Cambios
+- **Importación Inteligente Cardmarket**:
+    - Parser de texto capaz de interpretar correos de confirmación de pedido.
+    - **Detección Automática**: Extrae cantidad, nombre, set, variante (Holo/Reverse), idioma, condición y precio.
+    - **Matching Inteligente**: Algoritmo de puntuación que usa rareza y códigos (ART, RR) para encontrar la carta exacta en DB.
+    - **Acciones Masivas**: Asignación global a colección o presupuesto, variante por defecto, etc.
+- **Cross-Linking Presupuestos <-> Colecciones**:
+    - Ahora es posible navegar directamente desde un Presupuesto a su Colección asociada y viceversa.
+    - Mejor visibilidad del progreso de gasto por colección.
+- **Mejoras UX Importación**:
+    - Selector de Set manual en cada fila con re-matching automático.
+    - Validación visual de variantes (aviso si intentas forzar Holo en carta que no lo tiene).
+    - Campo de Notas de Usuario integrado en la importación.
+
+#### Archivos Modificados
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `src/app/import/page.tsx` | Nuevo | UI principal del importador. |
+| `src/lib/import/cardmarket-parser.ts` | Lib | Lógica de Regex para parseo. |
+| `src/app/api/import/bulk-save/route.ts` | API | Endpoint transaccional para guardar cartas y gastos. |
+| `src/locales/*.json` | Config | I18n completo del importador. |
+
+---
+
 ### [0.8.3] - 2026-01-15
 
 ### ✨ Sistema de Comprobación de Actualizaciones (Docker Hub)

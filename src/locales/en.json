@@ -895,5 +895,107 @@
         "step2": "Pull the new image:",
         "step3": "Restart the container:",
         "updateNote": "Your data is safe in the /data folder and will not be lost during the update."
+    },
+    "importPage": {
+        "title": "Import Cardmarket Order",
+        "step1": {
+            "title": "Step 1: Paste Email Content",
+            "description": "Open your Cardmarket order confirmation email, select all text (from order details to total) and paste it here.",
+            "placeholder": "Order details:\n\nOrder 1251993864\nSeller: MundoDistorsion18\n...",
+            "button": "Process Text",
+            "errorParsing": "Error parsing text"
+        },
+        "actions": {
+            "title": "Bulk Actions",
+            "assignCollection": "Assign Collection",
+            "assignCollectionHelp": "All detected cards will be added to this collection (unless specified otherwise in the table).",
+            "registerExpense": "Register Expense",
+            "registerExpenseHelp": "An expense will be created for each item in this budget.",
+            "defaultVariant": "Default Variant",
+            "defaultVariantHelp": "Will be applied if another one is not detected in the text.",
+            "totalDetected": "Total Detected",
+            "saveAll": "Save All",
+            "back": "Back / Paste Another"
+        },
+        "table": {
+            "detectedItems": "Detected Items",
+            "matched": "automatically matched",
+            "retryMatch": "Retry Match",
+            "headers": {
+                "imgQty": "Img / Qty",
+                "cardSet": "Card & Set",
+                "variantPrice": "Variant / Price",
+                "classification": "Classification",
+                "data": "Additional Data"
+            },
+            "placeholders": {
+                "cardName": "Card Name",
+                "selectSet": "Select Set",
+                "searchSet": "Search set...",
+                "noSet": "No set found.",
+                "seller": "Seller",
+                "notes": "Notes"
+            }
+        },
+        "alerts": {
+            "confirmSave": "Save import?",
+            "success": "Import completed!\n- Added to collection: {added}\n- Expenses created: {expenses}",
+            "errors": "⚠️ Errors ({count}):",
+            "failedToSave": "Error saving"
+        }
+    },
+    "changelog": {
+        "title": "What's New & Updates",
+        "action": "See What's New",
+        "description": "Discover the latest improvements added to HoloStack.",
+        "v0_9_1": {
+            "title": "Interactive Changelog History",
+            "features": [
+                "New 'What's New' modal to browse version history visually.",
+                "User-friendly summaries of each update.",
+                "Visual notification (✨) when new updates are available."
+            ]
+        },
+        "v0_9_0": {
+            "title": "Smart Cardmarket Import",
+            "features": [
+                "New system to import orders by simply pasting the confirmation email.",
+                "Automatic detection of cards, variants, language, and prices.",
+                "Direct linking between Budgets and Collections for better tracking.",
+                "Personal notes on imported cards."
+            ]
+        },
+        "v0_8_3": {
+            "title": "Secure Auto-Updates",
+            "features": [
+                "Detection system for new versions on Docker Hub.",
+                "Integrated step-by-step guide to update without data loss.",
+                "Visual alerts when improvements are available."
+            ]
+        },
+        "v0_8_2": {
+            "title": "Full National Pokédex",
+            "features": [
+                "Full support for all 1025 existing Pokémon.",
+                "Improved search algorithm (ignores accents, symbols, etc).",
+                "Corrected official images and silhouettes for all species."
+            ]
+        },
+        "v0_8_1": {
+            "title": "Stacking & Private Notes",
+            "features": [
+                "You can now have multiple copies/variants in the same slot (Stacking).",
+                "Visual 'Fan' effect when hovering over stacked cards.",
+                "Add private notes to any card (condition, history, purchase price)."
+            ]
+        },
+        "v0_7_0": {
+            "title": "Global Internationalization",
+            "features": [
+                "Interface 100% translated (Spanish / English).",
+                "Visual adjustments and unified design across all screens.",
+                "Better experience on mobile devices."
+            ]
+        }
     }
 }
