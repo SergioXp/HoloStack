@@ -949,6 +949,14 @@
         "title": "News & Updates",
         "action": "What's New",
         "description": "Discover the latest improvements added to HoloStack.",
+        "v1_0_1": {
+            "title": "Desktop Startup Fix",
+            "features": [
+                "Fixed a critical bug that prevented the desktop application (Electron) from launching.",
+                "The migration lock file is now created in a writable location.",
+                "This issue affected all desktop versions (Windows, Mac and Linux). Docker was unaffected."
+            ]
+        },
         "v1_0_0": {
             "title": "HoloStack Desktop Launch",
             "features": [

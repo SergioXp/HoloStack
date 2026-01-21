@@ -62,3 +62,4 @@ data/*.sqlite
 
 # Build temps
 temp_native_build/
+images_github/

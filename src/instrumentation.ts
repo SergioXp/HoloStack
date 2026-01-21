@@ -12,7 +12,16 @@ export async function register() {
         const { db, sqlite } = getDb();
 
         // 2. Lock por archivo para procesos paralelos de Docker
-        const lockFile = path.join(process.cwd(), "data", ".migration.lock");
+        // En Electron empaquetado, usamos el directorio de la DB (que es escribible)
+        // En desarrollo/Docker, usamos process.cwd()/data
+        const dbFile = process.env.DATABASE_FILE;
+        const lockDir = dbFile ? path.dirname(dbFile) : path.join(process.cwd(), "data");
+        const lockFile = path.join(lockDir, ".migration.lock");
+        
+        // Asegurar que el directorio exista
+        if (!fs.existsSync(lockDir)) {
+            fs.mkdirSync(lockDir, { recursive: true });
+        }
 
         try {
             if (fs.existsSync(lockFile)) {

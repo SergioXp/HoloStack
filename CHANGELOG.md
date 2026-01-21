@@ -1,3 +1,22 @@
+### [1.0.1] - 2026-01-21
+
+### 🐛 Hotfix: Electron Startup Fix
+
+**Fecha**: 2026-01-21
+
+#### Cambios
+- **Corrección Crítica de Inicio**: Solucionado un bug que impedía que la aplicación de escritorio (Electron) se iniciara correctamente.
+    - **Causa**: El archivo `.migration.lock` intentaba crearse dentro del bundle empaquetado (`app.asar.unpacked`), que es de solo lectura en producción.
+    - **Solución**: El lock file ahora se crea en el mismo directorio que la base de datos (`Library/Application Support/holostack/`), que es una ubicación escribible.
+- **Impacto**: Este bug afectaba a todas las versiones de escritorio (Windows, Mac y Linux). La versión Docker y el modo desarrollo no estaban afectados.
+
+#### Archivos Modificados
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `src/instrumentation.ts` | Fix | Ruta dinámica del lock file según entorno. |
+
+---
+
 ### [1.0.0] - 2026-01-20
 
 ### ✨ HoloStack Desktop Launch & CI/CD Centralizado

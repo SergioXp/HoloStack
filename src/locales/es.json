@@ -949,6 +949,14 @@
         "title": "Novedades & Actualizaciones",
         "action": "Ver Novedades",
         "description": "Descubre las últimas mejoras añadidas a HoloStack.",
+        "v1_0_1": {
+            "title": "Corrección de Inicio en Escritorio",
+            "features": [
+                "Solucionado un bug crítico que impedía que la aplicación de escritorio (Electron) se iniciara.",
+                "El archivo de bloqueo de migraciones ahora se crea en una ubicación escribible.",
+                "Este problema afectaba a todas las versiones de escritorio (Windows, Mac y Linux). Docker no estaba afectado."
+            ]
+        },
         "v1_0_0": {
             "title": "Lanzamiento HoloStack Desktop",
             "features": [
