@@ -78,7 +78,10 @@ async function startNextServer() {
     // Write runtime config file that Next.js can read
     // This is needed because Next.js standalone "bakes" env vars at build time
     const runtimeConfigPath = path.join(DIST_PATH, 'runtime-config.json');
-    const runtimeConfig = { DATABASE_FILE: dbPath };
+    const runtimeConfig = {
+        DATABASE_FILE: dbPath,
+        APP_MODE: 'LOCAL' // Desktop app doesn't need login
+    };
     fs.writeFileSync(runtimeConfigPath, JSON.stringify(runtimeConfig));
     logToFile(`Wrote runtime config to: ${runtimeConfigPath}`);
 

@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { users } from "@/db/schema";
+import { getAppMode } from "@/lib/runtime-config";
 
 // Usuario Admin ficticio para modo LOCAL
 const LOCAL_ADMIN_USER = {
@@ -23,7 +24,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             },
             async authorize(credentials) {
                 // Modo LOCAL: autenticar automáticamente como Admin
-                if (process.env.APP_MODE === "LOCAL") {
+                if (getAppMode() === "LOCAL") {
                     return LOCAL_ADMIN_USER;
                 }
 

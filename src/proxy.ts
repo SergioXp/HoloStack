@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+// Note: This middleware runs in Edge Runtime, which cannot read files.
+// For Electron/desktop mode detection, we check for localhost since
+// the app runs on 127.0.0.1. For SERVER mode check, we rely on env vars
+// set at build time OR the fact that desktop apps always run on localhost.
+
 // Obtener APP_MODE - default SERVER requiere autenticación
 const APP_MODE = process.env.APP_MODE || "SERVER";
 
@@ -9,6 +14,7 @@ const publicRoutes = ["/login", "/register", "/api"];
 
 export function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl;
+    const host = request.headers.get("host") || "";
 
     // Ignorar rutas públicas
     for (const route of publicRoutes) {
@@ -17,8 +23,10 @@ export function proxy(request: NextRequest) {
         }
     }
 
-    // Modo LOCAL: permitir todo
-    if (APP_MODE === "LOCAL") {
+    // Modo LOCAL (desde env var de build) o Electron (localhost)
+    // En Electron, el servidor corre en 127.0.0.1:PORT
+    const isLocalhost = host.startsWith("127.0.0.1") || host.startsWith("localhost");
+    if (APP_MODE === "LOCAL" || isLocalhost) {
         return NextResponse.next();
     }
 
