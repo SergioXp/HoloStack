@@ -1,3 +1,26 @@
+### [1.0.2] - 2026-01-22
+
+### 🐛 Hotfix: Electron Database Path & Startup
+
+**Fecha**: 2026-01-22
+
+#### Cambios
+- **Corrección de Ruta de Base de Datos**: Solucionado un problema donde la aplicación de escritorio no leía la base de datos del usuario correctamente.
+    - **Causa**: Next.js standalone "hornea" las variables de entorno en tiempo de build, ignorando las que Electron pasa en runtime.
+    - **Solución**: Electron ahora escribe un archivo `runtime-config.json` que Next.js lee dinámicamente al iniciar.
+- **Health Check Mejorado**: El verificador de estado del servidor ahora acepta códigos HTTP 2xx y 3xx (antes solo 200).
+    - Esto permite que la app inicie correctamente incluso cuando hay redirect a login.
+- **Limpieza de Build**: Se eliminan archivos de base de datos del bundle para proteger la privacidad del desarrollador.
+
+#### Archivos Modificados
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `electron/main.ts` | Fix | Escribe runtime-config.json antes de iniciar Next.js. |
+| `src/db/index.ts` | Fix | Lee configuración desde archivo JSON en runtime. |
+| `scripts/rebuild-standalone.js` | Fix | Limpia carpeta data/ del build. |
+
+---
+
 ### [1.0.1] - 2026-01-21
 
 ### 🐛 Hotfix: Electron Startup Fix

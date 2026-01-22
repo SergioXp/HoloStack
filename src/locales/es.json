@@ -949,6 +949,14 @@
         "title": "Novedades & Actualizaciones",
         "action": "Ver Novedades",
         "description": "Descubre las últimas mejoras añadidas a HoloStack.",
+        "v1_0_2": {
+            "title": "Corrección de Ruta de Base de Datos",
+            "features": [
+                "Solucionado un problema donde la app de escritorio no leía la base de datos del usuario.",
+                "El verificador de inicio ahora acepta redirecciones a login como estado válido.",
+                "Eliminados archivos de base de datos del bundle para proteger la privacidad."
+            ]
+        },
         "v1_0_1": {
             "title": "Corrección de Inicio en Escritorio",
             "features": [

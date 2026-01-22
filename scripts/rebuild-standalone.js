@@ -65,6 +65,13 @@ try {
 
     console.log('✅ Rebuild complete!');
 
+    // ⚠️ CRITICAL: Remove data/ folder to prevent shipping user's database
+    const dataDir = path.join(standaloneDir, 'data');
+    if (fs.existsSync(dataDir)) {
+        console.log('🔐 Removing data/ folder (prevents shipping user database)...');
+        fs.rmSync(dataDir, { recursive: true, force: true });
+    }
+
     // Cleanup other unnecessary standalone artifacts
     console.log('🧹 Cleaning up unnecessary dependencies...');
     const modulesToDelete = [

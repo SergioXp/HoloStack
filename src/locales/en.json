@@ -949,6 +949,14 @@
         "title": "News & Updates",
         "action": "What's New",
         "description": "Discover the latest improvements added to HoloStack.",
+        "v1_0_2": {
+            "title": "Database Path Fix",
+            "features": [
+                "Fixed an issue where the desktop app was not reading the user's database.",
+                "The startup health check now accepts login redirects as a valid state.",
+                "Removed database files from the bundle to protect developer privacy."
+            ]
+        },
         "v1_0_1": {
             "title": "Desktop Startup Fix",
             "features": [

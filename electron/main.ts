@@ -75,6 +75,13 @@ async function startNextServer() {
         throw new Error(errorMsg);
     }
 
+    // Write runtime config file that Next.js can read
+    // This is needed because Next.js standalone "bakes" env vars at build time
+    const runtimeConfigPath = path.join(DIST_PATH, 'runtime-config.json');
+    const runtimeConfig = { DATABASE_FILE: dbPath };
+    fs.writeFileSync(runtimeConfigPath, JSON.stringify(runtimeConfig));
+    logToFile(`Wrote runtime config to: ${runtimeConfigPath}`);
+
     // Use fork() in production to run with the bundled Electron Node runtime
     // This avoids requiring the user to have Node.js installed
     nextServerProcess = fork(serverPath, [], {
@@ -121,7 +128,9 @@ async function pollServer(port: number): Promise<void> {
         try {
             await new Promise<void>((resolve, reject) => {
                 const req = http.get(url, (res) => {
-                    if (res.statusCode === 200) {
+                    // Accept any 2xx or 3xx status as "server is ready"
+                    // (3xx means redirect to login, which is valid)
+                    if (res.statusCode && res.statusCode >= 200 && res.statusCode < 400) {
                         resolve();
                     } else {
                         reject(new Error(`Status code: ${res.statusCode}`));

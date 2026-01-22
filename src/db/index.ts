@@ -6,7 +6,32 @@ import * as schema from "./schema";
 
 // Función para obtener la ruta de la DB de forma segura
 function getDbPath() {
-    return process.env.DATABASE_FILE || "data/sqlite.db";
+    // 1. First try runtime config file (written by Electron at startup)
+    // This is needed because Next.js standalone "bakes" env vars at build time
+    const runtimeConfigPath = path.join(process.cwd(), 'runtime-config.json');
+    if (fs.existsSync(runtimeConfigPath)) {
+        try {
+            const config = JSON.parse(fs.readFileSync(runtimeConfigPath, 'utf-8'));
+            if (config.DATABASE_FILE) {
+                console.log(`🔍 Using DATABASE_FILE from runtime-config.json: ${config.DATABASE_FILE}`);
+                return config.DATABASE_FILE;
+            }
+        } catch (e) {
+            console.error('Error reading runtime-config.json:', e);
+        }
+    }
+
+    // 2. Then try environment variable (works in Docker and real dev)
+    // Only use if it's an absolute path (to avoid using baked build-time values)
+    const envDbFile = process.env.DATABASE_FILE;
+    if (envDbFile && path.isAbsolute(envDbFile)) {
+        console.log(`🔍 Using DATABASE_FILE from env: ${envDbFile}`);
+        return envDbFile;
+    }
+
+    // 3. Fallback to default (dev mode)
+    console.log(`🔍 Using default DATABASE_FILE: data/sqlite.db`);
+    return "data/sqlite.db";
 }
 
 // Singleton para la instancia de SQLite
@@ -30,8 +55,23 @@ export function getDb() {
     }
     return { db: drizzleInstance, sqlite: sqliteInstance as Database.Database };
 }
+// Lazy getters - only connect when actually needed
+// This ensures DATABASE_FILE is read at runtime, not build time
+export function getConnection() {
+    return getDb();
+}
 
-// Inicializar y exportar
-const connection = getDb();
-export const db = connection.db;
-export const sqlite = connection.sqlite;
+// For backwards compatibility
+export const db = new Proxy({} as BetterSQLite3Database<typeof schema>, {
+    get(_, prop) {
+        return (getDb().db as any)[prop];
+    }
+});
+
+export const sqlite = new Proxy({} as Database.Database, {
+    get(_, prop) {
+        const instance = getDb().sqlite;
+        const value = (instance as any)[prop];
+        return typeof value === 'function' ? value.bind(instance) : value;
+    }
+});

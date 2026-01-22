@@ -2,8 +2,8 @@
 
 Este documento es la fuente de verdad sobre el estado del proyecto, las funcionalidades implementadas y la visión futura.
 
-> **Versión Actual**: 1.0.1
-> **Última Actualización**: 21 Enero 2026 (Hotfix: Electron Startup)
+> **Versión Actual**: 1.0.2
+> **Última Actualización**: 22 Enero 2026 (Hotfix: Electron Database Path)
 
 ---
 

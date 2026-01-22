@@ -43,8 +43,7 @@ next-env.d.ts
 # Databases
 *.db
 *.sqlite
-data/*.db
-data/*.sqlite
+data/
 
 # Editors
 .vscode/
