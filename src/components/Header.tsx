@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, LayoutGrid, Layers, Library as LibraryIcon, Database, Sparkles, Settings, Wallet, Heart, ChartBar, Printer, BookOpen, BarChart3, Menu, PackageOpen, ShoppingBag } from "lucide-react";
+import { ChevronDown, LayoutGrid, Layers, Library as LibraryIcon, Database, Sparkles, Settings, Wallet, Heart, ChartBar, Printer, BookOpen, BarChart3, Menu, PackageOpen, ShoppingBag, GraduationCap } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -77,6 +77,10 @@ export default function Header() {
         { name: t("nav.wishlist"), href: "/wishlist", icon: Heart },
         { name: t("nav.bulk"), href: "/bulk", icon: PackageOpen },
         { name: t("proxies.print"), href: "/proxies", icon: Printer },
+    ];
+
+    const wikiItems = [
+        { name: "Guía de Coleccionismo", href: "/wiki", icon: GraduationCap },
     ];
 
     const marketItems = [
@@ -188,6 +192,26 @@ export default function Header() {
                                         ))}
                                     </div>
                                 </div>
+
+                                {/* Wiki Group */}
+                                <div>
+                                    <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 px-1">Wiki</h4>
+                                    <div className="space-y-1">
+                                        <Link
+                                            href="/wiki"
+                                            onClick={() => setMobileMenuOpen(false)}
+                                            className={cn(
+                                                "flex items-center p-3 rounded-lg text-base font-medium transition-all",
+                                                pathname.startsWith("/wiki")
+                                                    ? "bg-slate-800 text-white"
+                                                    : "text-slate-400 hover:text-white hover:bg-slate-900"
+                                            )}
+                                        >
+                                            <GraduationCap className="h-5 w-5 mr-3 text-purple-400" />
+                                            Guía de Coleccionismo
+                                        </Link>
+                                    </div>
+                                </div>
                             </div>
                             <div className="p-6 border-t border-slate-800 bg-slate-900/50 flex flex-col gap-3">
                                 <Link href="/settings" onClick={() => setMobileMenuOpen(false)}>
@@ -268,6 +292,20 @@ export default function Header() {
                             ))}
                         </DropdownMenuContent>
                     </DropdownMenu>
+
+                    {/* Wiki Link */}
+                    <Link
+                        href="/wiki"
+                        className={cn(
+                            "flex items-center px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200",
+                            pathname.startsWith("/wiki")
+                                ? "bg-purple-500/10 text-purple-400 shadow-lg shadow-purple-500/5 ring-1 ring-purple-500/20"
+                                : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                        )}
+                    >
+                        <GraduationCap className="h-4 w-4 mr-2" />
+                        <span>Wiki</span>
+                    </Link>
                 </nav>
 
                 {/* Global Search */}
@@ -405,6 +443,6 @@ export default function Header() {
                 </div>
             </div>
             <ChangelogModal open={changelogOpen} onOpenChange={setChangelogOpen} />
-        </header>
+        </header >
     );
 }
