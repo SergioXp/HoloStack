@@ -73,6 +73,16 @@ try {
     console.log(`⬆️  Subiendo tag a ${blue('public')} (HoloStack)...`);
     execSync(`git push public ${tag}`, { stdio: 'inherit' });
 
+    // 6. Sincronizar PUBLIC_CHANGELOG.md con el repo público
+    console.log(`📜 Sincronizando CHANGELOG público...`);
+    try {
+        // Copiar PUBLIC_CHANGELOG.md como CHANGELOG.md en el repo público
+        execSync(`git show HEAD:PUBLIC_CHANGELOG.md | gh api repos/SergioXp/HoloStack/contents/CHANGELOG.md -X PUT -f message="docs: update changelog for ${tag}" -f content="$(base64 -i PUBLIC_CHANGELOG.md)" -f sha="$(gh api repos/SergioXp/HoloStack/contents/CHANGELOG.md --jq .sha 2>/dev/null || echo '')" 2>/dev/null || echo "Creating new file..."`, { stdio: 'ignore' });
+        console.log(`✅ ${green('CHANGELOG.md actualizado en repo público')}`);
+    } catch (e) {
+        console.log(yellow('⚠️ No se pudo sincronizar CHANGELOG (requiere gh cli configurado)'));
+    }
+
     console.log(`\n${green('🎉 ¡Lanzamiento completado con éxito!')}`);
     console.log(`🔗 Verifica el repo público: ${blue('https://github.com/SergioXp/HoloStack/releases')}`);
     console.log(`🐳 La imagen Docker se está procesando en Hub.\n`);

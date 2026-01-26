@@ -43,8 +43,14 @@ Ejecuta este workflow cada vez que termines un desarrollo, refactorización o co
 - **Sincronización**: Verificar que todas las claves nuevas en `src/locales/es.json` han sido portadas y traducidas en `src/locales/en.json`.
 - **Hardcoding**: Asegurar que no hay textos literales en la UI; todo debe pasar por el hook `useI18n`.
 
-### 9. 📜 CHANGELOG.md (Si existe)
+### 9. 📜 CHANGELOG.md (Interno)
 - Añadir entrada bajo la categoría correspondiente (✨ Feature, ♻️ Refactor, 🐛 Bugfix).
+- Este changelog es técnico y detallado para el equipo de desarrollo.
+
+### 10. 🌍 PUBLIC_CHANGELOG.md (Usuarios)
+- **Añadir entrada** en `PUBLIC_CHANGELOG.md` con lenguaje orientado al usuario final (sin jerga técnica).
+- **Sincronización automática**: Al ejecutar `npm run release`, este archivo se sube automáticamente como `CHANGELOG.md` al repo público (SergioXp/HoloStack).
+- **Formato**: Usar descripciones de beneficios, no de implementación (ej: "Faster startup" en lugar de "Refactored main.ts").
 
 ## 🚀 Emojis para Commit/Documentación
 
