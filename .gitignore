@@ -59,6 +59,6 @@ data/
 /linux-unpacked
 /mac-unpacked
 
-# Build temps
-temp_native_build/
-images_github/
+
+# Testing Sandbox
+.temp-data/

@@ -1,3 +1,31 @@
+### [1.0.3] - 2026-01-26
+
+### 🛡️ Fix Crítico de Base de Datos y Red
+
+**Fecha**: 2026-01-26
+
+#### Cambios
+- **Auto-Reparación de Base de Datos**: 
+    - Se elimina el bloqueo que impedía actualizar la base de datos si ya existían tablas.
+    - Ahora, cada vez que la app arranca, verifica y aplica las correcciones necesarias automáticamente (como añadir columnas faltantes `attacks`).
+    - Soluciona el error `SqliteError: table cards has no column named attacks`.
+- **Estabilidad de Red en Descargas**:
+    - Optimización del proceso de sincronización de imágenes y datos de cartas.
+    - Implementación de descargas por lotes (Batching 20 items) para evitar saturación de red y timeouts en conexiones lentas.
+- **Prevención de Errores (CI/CD)**:
+    - Nuevo comando `db:check` en el pipeline de construcción que impide generar una versión si el esquema de base de datos no coincide con las migraciones SQL.
+    - Nuevo script `start:clean` para probar entornos limpios (Sandbox) sin afectar los datos del desarrollador.
+
+#### Archivos Modificados
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `drizzle/0002_common_drax.sql` | SQL | Nueva migración con columnas faltantes en tabla `cards`. |
+| `src/instrumentation.ts` | Fix | Lógica de migración corregida para ejecutarse siempre. |
+| `src/app/api/sync/collection-cards/route.ts` | Perf | Batching de descargas para evitar timeouts. |
+| `package.json` | Config | Scripts de seguridad `db:check` y `start:clean`. |
+
+---
+
 ### [1.0.2] - 2026-01-22
 
 ### 🐛 Hotfix: Electron Database Path & Startup

@@ -17,7 +17,7 @@ export async function register() {
         const dbFile = process.env.DATABASE_FILE;
         const lockDir = dbFile ? path.dirname(dbFile) : path.join(process.cwd(), "data");
         const lockFile = path.join(lockDir, ".migration.lock");
-        
+
         // Asegurar que el directorio exista
         if (!fs.existsSync(lockDir)) {
             fs.mkdirSync(lockDir, { recursive: true });
@@ -30,17 +30,26 @@ export async function register() {
             }
             fs.writeFileSync(lockFile, Date.now().toString());
 
-            // 3. ¡LA CLAVE! Verificación manual antes de migrar
-            // Si la tabla 'users' ya existe, es que la DB ya está inicializada
-            const tableCheck = sqlite.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='users'").get();
+            // 3. Ejecutar migraciones SIEMPRE para mantener el esquema actualizado
+            // Drizzle gestiona automáticamente qué migraciones faltan por aplicar.
+            console.log("🔍 Verificando estado del esquema de base de datos...");
 
-            if (tableCheck) {
-                console.log("ℹ️ La base de datos ya contiene tablas. Sincronización omitida.");
-            } else {
-                console.log("⏳ Base de datos vacía. Aplicando migraciones iniciales...");
-                const migrationsFolder = path.join(process.cwd(), "drizzle");
+            // Resolve migrations folder depending on environment
+            // In standalone/prod, it might be in ./drizzle or ../../drizzle depending on copy
+            let migrationsFolder = path.join(process.cwd(), "drizzle");
+            if (!fs.existsSync(migrationsFolder)) {
+                // Try looking in app root if we are in next standalone nested structure
+                const altPath = path.resolve(process.cwd(), "../../drizzle");
+                if (fs.existsSync(altPath)) migrationsFolder = altPath;
+            }
+
+            if (fs.existsSync(migrationsFolder)) {
+                console.log(`🚀 Aplicando migraciones desde: ${migrationsFolder}`);
                 await migrate(db, { migrationsFolder });
-                console.log("✅ Migraciones completadas con éxito.");
+                console.log("✅ Esquema sincronizado correctamente.");
+            } else {
+                console.error(`⚠️ No se encontró la carpeta de migraciones en: ${migrationsFolder}`);
+                // In dev, usually exists. In prod, ensure it is copied.
             }
 
         } catch (error: any) {

@@ -15,6 +15,13 @@
       "when": 1768088412850,
       "tag": "0001_free_vertigo",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1769419369225,
+      "tag": "0002_common_drax",
+      "breakpoints": true
     }
   ]
 }

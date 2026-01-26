@@ -6,9 +6,10 @@ import * as schema from "./schema";
 
 // Función para obtener la ruta de la DB de forma segura
 function getDbPath() {
-    // 1. First try runtime config file (written by Electron at startup)
-    // This is needed because Next.js standalone "bakes" env vars at build time
-    const runtimeConfigPath = path.join(process.cwd(), 'runtime-config.json');
+    // 1. Try runtime config file (explicit path from Electron or fallback to cwd)
+    const runtimeConfigPath = process.env.RUNTIME_CONFIG_PATH || path.join(process.cwd(), 'runtime-config.json');
+    console.log(`🔍 Checking runtime config at: ${runtimeConfigPath}`);
+
     if (fs.existsSync(runtimeConfigPath)) {
         try {
             const config = JSON.parse(fs.readFileSync(runtimeConfigPath, 'utf-8'));
@@ -19,6 +20,10 @@ function getDbPath() {
         } catch (e) {
             console.error('Error reading runtime-config.json:', e);
         }
+    } else {
+        console.log(`⚠️ Runtime config not found at: ${runtimeConfigPath}`);
+        // Debug environment
+        console.log(`DEBUG: process.env.DATABASE_FILE = ${process.env.DATABASE_FILE}`);
     }
 
     // 2. Then try environment variable (works in Docker and real dev)

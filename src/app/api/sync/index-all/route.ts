@@ -43,6 +43,11 @@ export async function GET(request: NextRequest) {
                     total: allSets.length
                 });
 
+                if (allSets.length < 10) {
+                    console.warn(`[Index] WARNING: Very few sets found (${allSets.length}). This might indicate a fetch issue.`);
+                    allSets.forEach(s => console.log(` - Set: ${s.id} (${s.name}) cards: ${s.cardCount.total}`));
+                }
+
                 // 2. Guardar sets en BD
                 for (const set of allSets) {
                     const setData = transformSetToSchema(set);

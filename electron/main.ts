@@ -21,9 +21,25 @@ function logToFile(message: string) {
     try {
         fs.appendFileSync(logFile, logMessage);
     } catch (error) {
-        console.error("Failed to write to log file:", error);
+        // Fallback to original console error if writing fails (avoid loop)
+        originalConsoleError("Failed to write to log file:", error);
     }
 }
+
+const originalConsoleLog = console.log;
+const originalConsoleError = console.error;
+
+console.log = (...args) => {
+    const message = args.map(arg => String(arg)).join(' ');
+    logToFile(`[INFO] ${message}`);
+    originalConsoleLog.apply(console, args);
+};
+
+console.error = (...args) => {
+    const message = args.map(arg => String(arg)).join(' ');
+    logToFile(`[ERROR] ${message}`);
+    originalConsoleError.apply(console, args);
+};
 
 // Correctly resolve standalone path in Production (ASAR) vs Development
 const DIST_PATH = app.isPackaged
@@ -77,26 +93,54 @@ async function startNextServer() {
 
     // Write runtime config file that Next.js can read
     // This is needed because Next.js standalone "bakes" env vars at build time
-    const runtimeConfigPath = path.join(DIST_PATH, 'runtime-config.json');
+    // WE MUST WRITE THIS TO userData because we cannot write to ASAR
+    const runtimeConfigPath = path.join(app.getPath('userData'), 'runtime-config.json');
     const runtimeConfig = {
         DATABASE_FILE: dbPath,
-        APP_MODE: 'LOCAL' // Desktop app doesn't need login
+        APP_MODE: 'LOCAL'
     };
     fs.writeFileSync(runtimeConfigPath, JSON.stringify(runtimeConfig));
     logToFile(`Wrote runtime config to: ${runtimeConfigPath}`);
 
-    // Use fork() in production to run with the bundled Electron Node runtime
-    // This avoids requiring the user to have Node.js installed
-    nextServerProcess = fork(serverPath, [], {
-        env: {
-            ...process.env,
-            PORT: serverPort.toString(),
-            HOST: '127.0.0.1',
-            DATABASE_FILE: dbPath // Inject dynamic DB path
-        },
-        cwd: DIST_PATH,
-        stdio: 'pipe' // Pipe output to capture logs
-    });
+    // In production (ASAR), we cannot easily 'fork' a file inside ASAR because Node's fork expects a real file path.
+    // However, we can spawn a new Electron process that runs the script.
+    // serverPath inside ASAR: .../app.asar/.next/standalone/server.js
+
+    const scriptToRun = app.isPackaged
+        ? path.join(process.resourcesPath, 'app.asar', '.next', 'standalone', 'server.js')
+        : serverPath;
+
+    logToFile(`Target Server Script: ${scriptToRun}`);
+
+    // Set ENV for the child process to pick up the runtime config from UserData
+    // We need to patch the server to read from this location if we haven't already, 
+    // OR we can rely on env vars which is cleaner.
+    // Let's rely on ENV vars overrides.
+
+    const env = {
+        ...process.env,
+        PORT: serverPort.toString(),
+        HOST: '127.0.0.1',
+        DATABASE_FILE: dbPath,
+        RUNTIME_CONFIG_PATH: runtimeConfigPath
+    };
+
+    if (app.isPackaged) {
+        // Run with Electron binary itself to support ASAR reading (if needed) but here strictly needed for environment consistency
+        // Note: serverPath is in app.asar.unpacked, so it is a real file.
+        logToFile('Spawning Next.js using fork...');
+        nextServerProcess = fork(serverPath, [], {
+            env,
+            cwd: DIST_PATH,
+            stdio: 'pipe'
+        });
+    } else {
+        nextServerProcess = fork(serverPath, [], {
+            env,
+            cwd: DIST_PATH,
+            stdio: 'pipe'
+        });
+    }
 
     nextServerProcess.stdout?.on('data', (data: any) => {
         logToFile(`[Next.js stdout] ${data}`);
@@ -116,6 +160,10 @@ async function startNextServer() {
     nextServerProcess.on('exit', (code: number, signal: string) => {
         logToFile(`Next.js server exited with code ${code} and signal ${signal}`);
     });
+
+    // No need to handle exit/stdout specifically as it shares the main process streams
+    // But we should clean up if we could, though require is cached.
+    // Main process exit handles cleanup.
 
     // Poll for the server to be ready
     await pollServer(serverPort);
@@ -231,10 +279,17 @@ function createWindow(port: number) {
     });
 }
 
+// Imports removed to avoid load issues
+
 app.whenReady().then(async () => {
     try {
         const port = await startNextServer();
+
+        // Run migrations was removed because it caused ABI incompatibility issues in the Main Process.
+        // Next.js (child process) handles migrations on startup.
+
         createWindow(port);
+        // ...
 
         app.on('activate', () => {
             if (BrowserWindow.getAllWindows().length === 0) createWindow(port);

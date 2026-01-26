@@ -131,15 +131,20 @@ export interface TCGdexCard {
  */
 async function tcgdexFetch<T>(endpoint: string): Promise<T> {
     const url = `${BASE_URL}/${DEFAULT_LANG}${endpoint}`;
-    console.log(`[TCGdex] Fetching: ${url}`);
+    // console.log(`[TCGdex] Fetching: ${url}`); // Reducir ruido si es necesario, o mantener debug
 
-    const res = await fetch(url);
+    try {
+        const res = await fetch(url, { cache: 'no-store' });
 
-    if (!res.ok) {
-        throw new Error(`TCGdex API error: ${res.status} ${res.statusText}`);
+        if (!res.ok) {
+            throw new Error(`TCGdex API error: ${res.status} ${res.statusText}`);
+        }
+
+        return res.json();
+    } catch (error) {
+        console.error(`[TCGdex] Fetch Error for ${url}:`, error);
+        throw error;
     }
-
-    return res.json();
 }
 
 /**
@@ -250,13 +255,21 @@ export async function fetchSetCardsDetailed(setId: string): Promise<{ set: TCGde
 
     console.log(`[TCGdex] Fetching ${set.cards.length} cards from ${setId}`);
 
-    // Fetch all cards in parallel (TCGdex is fast, no rate limits)
-    const cards = await Promise.all(
-        set.cards.map(card => fetchCard(card.id).catch(err => {
+    // Fetch all cards in batches to avoid network saturation / socket exhaustion
+    // Sets can have 200+ cards, firing 200 requests at once helps no one.
+    const BATCH_SIZE = 20;
+    const cards: (TCGdexCard | null)[] = [];
+
+    for (let i = 0; i < set.cards.length; i += BATCH_SIZE) {
+        const batch = set.cards.slice(i, i + BATCH_SIZE);
+        const batchPromises = batch.map(card => fetchCard(card.id).catch(err => {
             console.error(`[TCGdex] Error fetching card ${card.id}:`, err);
             return null;
-        }))
-    );
+        }));
+
+        const batchResults = await Promise.all(batchPromises);
+        cards.push(...batchResults);
+    }
 
     const validCards = cards.filter((c): c is TCGdexCard => c !== null);
     return { set, cards: validCards };

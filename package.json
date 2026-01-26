@@ -1,6 +1,6 @@
 {
   "name": "holostack",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "repository": {
     "type": "git",
@@ -10,11 +10,14 @@
     "dev": "next dev",
     "build": "next build",
     "build:electron": "tsc -p electron/tsconfig.json",
-    "dist": "npm run build && npm run build:electron && npm run rebuild:standalone && electron-builder",
+    "dist": "npm run db:check && npm run build && npm run build:electron && npm run rebuild:standalone && electron-builder",
     "rebuild": "electron-builder install-app-deps",
     "rebuild:standalone": "node scripts/rebuild-standalone.js",
     "electron:dev": "concurrently -k \"cross-env BROWSER=none npm run dev\" \"npm run build:electron && cross-env NODE_ENV=development electron .\"",
     "start": "next start",
+    "start:clean": "npm run build:electron && cross-env NODE_ENV=development electron . --user-data-dir=./.temp-data",
+    "db:generate": "drizzle-kit generate",
+    "db:check": "drizzle-kit check",
     "lint": "eslint",
     "test": "vitest run",
     "release": "node scripts/release.mjs"
@@ -87,7 +90,8 @@
       "dist-electron/**/*",
       ".next/standalone/**/*",
       ".next/static/**/*",
-      "public/**/*"
+      "public/**/*",
+      "drizzle/**/*"
     ],
     "directories": {
       "output": "dist"

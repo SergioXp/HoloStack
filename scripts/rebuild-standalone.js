@@ -139,6 +139,17 @@ try {
         console.log('  - .next/static folder copied');
     }
 
+    // Copy drizzle migrations to standalone
+    const drizzleSrc = path.join(__dirname, '../drizzle');
+    const drizzleDest = path.join(standaloneDir, 'drizzle');
+    if (fs.existsSync(drizzleSrc)) {
+        if (fs.existsSync(drizzleDest)) {
+            execSync(`rm -rf "${drizzleDest}"`);
+        }
+        execSync(`cp -R "${drizzleSrc}" "${drizzleDest}"`);
+        console.log('  - drizzle folder copied');
+    }
+
 } catch (error) {
     console.error('❌ Rebuild/Copy failed:', error);
     process.exit(1);

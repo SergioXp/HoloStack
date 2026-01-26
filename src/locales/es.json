@@ -946,6 +946,15 @@
         }
     },
     "changelog": {
+        "1.0.3": {
+            "title": "Corrección de Base de Datos y Estabilidad",
+            "features": [
+                "✅ Solucionado error crítico que impedía actualizar la base de datos al 100%.",
+                "🐛 Arreglado fallo visual donde faltaban ataques y habilidades en cartas nuevas.",
+                "⚡ Mejora de estabilidad de red al descargar imágenes de cartas.",
+                "🛡️ Sistema de auto-reparación incluido: la app se arregla sola al abrirse."
+            ]
+        },
         "title": "Novedades & Actualizaciones",
         "action": "Ver Novedades",
         "description": "Descubre las últimas mejoras añadidas a HoloStack.",

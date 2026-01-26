@@ -946,6 +946,15 @@
         }
     },
     "changelog": {
+        "1.0.3": {
+            "title": "Database & Stability Fixes",
+            "features": [
+                "✅ Solved critical bug that prevented full database updates.",
+                "🐛 Fixed visual issue with missing attacks/abilities in new cards.",
+                "⚡ Improved network stability when downloading card images.",
+                "🛡️ Included auto-repair system: app fixes itself on startup."
+            ]
+        },
         "title": "News & Updates",
         "action": "What's New",
         "description": "Discover the latest improvements added to HoloStack.",
