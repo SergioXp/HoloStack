@@ -1,6 +1,6 @@
 import { app, BrowserWindow, shell, dialog, net } from 'electron';
 import path from 'path';
-import { fork } from 'child_process';
+import { fork, spawn } from 'child_process';
 import http from 'http';
 import fs from 'fs';
 
@@ -10,7 +10,7 @@ let mainWindow: BrowserWindow | null = null;
 let nextServerProcess: any = null;
 let serverPort = 3000;
 
-// Determine if we are in development mode
+
 const isDev = process.env.NODE_ENV === 'development';
 
 const logFile = path.join(app.getPath('userData'), 'main.log');
@@ -26,6 +26,43 @@ function logToFile(message: string) {
     }
 }
 
+// --- App Logic ---
+
+/**
+ * Generates a runtime configuration file to pass dynamic absolute paths to Next.js.
+ * This solves the issue where process.cwd() is '/' in packaged Mac apps.
+ */
+function writeRuntimeConfig() {
+    try {
+        const userDataPath = app.getPath('userData');
+        const dbDir = path.join(userDataPath, 'data');
+        const dbFile = path.join(dbDir, 'sqlite.db');
+        const configPath = path.join(userDataPath, 'runtime-config.json');
+
+        // Ensure DB directory exists
+        if (!fs.existsSync(dbDir)) {
+            fs.mkdirSync(dbDir, { recursive: true });
+            logToFile(`📁 Created database directory: ${dbDir}`);
+        }
+
+        const config = {
+            DATABASE_FILE: dbFile,
+            APP_MODE: "LOCAL" // Always LOCAL mode when running via Electron
+        };
+
+        fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
+        logToFile(`📄 Written runtime config to: ${configPath}`);
+
+        // Inject environment variable so Next.js knows where to look
+        process.env.RUNTIME_CONFIG_PATH = configPath;
+        logToFile(`🔧 Set RUNTIME_CONFIG_PATH=${configPath}`);
+
+        return configPath;
+    } catch (error: any) {
+        logToFile(`❌ Failed to write runtime config: ${error.message}`);
+        return null;
+    }
+}
 const originalConsoleLog = console.log;
 const originalConsoleError = console.error;
 
@@ -43,133 +80,164 @@ console.error = (...args) => {
 
 // Correctly resolve standalone path in Production (ASAR) vs Development
 const DIST_PATH = app.isPackaged
-    ? path.join(process.resourcesPath, 'app.asar.unpacked', '.next', 'standalone')
+    ? path.join(process.resourcesPath, 'app.asar', '.next', 'standalone')
     : path.join(__dirname, '../.next/standalone');
 
 logToFile(`Starting App. Packaged: ${app.isPackaged}`);
 logToFile(`DIST_PATH: ${DIST_PATH}`);
 
-function findFreePort(startPort: number): Promise<number> {
-    return new Promise((resolve, reject) => {
-        const server = http.createServer();
-        server.listen(startPort, () => {
-            const address = server.address();
-            server.close(() => {
-                if (address && typeof address !== 'string') {
-                    resolve(address.port);
-                } else {
-                    resolve(startPort);
+// -----------------------------------------------------------------------------
+// IN-PROCESS SERVER STARTUP (SECURE)
+// -----------------------------------------------------------------------------
+
+/**
+ * Patches Node.js module resolution and process methods to work inside ASAR.
+ * This is the "Magic" that allows Next.js to run in-process without unpacking source code.
+ */
+function applyDoNotUnpackPatches() {
+    logToFile("🔧 Applying ASAR patches for In-Process execution...");
+
+    // Patch 1: process.chdir
+    const originalChdir = process.chdir;
+    process.chdir = (directory: string) => {
+        try {
+            originalChdir(directory);
+        } catch (err: any) {
+            // Ignore chdir errors inside ASAR
+        }
+    };
+
+    // Patch 2: Module._resolveFilename
+    const Module = require('module');
+    const originalResolveFilename = Module._resolveFilename;
+
+    Module._resolveFilename = function (request: string, parent: any, isMain: boolean, options: any) {
+        // PROACTIVE PATCH: Redirect native modules before they fail
+        // Next.js uses hashed names like 'better-sqlite3-xxxx', so we use includes()
+        if (app.isPackaged && (request.includes('better-sqlite3') || request.includes('sharp'))) {
+            const pkgName = request.includes('better-sqlite3') ? 'better-sqlite3' : 'sharp';
+
+            // Try 1: Root node_modules (rebuilt by electron-builder - MOST RELIABLE)
+            const rootUnpacked = path.join(process.resourcesPath, 'app.asar.unpacked', 'node_modules', pkgName);
+            // Try 2: Standalone node_modules (fallback)
+            const standaloneUnpacked = path.join(process.resourcesPath, 'app.asar.unpacked', '.next', 'standalone', 'node_modules', pkgName);
+
+            const finalPath = fs.existsSync(rootUnpacked) ? rootUnpacked : (fs.existsSync(standaloneUnpacked) ? standaloneUnpacked : null);
+
+            if (finalPath) {
+                return originalResolveFilename.call(this, finalPath, parent, isMain, options);
+            }
+        }
+
+        // Standard try-catch for everything else
+        try {
+            return originalResolveFilename.call(this, request, parent, isMain, options);
+        } catch (err: any) {
+            if (app.isPackaged && err.code === 'MODULE_NOT_FOUND') {
+                // Secondary recovery for .node files (often loaded relatively inside of node_modules)
+                if (request.endsWith('.node') && parent?.filename) {
+                    const unpackedParentDir = path.dirname(parent.filename).replace('app.asar', 'app.asar.unpacked');
+                    const targetPath = path.resolve(unpackedParentDir, request);
+                    if (fs.existsSync(targetPath)) {
+                        logToFile(`[PATCH RECOVERY] Redirected .node ${request} -> ${targetPath}`);
+                        return targetPath;
+                    }
                 }
+            }
+            throw err;
+        }
+    };
+}
+
+async function startNextServer(): Promise<number> {
+    return new Promise(async (resolve, reject) => {
+        const port = 3000;
+
+        if (!app.isPackaged) {
+            // --- DEVELOPMENT MODE ---
+            logToFile("Starting DEV server via spawn...");
+            const nextProcess = spawn('npm', ['run', 'dev'], {
+                cwd: path.join(__dirname, '..'),
+                stdio: 'inherit',
+                env: { ...process.env, PORT: port.toString() }
             });
-        });
-        server.on('error', () => {
-            findFreePort(startPort + 1).then(resolve, reject);
-        });
+            nextProcess.on('error', (err) => reject(err));
+            setTimeout(() => resolve(port), 5000);
+            return;
+        }
+
+        // --- PRODUCTION MODE (Fork Process) ---
+        try {
+            logToFile("🚀 Starting PROD server via FORK (UNPACKED)...");
+
+            // 1. Prepare Environment
+            writeRuntimeConfig();
+            // No patches needed if we run from unpacked!
+
+            // Full path to UNPACKED standalone server.js
+            const serverPath = path.join(process.resourcesPath, 'app.asar.unpacked', '.next/standalone/server.js');
+            const standaloneRoot = path.dirname(serverPath);
+
+            logToFile(`Server Path: ${serverPath}`);
+            logToFile(`Standalone Root (CWD): ${standaloneRoot}`);
+
+            if (!fs.existsSync(serverPath)) {
+                logToFile(`❌ ERROR: Ready-to-run server not found at ${serverPath}`);
+                reject(new Error("Server binary missing"));
+                return;
+            }
+
+            // 2. Setup Env Vars
+            const env = {
+                ...process.env,
+                NODE_ENV: 'production',
+                PORT: port.toString(),
+                HOSTNAME: 'localhost',
+                RUNTIME_CONFIG_PATH: process.env.RUNTIME_CONFIG_PATH,
+                DATABASE_FILE: process.env.DATABASE_FILE // Extra safety
+            } as any;
+
+            // 3. Fork the server
+            // Using fork() on server.js inside ASAR works because Electron patches fork/spawn
+            nextServerProcess = fork(serverPath, [], {
+                env,
+                stdio: ['ignore', 'pipe', 'pipe', 'ipc'],
+                cwd: standaloneRoot
+            });
+
+            // 4. Capture Server Logs
+            nextServerProcess.stdout.on('data', (data: any) => {
+                logToFile(`[SERVER] ${data.toString().trim()}`);
+            });
+
+            nextServerProcess.stderr.on('data', (data: any) => {
+                const msg = data.toString().trim();
+                logToFile(`[SERVER ERROR] ${msg}`);
+            });
+
+            nextServerProcess.on('error', (err: any) => {
+                logToFile(`❌ Server process failed: ${err.message}`);
+                reject(err);
+            });
+
+            nextServerProcess.on('exit', (code: number) => {
+                logToFile(`⚠️ Server process exited with code ${code}`);
+                // If it crashes during startup, the poll will fail and we'll handle it
+            });
+
+            // 5. Wait for readiness
+            logToFile("⏳ Waiting for server to become ready...");
+            await pollServer(port);
+            logToFile("✅ Server is READY.");
+            resolve(port);
+
+        } catch (err: any) {
+            logToFile(`❌ Failed to start server: ${err.message}`);
+            logToFile(`Stack: ${err.stack}`);
+            reject(err);
+        }
     });
 }
-
-async function startNextServer() {
-    const dbPath = path.join(app.getPath('userData'), 'sqlite.db');
-    logToFile(`Configuring DB Path: ${dbPath}`);
-    console.log(`Configuring DB Path: ${dbPath}`);
-
-    if (isDev) {
-        console.log('In Dev mode: Assuming Next.js is already running on port 3000');
-        return 3000;
-    }
-
-    serverPort = await findFreePort(3000);
-    logToFile(`Starting Next.js standalone server on port ${serverPort}...`);
-    console.log(`Starting Next.js standalone server on port ${serverPort}...`);
-
-    const serverPath = path.join(DIST_PATH, 'server.js');
-    logToFile(`Server Path: ${serverPath}`);
-
-    if (!fs.existsSync(serverPath)) {
-        const errorMsg = `Next.js standalone build not found at: ${serverPath}`;
-        logToFile(errorMsg);
-        throw new Error(errorMsg);
-    }
-
-    // Write runtime config file that Next.js can read
-    // This is needed because Next.js standalone "bakes" env vars at build time
-    // WE MUST WRITE THIS TO userData because we cannot write to ASAR
-    const runtimeConfigPath = path.join(app.getPath('userData'), 'runtime-config.json');
-    const runtimeConfig = {
-        DATABASE_FILE: dbPath,
-        APP_MODE: 'LOCAL'
-    };
-    fs.writeFileSync(runtimeConfigPath, JSON.stringify(runtimeConfig));
-    logToFile(`Wrote runtime config to: ${runtimeConfigPath}`);
-
-    // In production (ASAR), we cannot easily 'fork' a file inside ASAR because Node's fork expects a real file path.
-    // However, we can spawn a new Electron process that runs the script.
-    // serverPath inside ASAR: .../app.asar/.next/standalone/server.js
-
-    const scriptToRun = app.isPackaged
-        ? path.join(process.resourcesPath, 'app.asar', '.next', 'standalone', 'server.js')
-        : serverPath;
-
-    logToFile(`Target Server Script: ${scriptToRun}`);
-
-    // Set ENV for the child process to pick up the runtime config from UserData
-    // We need to patch the server to read from this location if we haven't already, 
-    // OR we can rely on env vars which is cleaner.
-    // Let's rely on ENV vars overrides.
-
-    const env = {
-        ...process.env,
-        PORT: serverPort.toString(),
-        HOST: '127.0.0.1',
-        DATABASE_FILE: dbPath,
-        RUNTIME_CONFIG_PATH: runtimeConfigPath
-    };
-
-    if (app.isPackaged) {
-        // Run with Electron binary itself to support ASAR reading (if needed) but here strictly needed for environment consistency
-        // Note: serverPath is in app.asar.unpacked, so it is a real file.
-        logToFile('Spawning Next.js using fork...');
-        nextServerProcess = fork(serverPath, [], {
-            env,
-            cwd: DIST_PATH,
-            stdio: 'pipe'
-        });
-    } else {
-        nextServerProcess = fork(serverPath, [], {
-            env,
-            cwd: DIST_PATH,
-            stdio: 'pipe'
-        });
-    }
-
-    nextServerProcess.stdout?.on('data', (data: any) => {
-        logToFile(`[Next.js stdout] ${data}`);
-        console.log(`[Next.js] ${data}`);
-    });
-
-    nextServerProcess.stderr?.on('data', (data: any) => {
-        logToFile(`[Next.js stderr] ${data}`);
-        console.error(`[Next.js] ${data}`);
-    });
-
-    nextServerProcess.on('error', (err: any) => {
-        logToFile(`Failed to start Next.js server: ${err}`);
-        console.error('Failed to start Next.js server:', err);
-    });
-
-    nextServerProcess.on('exit', (code: number, signal: string) => {
-        logToFile(`Next.js server exited with code ${code} and signal ${signal}`);
-    });
-
-    // No need to handle exit/stdout specifically as it shares the main process streams
-    // But we should clean up if we could, though require is cached.
-    // Main process exit handles cleanup.
-
-    // Poll for the server to be ready
-    await pollServer(serverPort);
-    return serverPort;
-}
-
 async function pollServer(port: number): Promise<void> {
     const maxRetries = 30; // Wait up to 30 seconds
     const interval = 1000;

@@ -48,7 +48,15 @@ Construido con las últimas tecnologías web modernas para rendimiento y manteni
 
 Puedes ejecutar HoloStack en minutos usando Docker o configurándolo manualmente.
 
-### Opción A: Docker (Recomendada)
+### Opción A: Aplicación de Escritorio (Recomendada para Usuarios Únicos)
+
+HoloStack ahora está disponible como una aplicación nativa de escritorio (Mac, Windows, Linux) para una experiencia más integrada:
+
+1.  **Descargar**: Ve a la pestaña de [Releases](https://github.com/SergioXp/HoloStack/releases) y descarga el instalador para tu sistema operativo (`.dmg`, `.exe` o `.AppImage`).
+2.  **Instalar**: Ejecuta el instalador y abre la aplicación.
+3.  **Privacidad Directa**: La aplicación gestiona su propia base de datos SQLite localmente en tu carpeta de documentos de usuario.
+
+### Opción B: Docker (Recomendada para Servidores/NAS)
 
 1.  **Clonar el repositorio**:
     ```bash
@@ -64,7 +72,7 @@ Puedes ejecutar HoloStack en minutos usando Docker o configurándolo manualmente
 3.  **Acceder a la app**:
     Abre [http://localhost:3000](http://localhost:3000) en tu navegador. Los datos persistirán en la carpeta `./data`.
 
-### Opción B: Instalación Manual
+### Opción C: Instalación Manual (Desarrollo)
 
 1.  **Instalar dependencias**:
     ```bash
@@ -90,10 +98,12 @@ Para información detallada sobre funcionalidades, roadmap y guías de usuario:
 - [📖 Manual de Usuario](docs/USER_MANUAL.md) - Guía completa de uso de HoloStack.
 - [🚀 Roadmap](docs/ROADMAP.md) - Planes futuros e hitos completados.
 - [📝 Changelog](CHANGELOG.md) - Historial de cambios y actualizaciones.
+- [🧪 Tests](docs/TESTS.md) - Estrategia de pruebas y automatización CI (Windows/Mac).
 
 ---
 
-## 🤝 Contribuir
+## 🛡️ Garantía de Calidad
+HoloStack utiliza **Playwright** y **GitHub Actions** para realizar "Smoke Tests" automáticos en cada cambio. Esto asegura que la aplicación se compile y arranque correctamente tanto en **macOS** como en **Windows**, garantizando la estabilidad incluso en sistemas que no posees físicamente.
 
 ¡Las contribuciones son bienvenidas! Por favor revisa el [ROADMAP](docs/ROADMAP.md) para ver qué está planeado o envía un issue para bugs y sugerencias.
 

@@ -1,6 +1,6 @@
 {
   "name": "holostack",
-  "version": "1.0.3",
+  "version": "1.1.1",
   "private": true,
   "repository": {
     "type": "git",
@@ -10,8 +10,8 @@
     "dev": "next dev",
     "build": "next build",
     "build:electron": "tsc -p electron/tsconfig.json",
-    "dist": "npm run db:check && npm run build && npm run build:electron && npm run rebuild:standalone && electron-builder",
-    "rebuild": "electron-builder install-app-deps",
+    "dist": "npm run db:check && npm run build && npm run rebuild && npm run build:electron && npm run rebuild:standalone && electron-builder",
+    "rebuild": "electron-rebuild -v 33.2.1 --build-from-source",
     "rebuild:standalone": "node scripts/rebuild-standalone.js",
     "electron:dev": "concurrently -k \"cross-env BROWSER=none npm run dev\" \"npm run build:electron && cross-env NODE_ENV=development electron .\"",
     "start": "next start",
@@ -20,6 +20,7 @@
     "db:check": "drizzle-kit check",
     "lint": "eslint",
     "test": "vitest run",
+    "test:e2e": "playwright test",
     "release": "node scripts/release.mjs"
   },
   "dependencies": {
@@ -56,6 +57,8 @@
     "uuid": "^13.0.0"
   },
   "devDependencies": {
+    "@electron/rebuild": "^4.0.2",
+    "@playwright/test": "^1.58.0",
     "@tailwindcss/postcss": "^4",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
@@ -70,9 +73,8 @@
     "concurrently": "^9.2.1",
     "cross-env": "^10.1.0",
     "drizzle-kit": "^0.31.8",
-    "electron": "^40.0.0",
+    "electron": "33.2.1",
     "electron-builder": "^26.4.0",
-    "electron-rebuild": "^3.2.9",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
     "jsdom": "^27.4.0",
@@ -108,8 +110,10 @@
       "target": "AppImage"
     },
     "extraResources": [],
+    "npmRebuild": false,
     "asarUnpack": [
-      ".next/standalone/**/*"
+      ".next/standalone/**/*",
+      "**/node_modules/**/*"
     ],
     "publish": [
       {

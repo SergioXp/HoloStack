@@ -25,6 +25,7 @@ const nextConfig: NextConfig = {
   // Permitir acceso desde dispositivos en la red local durante desarrollo
   // @ts-ignore - Propiedad nueva en Next.js 16+
   allowedDevOrigins: ["localhost:3000", "192.168.0.174:3000"],
+  serverExternalPackages: ["better-sqlite3", "sharp"],
 };
 
 export default nextConfig;

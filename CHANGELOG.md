@@ -1,4 +1,31 @@
-### [1.0.3] - 2026-01-26
+### [1.1.0] - 2026-01-26
+
+### 🛡️ Máxima Estabilidad en Escritorio
+
+**Fecha**: 2026-01-26
+
+#### Cambios Principales (v1.1.0)
+- **Arranque Ultra-Fiable**: Se ha rediseñado el motor interno para que la aplicación sea mucho más estable y nunca se quede "congelada" al iniciar.
+- **Acceso Directo a Datos**: Mejorada la comunicación con la base de datos para que sea más rápida y robusta en Mac, Windows y Linux.
+- **Limpieza de Errores**: Corregidos fallos visuales y de carga que aparecían en algunos ordenadores al abrir la aplicación.
+- **Optimización de Instalación**: El instalador ahora es más inteligente y asegura que todas las piezas funcionen a la primera en cualquier sistema.
+
+### [1.1.1] - 2026-01-26
+
+### 🧪 Infraestructura de Tests Resiliente
+
+**Fecha**: 2026-01-26
+
+#### Cambios Principales (v1.1.1)
+- **Suite de Pruebas E2E Híbrida**: Nuevos tests automatizados (`indexing.test.ts`) capaces de detectar el estado de la base de datos (vacía o llena) y validar el flujo correcto sin falsos positivos.
+- **Cobertura de Navegación y Colecciones**: 
+    - Validación automática de la creación de colecciones Manuales y Automáticas.
+    - Verificación del buscador del Explorador y filtrado de sets.
+- **Transparencia en CI/CD**: Los logs de la aplicación (`main.log`) ahora se suben automáticamente a GitHub Actions si ocurre un fallo en Windows, facilitando la depuración remota.
+
+---
+
+### [1.1.0] - 2026-01-26
 
 ### 🛡️ Fix Crítico de Base de Datos y Red
 

@@ -2,8 +2,8 @@
 
 Este documento es la fuente de verdad sobre el estado del proyecto, las funcionalidades implementadas y la visión futura.
 
-> **Versión Actual**: 1.0.2
-> **Última Actualización**: 22 Enero 2026 (Hotfix: Electron Database Path)
+> **Versión Actual**: 1.1.1
+> **Última Actualización**: 26 Enero 2026 (Infraestructura QA & Tests Resilientes)
 
 ---
 
@@ -57,6 +57,7 @@ Este documento es la fuente de verdad sobre el estado del proyecto, las funciona
 - [x] **Persistencia Nativa**: Gestión automática de la base de datos en carpetas del sistema (`%APPDATA%` / `Library`).
 - [x] **Auto-Update**: Sistema de detección de nuevas versiones via GitHub Releases.
 - [x] **Multiplataforma**: Instaladores oficiales para Windows (.exe), Mac (.dmg) y Linux (.AppImage).
+- [x] **Estabilidad de Escritorio (v1.1.0)**: Motor optimizado y aislamiento de procesos para un rendimiento de roca.
 - [x] **Branding**: Iconos personalizados y optimización de ventana nativa.
 
 ---

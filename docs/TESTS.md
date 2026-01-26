@@ -127,8 +127,12 @@ Para robustecer la aplicación de forma progresiva sin detener el desarrollo de 
 - [x] **Componentes Clave**:
     - [x] `CollectionCard`: Testear renderizado de estado vacío vs lleno (Grayscale vs Color).
     - [x] `PriceChart`: Verificar que muestra el color correcto (verde/rojo) según tendencia.
-- [ ] **E2E (Playwright/Cypress)**:
-    - [ ] Flujo completo: Crear Colección -> Añadir Carta -> Ver en Portfolio.
+- [x] **E2E (Playwright) - Arquitectura Resiliente**: 
+    - [x] **Smoke Test**: Verificación de arranque en Mac y Windows.
+    - [x] **Navegación**: Validación de acceso a todas las secciones críticas (Explorador, Colecciones, Configuración).
+    - [x] **Explorador & Búsqueda**: Verificación de filtrado de sets (ej: "151") y visibilidad de Eras.
+    - [x] **Colecciones**: Creación de colecciones manuales y automáticas con validación de formularios.
+    - [x] **Indexación Híbrida**: Test inteligente que valida el proceso de Sincronización (si BD vacía) o la Visibilidad de Datos (si BD llena).
 
 ### Fase 5: Aplicación de Escritorio (Electron)
 *Objetivo: Asegurar que el empaquetado y la persistencia nativa funcionan en todos los sistemas.*
@@ -139,6 +143,7 @@ Para robustecer la aplicación de forma progresiva sin detener el desarrollo de 
 - [x] **Build & Packaging**:
     - [x] Verificación de la compilación de módulos nativos (`better-sqlite3`).
     - [x] Test de lanzamiento del subproceso Next.js en entorno empaquetado (.asar).
+    - [x] **Smoke Test Multiplataforma**: Ejecución automatizada en GitHub Actions sobre Windows y macOS para asegurar que el instalador es funcional en todos los sistemas.
 - [x] **Auto-Update**:
     - [x] Test de integración con GitHub API para detección de releases.
 

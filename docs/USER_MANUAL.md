@@ -2,7 +2,18 @@
 
 HoloStack es tu gestor personal para colecciones de Pokémon TCG, diseñado para ser rápido, privado y fácil de desplegar.
 
-## 🚀 Despliegue con Docker (Recomendado)
+## 🚀 Despliegue e Instalación
+
+HoloStack puede ejecutarse de dos formas principales según tu perfil de uso.
+
+### Opción A: Aplicación de Escritorio (Nativa) - Recomendado
+La forma más sencilla y privada de usar HoloStack en tu día a día.
+
+1. Descarga el instalador (`.dmg`, `.exe`, `.AppImage`) desde la sección de **Releases** de GitHub.
+2. Instala como cualquier otra aplicación.
+3. Tus datos se guardan de forma segura y privada en tu carpeta de documentos de usuario automáticamente.
+
+### Opción B: Despliegue con Docker - Recomendado para NAS/Servidores
 
 ### Prerrequisitos
 - [Docker](https://www.docker.com/) y Docker Compose instalados.
