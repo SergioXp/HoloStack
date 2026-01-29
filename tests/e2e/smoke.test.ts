@@ -5,7 +5,10 @@ import path from 'path';
 test('App starts and shows home page', async () => {
     // Launch Electron with the main entry point
     const electronApp = await electron.launch({
-        args: [path.join(__dirname, '../../dist-electron/main.js')],
+        args: [
+            '--no-sandbox',
+            path.join(__dirname, '../../dist-electron/main.js')
+        ],
         env: {
             ...process.env,
             NODE_ENV: 'production', // Simulate production
