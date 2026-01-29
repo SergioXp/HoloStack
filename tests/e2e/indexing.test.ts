@@ -23,7 +23,9 @@ test.describe('Database Indexing Flow', () => {
     });
 
     test.afterAll(async () => {
-        await electronApp.close();
+        if (electronApp) {
+            await electronApp.close();
+        }
     });
 
     test('Full indexing process (Partial Check)', async () => {

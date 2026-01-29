@@ -48,7 +48,13 @@ jobs:
 
       - name: Run E2E Tests
         # Ejecutamos los tests E2E contra la versión ya compilada
-        run: npx playwright test
+        # En Linux necesitamos xvfb para simular un servidor de pantalla para Electron
+        run: |
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            xvfb-run npx playwright test
+          else
+            npx playwright test
+          fi
         env:
           CI: true
 

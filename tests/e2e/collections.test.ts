@@ -23,7 +23,9 @@ test.describe('Collections Management', () => {
     });
 
     test.afterAll(async () => {
-        await electronApp.close();
+        if (electronApp) {
+            await electronApp.close();
+        }
     });
 
     test('Create a Manual Collection', async () => {

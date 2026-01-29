@@ -23,7 +23,9 @@ test.describe('Explorer & Sets', () => {
     });
 
     test.afterAll(async () => {
-        await electronApp.close();
+        if (electronApp) {
+            await electronApp.close();
+        }
     });
 
     test('Navigate through eras in Explorer', async () => {

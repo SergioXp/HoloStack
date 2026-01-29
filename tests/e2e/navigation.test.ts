@@ -23,7 +23,9 @@ test.describe('Navigation & Basic Flow', () => {
     });
 
     test.afterAll(async () => {
-        await electronApp.close();
+        if (electronApp) {
+            await electronApp.close();
+        }
     });
 
     test('Navigate to Explorer', async () => {
