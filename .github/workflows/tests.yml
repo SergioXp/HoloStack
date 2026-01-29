@@ -40,7 +40,14 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run Smoke Tests
-        run: npx playwright test
+        # Usamos shell: bash por compatibilidad multiplataforma en los scripts
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            xvfb-run npx playwright test
+          else
+            npx playwright test
+          fi
         env:
           CI: true
 
