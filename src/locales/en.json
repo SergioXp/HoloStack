@@ -946,6 +946,15 @@
         }
     },
     "changelog": {
+        "1.1.2": {
+            "title": "Robust Build & Resilient Sync",
+            "features": [
+                "🛡️ Fixed Node.js version conflict when installing the app on Mac.",
+                "🚀 New ultra-clean packaging system to prevent digital signature errors.",
+                "🔍 Improved TCGdex sync: now ignores minor errors without stopping.",
+                "📦 Internal optimization of standalone app size."
+            ]
+        },
         "1.1.1": {
             "title": "Armored Tests & Quality",
             "features": [
