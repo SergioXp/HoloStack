@@ -1,3 +1,27 @@
+### [1.1.2] - 2026-01-29
+
+### 🛡️ Build Robusto & Sincronización Resiliente
+
+**Fecha**: 2026-01-29
+
+#### Cambios
+- **Build de Escritorio Infalible**: 
+    - Se ha forzado la reconstrucción de módulos nativos (`better-sqlite3`) específicamente para Electron, evitando colisiones con la versión de Node.js del sistema.
+    - Implementación de limpieza profunda (`rm -rf`) y protección contra recursividad mediante `.nextignore`.
+- **Sincronización TCGdex Tolerante**:
+    - Mejora en el servicio de la API para ignorar errores 404 al descargar detalles de cartas específicas ("cartas fantasma").
+    - Ahora el proceso de sincronización es ininterrumpido a pesar de inconsistencias en la API externa.
+
+#### Archivos Modificados
+| Archivo | Tipo | Descripción |
+|---------|------|-------------|
+| `package.json` | Build | Scripts de empaquetado optimizados con reconstruction forzada. |
+| `scripts/rebuild-standalone.js` | Build | Sincronización de módulos nativos blindada para Electron. |
+| `src/services/tcgdex.ts` | Fix | Manejo silencioso de errores 404 en el fetch detallado de cartas. |
+| `.nextignore` | Infra | Prevención de inclusión de carpetas de salida en el bundle standalone. |
+
+---
+
 ### [1.1.0] - 2026-01-26
 
 ### 🛡️ Máxima Estabilidad en Escritorio

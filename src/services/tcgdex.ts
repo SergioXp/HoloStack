@@ -263,7 +263,11 @@ export async function fetchSetCardsDetailed(setId: string): Promise<{ set: TCGde
     for (let i = 0; i < set.cards.length; i += BATCH_SIZE) {
         const batch = set.cards.slice(i, i + BATCH_SIZE);
         const batchPromises = batch.map(card => fetchCard(card.id).catch(err => {
-            console.error(`[TCGdex] Error fetching card ${card.id}:`, err);
+            if (err.message.includes("404")) {
+                console.warn(`[TCGdex] Card ${card.id} not found (404), skipping...`);
+            } else {
+                console.error(`[TCGdex] Error fetching card ${card.id}:`, err);
+            }
             return null;
         }));
 

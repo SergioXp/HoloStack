@@ -946,13 +946,13 @@
         }
     },
     "changelog": {
-        "1.1.0": {
-            "title": "Máxima Estabilidad en Escritorio",
+        "1.1.2": {
+            "title": "Build Robusto & Sincronización Resiliente",
             "features": [
-                "🛡️ Rediseño del motor interno para un arranque mucho más rápido y fiable.",
-                "🚀 Solucionados los problemas de 'congelación' y parpadeos al abrir la aplicación.",
-                "💎 Mejorada la comunicación con la base de datos para asegurar que tus cartas nunca se pierdan.",
-                "✨ Instalador más inteligente que detecta y configura tu ordenador automáticamente."
+                "🛡️ Reparado el conflicto de versiones de Node.js al instalar la aplicación en Mac.",
+                "🚀 Nuevo sistema de empaquetado ultra-limpio que evita errores de firma digital.",
+                "🔍 Sincronización con TCGdex mejorada: ahora ignora errores menores sin detenerse.",
+                "📦 Optimización interna del tamaño de la aplicación standalone."
             ]
         },
         "1.1.1": {
@@ -962,6 +962,15 @@
                 "🔍 Validación automática del buscador y del sistema de colecciones en cada cambio.",
                 "🛡️ Si algo falla en la nube, ahora recibimos los logs exactos para arreglarlo al instante.",
                 "✅ Garantía total de que la app funciona perfecta antes de que llegue a ti."
+            ]
+        },
+         "1.1.0": {
+            "title": "Máxima Estabilidad en Escritorio",
+            "features": [
+                "🛡️ Rediseño del motor interno para un arranque mucho más rápido y fiable.",
+                "🚀 Solucionados los problemas de 'congelación' y parpadeos al abrir la aplicación.",
+                "💎 Mejorada la comunicación con la base de datos para asegurar que tus cartas nunca se pierdan.",
+                "✨ Instalador más inteligente que detecta y configura tu ordenador automáticamente."
             ]
         },
         "1.0.3": {

@@ -2,8 +2,8 @@
 
 Este documento es la fuente de verdad sobre el estado del proyecto, las funcionalidades implementadas y la visión futura.
 
-> **Versión Actual**: 1.1.1
-> **Última Actualización**: 26 Enero 2026 (Infraestructura QA & Tests Resilientes)
+> **Versión Actual**: 1.1.2
+> **Última Actualización**: 29 Enero 2026 (Fixes de Estabilidad Electron & TCGdex)
 
 ---
 

@@ -1,0 +1,9 @@
+dist
+node_modules
+.git
+.next
+electron/dist
+dist-electron
+data
+.temp-data
+*.log

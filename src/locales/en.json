@@ -946,15 +946,6 @@
         }
     },
     "changelog": {
-        "1.1.0": {
-            "title": "Maximum Desktop Stability",
-            "features": [
-                "🛡️ Internal engine redesign for a much faster and more reliable startup.",
-                "🚀 Fixed 'freezing' and flickering issues when opening the application.",
-                "💎 Improved communication with the database to ensure your cards are always safe.",
-                "✨ Smarter installer that automatically detects and configures your computer."
-            ]
-        },
         "1.1.1": {
             "title": "Armored Tests & Quality",
             "features": [
@@ -962,6 +953,15 @@
                 "🔍 Automatic validation of search and collection systems on every change.",
                 "🛡️ If something fails in the cloud, we now get exact logs to fix it instantly.",
                 "✅ Total guarantee that the app works perfectly before it reaches you."
+            ]
+        },
+        "1.1.0": {
+            "title": "Maximum Desktop Stability",
+            "features": [
+                "🛡️ Internal engine redesign for a much faster and more reliable startup.",
+                "🚀 Fixed 'freezing' and flickering issues when opening the application.",
+                "💎 Improved communication with the database to ensure your cards are always safe.",
+                "✨ Smarter installer that automatically detects and configures your computer."
             ]
         },
         "1.0.3": {

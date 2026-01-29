@@ -1,6 +1,6 @@
 {
   "name": "holostack",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "private": true,
   "repository": {
     "type": "git",
@@ -10,8 +10,8 @@
     "dev": "next dev",
     "build": "next build",
     "build:electron": "tsc -p electron/tsconfig.json",
-    "dist": "npm run db:check && npm run build && npm run rebuild && npm run build:electron && npm run rebuild:standalone && electron-builder",
-    "rebuild": "electron-rebuild -v 33.2.1 --build-from-source",
+    "dist": "rm -rf dist .next && npm run db:check && npm run build && npx electron-rebuild -v 33.2.1 --force --build-from-source && npm run build:electron && npm run rebuild:standalone && electron-builder",
+    "rebuild": "npx electron-rebuild -v 33.2.1 --build-from-source",
     "rebuild:standalone": "node scripts/rebuild-standalone.js",
     "electron:dev": "concurrently -k \"cross-env BROWSER=none npm run dev\" \"npm run build:electron && cross-env NODE_ENV=development electron .\"",
     "start": "next start",

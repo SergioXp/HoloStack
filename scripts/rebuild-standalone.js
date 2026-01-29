@@ -56,13 +56,24 @@ try {
     nativeModules.forEach(mod => {
         const srcPath = path.join(__dirname, '../node_modules', mod);
         const destPath = path.join(standaloneDir, 'node_modules', mod);
+        
         if (fs.existsSync(srcPath)) {
+            console.log(`  📦 Syncing ${mod}...`);
             if (!fs.existsSync(path.dirname(destPath))) {
                 fs.mkdirSync(path.dirname(destPath), { recursive: true });
             }
-            if (fs.existsSync(destPath)) execSync(`rm -rf "${destPath}"`);
+            if (fs.existsSync(destPath)) {
+                execSync(`rm -rf "${destPath}"`);
+            }
+            // Copiar asegurando que no arrastramos basura de compilación previa
             execSync(`cp -R "${srcPath}" "${destPath}"`);
-            console.log(`  - ${mod} synced to standalone`);
+            
+            // Verificación extra para better-sqlite3: borrar carpetas de build temporales en el destino
+            if (mod === 'better-sqlite3') {
+                const tempBuild = path.join(destPath, 'build', 'Release', 'obj.target');
+                if (fs.existsSync(tempBuild)) execSync(`rm -rf "${tempBuild}"`);
+            }
+            console.log(`  ✅ ${mod} synced`);
         }
     });
 
