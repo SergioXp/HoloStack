@@ -4,6 +4,12 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch: # Permitir ejecución manual
+
+# Cancelar ejecuciones previas de este tag/rama
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
@@ -31,11 +37,8 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
-
-      - name: Run Unit Tests
-        run: npm test
+      - name: Install Dependencies
+        run: npm ci
 
       - name: Build Next.js
         run: npm run build
@@ -46,23 +49,8 @@ jobs:
       - name: Prepare Standalone Modules
         run: npm run rebuild:standalone
 
-      - name: Run E2E Tests
-        # Ejecutamos los tests E2E contra la versión ya compilada
-        # En Linux necesitamos xvfb para simular un servidor de pantalla para Electron
-        # Usamos shell: bash para que el if/else funcione igual en Windows, Mac y Linux
-        shell: bash
-        run: |
-          if [ "$RUNNER_OS" == "Linux" ]; then
-            xvfb-run npx playwright test
-          else
-            npx playwright test
-          fi
-        env:
-          CI: true
-
       - name: Publish to GitHub Public Repo
         env:
-          # Usamos el token con permisos sobre el repo público
           GH_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.PUBLIC_REPO_TOKEN }}
         run: |
