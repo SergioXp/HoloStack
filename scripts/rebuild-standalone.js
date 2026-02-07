@@ -56,7 +56,7 @@ try {
     nativeModules.forEach(mod => {
         const srcPath = path.join(__dirname, '../node_modules', mod);
         const destPath = path.join(standaloneDir, 'node_modules', mod);
-        
+
         if (fs.existsSync(srcPath)) {
             console.log(`  📦 Syncing ${mod}...`);
             if (!fs.existsSync(path.dirname(destPath))) {
@@ -67,7 +67,15 @@ try {
             }
             // Copiar asegurando que no arrastramos basura de compilación previa
             execSync(`cp -R "${srcPath}" "${destPath}"`);
-            
+
+            // CRITICAL: Ensure `build/Release` exists and contains the .node file
+            const releasePath = path.join(destPath, 'build', 'Release');
+            if (fs.existsSync(releasePath)) {
+                console.log(`     Confirmed ${mod}.node location: ${releasePath}`);
+            } else {
+                console.warn(`     WARNING: ${mod} does not seem to have a build/Release folder.`);
+            }
+
             // Verificación extra para better-sqlite3: borrar carpetas de build temporales en el destino
             if (mod === 'better-sqlite3') {
                 const tempBuild = path.join(destPath, 'build', 'Release', 'obj.target');
