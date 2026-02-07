@@ -946,6 +946,15 @@
         }
     },
     "changelog": {
+        "v1_1_3": {
+            "title": "Smart Updates & Reliable Backups",
+            "features": [
+                "🔄 Smarter Updates: The checker stops nagging you if you are already on the latest version.",
+                "🛡️ Backup restoration now works flawlessly on fresh installations.",
+                "🐳 Optimized Docker: Build process is now more resilient to slow networks.",
+                "✨ Fixed minor visual glitches in the changes history."
+            ]
+        },
         "v1_1_2": {
             "title": "Robust Build & Resilient Sync",
             "features": [

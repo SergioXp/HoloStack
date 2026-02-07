@@ -4,6 +4,14 @@ All notable changes to HoloStack are documented here.
 
 ---
 
+## [1.1.3] - 2026-02-07
+
+### 🔄 Updates & Stability
+- **Smarter Updates**: Fixed the update checker to stop nagging you when you're already on the latest version.
+- **Reliable Backups**: Resolved an issue where importing backups on a fresh install would fail due to missing card data.
+- **Docker Fixes**: Improved Docker build process to be more resilient against network timeouts.
+- **Changelog**: Fixed visual glitches in the changelog display for some languages.
+
 ## [1.1.1] - 2026-01-26
 
 ### Quality & Testing

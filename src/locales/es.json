@@ -946,6 +946,15 @@
         }
     },
     "changelog": {
+        "v1_1_3": {
+            "title": "Actualizaciones Inteligentes & Backup Estable",
+            "features": [
+                "🔄 Actualizaciones más listas: El verificador ya no molesta si estás al día.",
+                "🛡️ Restauración de backups ahora funciona a la primera en instalaciones limpias.",
+                "🐳 Docker optimizado: Construcción más resistente a redes lentas.",
+                "✨ Arreglados pequeños fallos visuales en el historial de cambios."
+            ]
+        },
         "v1_1_2": {
             "title": "Build Robusto & Sincronización Resiliente",
             "features": [
