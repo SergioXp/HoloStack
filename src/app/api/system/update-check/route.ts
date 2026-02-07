@@ -8,7 +8,7 @@ export async function GET() {
     try {
         // Consultamos la API de GitHub Releases
         const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/releases/latest`, {
-            next: { revalidate: 3600 }, // Cachear 1 hora
+            next: { revalidate: 0 }, // No cachear para desarrollo/testing
             headers: {
                 'Accept': 'application/vnd.github.v3+json',
                 // Opcional: User-Agent es requerido por GitHub API
@@ -25,6 +25,7 @@ export async function GET() {
         const latestVersion = data.tag_name?.replace('v', '') || data.name?.replace('v', '') || "unknown";
 
         // Comparar versiones
+        console.log(`[Update Check] Current: ${APP_VERSION}, Remote: ${latestVersion}`);
         const hasUpdate = latestVersion !== "unknown" && hasNewerVersion(APP_VERSION, latestVersion);
 
         return NextResponse.json({

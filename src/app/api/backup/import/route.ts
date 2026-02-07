@@ -1,4 +1,4 @@
-import { db } from "@/db";
+import { db, sqlite } from "@/db";
 import { userProfiles, collections, collectionItems, budgets, budgetGroups, expenses } from "@/db/schema";
 
 export const dynamic = "force-dynamic";
@@ -12,45 +12,94 @@ export async function POST(request: Request) {
             return Response.json({ error: "Archivo de respaldo inválido" }, { status: 400 });
         }
 
-        // Ejecutar todo en una transacción para asegurar integridad
-        await db.transaction(async (tx) => {
-            // 1. Eliminar datos existentes (Orden: tablas dependientes primero)
-            await tx.delete(collectionItems);
-            await tx.delete(budgetGroups);
-            await tx.delete(expenses);
-            await tx.delete(budgets);
-            await tx.delete(collections);
-            await tx.delete(userProfiles);
+        // Helper para convertir strings de fecha a objetos Date
+        const toDate = (dateStr: string | number | Date | null | undefined): Date | undefined => {
+            if (!dateStr) return undefined; // No poner fecha si es null/undefined para que entre el default
+            return new Date(dateStr);
+        };
 
-            // 2. Insertar nuevos datos (Orden: tablas independientes primero)
-            if (data.userProfiles && data.userProfiles.length > 0) {
-                await tx.insert(userProfiles).values(data.userProfiles);
-            }
+        // Procesar fechas antes de la transacción (fuera de la transacción para no bloquear)
+        const cleanUserProfiles = data.userProfiles?.map((p: any) => ({
+            ...p,
+            createdAt: toDate(p.createdAt),
+            updatedAt: toDate(p.updatedAt)
+        })) || [];
 
-            if (data.collections && data.collections.length > 0) {
-                await tx.insert(collections).values(data.collections);
-            }
+        const cleanCollections = data.collections?.map((c: any) => ({
+            ...c,
+            createdAt: toDate(c.createdAt),
+            updatedAt: toDate(c.updatedAt)
+        })) || [];
 
-            if (data.budgets && data.budgets.length > 0) {
-                await tx.insert(budgets).values(data.budgets);
-            }
+        const cleanBudgets = data.budgets?.map((b: any) => ({
+            ...b,
+            createdAt: toDate(b.createdAt),
+            updatedAt: toDate(b.updatedAt)
+        })) || [];
 
-            if (data.collectionItems && data.collectionItems.length > 0) {
-                await tx.insert(collectionItems).values(data.collectionItems);
-            }
+        const cleanCollectionItems = data.collectionItems?.map((i: any) => ({
+            ...i,
+            addedAt: toDate(i.addedAt)
+        })) || [];
 
-            if (data.budgetGroups && data.budgetGroups.length > 0) {
-                await tx.insert(budgetGroups).values(data.budgetGroups);
-            }
+        const cleanBudgetGroups = data.budgetGroups || [];
 
-            if (data.expenses && data.expenses.length > 0) {
-                await tx.insert(expenses).values(data.expenses);
-            }
-        });
+        const cleanExpenses = data.expenses?.map((e: any) => ({
+            ...e,
+            createdAt: toDate(e.createdAt)
+        })) || [];
+
+        // Ejecutar todo en una transacción SINCRONA
+        try {
+            // Desactivar FKs temporalmente para permitir restaurar items aunque falten cartas (se sincronizarán luego)
+            sqlite.pragma('foreign_keys = OFF');
+
+            db.transaction((tx) => {
+                // 1. Eliminar datos existentes (Orden: tablas dependientes primero)
+                tx.delete(collectionItems).run();
+                tx.delete(budgetGroups).run();
+                tx.delete(expenses).run();
+                tx.delete(budgets).run();
+                tx.delete(collections).run();
+                tx.delete(userProfiles).run();
+
+                // 2. Insertar nuevos datos (Orden: tablas independientes primero)
+                if (cleanUserProfiles.length > 0) {
+                    tx.insert(userProfiles).values(cleanUserProfiles).run();
+                }
+
+                if (cleanCollections.length > 0) {
+                    tx.insert(collections).values(cleanCollections).run();
+                }
+
+                if (cleanBudgets.length > 0) {
+                    tx.insert(budgets).values(cleanBudgets).run();
+                }
+
+                if (cleanCollectionItems.length > 0) {
+                    // Chunking para evitar límites de SQL si hay muchos items
+                    const chunkSize = 100;
+                    for (let i = 0; i < cleanCollectionItems.length; i += chunkSize) {
+                        tx.insert(collectionItems).values(cleanCollectionItems.slice(i, i + chunkSize)).run();
+                    }
+                }
+
+                if (cleanBudgetGroups.length > 0) {
+                    tx.insert(budgetGroups).values(cleanBudgetGroups).run();
+                }
+
+                if (cleanExpenses.length > 0) {
+                    tx.insert(expenses).values(cleanExpenses).run();
+                }
+            });
+        } finally {
+            // Asegurarnos de reactivar las FKs pase lo que pase
+            sqlite.pragma('foreign_keys = ON');
+        }
 
         return Response.json({ success: true });
     } catch (error) {
         console.error("Error restoring backup:", error);
-        return Response.json({ error: "Error restaurando copia de seguridad" }, { status: 500 });
+        return Response.json({ error: "Error restaurando copia de seguridad: " + (error as any).message }, { status: 500 });
     }
 }

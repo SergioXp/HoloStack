@@ -946,7 +946,7 @@
         }
     },
     "changelog": {
-        "1.1.2": {
+        "v1_1_2": {
             "title": "Robust Build & Resilient Sync",
             "features": [
                 "🛡️ Fixed Node.js version conflict when installing the app on Mac.",
@@ -955,7 +955,7 @@
                 "📦 Internal optimization of standalone app size."
             ]
         },
-        "1.1.1": {
+        "v1_1_1": {
             "title": "Armored Tests & Quality",
             "features": [
                 "🧪 New battery of 'smart' automated tests that adapt to your computer.",
@@ -964,7 +964,7 @@
                 "✅ Total guarantee that the app works perfectly before it reaches you."
             ]
         },
-        "1.1.0": {
+        "v1_1_0": {
             "title": "Maximum Desktop Stability",
             "features": [
                 "🛡️ Internal engine redesign for a much faster and more reliable startup.",
@@ -973,7 +973,7 @@
                 "✨ Smarter installer that automatically detects and configures your computer."
             ]
         },
-        "1.0.3": {
+        "v1_0_3": {
             "title": "Database & Stability Fixes",
             "features": [
                 "✅ Solved critical bug that prevented full database updates.",

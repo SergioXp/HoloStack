@@ -12,7 +12,7 @@ export function hasNewerVersion(current: string, remote: string): boolean {
         if (r > c) return true;
         if (r < c) return false;
     }
-    return false;
+    return false; // Equal versions
 }
 
 /**

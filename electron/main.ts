@@ -281,7 +281,22 @@ async function checkForUpdates() {
 
         logToFile(`Latest version on GitHub: ${latestVersion}`);
 
-        if (latestVersion && latestVersion !== currentVersion) {
+        // Compare versions semantically (borrowed logic from frontend)
+        const hasNewerVersion = (current: string, remote: string) => {
+            const cleanVersion = (v: string) => v.replace(/^v/, '').split('.').map(Number);
+            const currentParts = cleanVersion(current);
+            const remoteParts = cleanVersion(remote);
+
+            for (let i = 0; i < 3; i++) {
+                const c = currentParts[i] || 0;
+                const r = remoteParts[i] || 0;
+                if (r > c) return true;
+                if (r < c) return false;
+            }
+            return false;
+        };
+
+        if (latestVersion && hasNewerVersion(currentVersion, latestVersion)) {
             const { response } = await dialog.showMessageBox({
                 type: 'info',
                 buttons: ['Descargar', 'Más tarde'],
