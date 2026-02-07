@@ -5,7 +5,11 @@ WORKDIR /app
 RUN apk add --no-cache libc6-compat python3 make g++
 
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm config set fetch-retries 5 && \
+    npm config set fetch-retry-factor 2 && \
+    npm config set fetch-retry-mintimeout 10000 && \
+    npm config set fetch-retry-maxtimeout 60000 && \
+    npm ci
 
 FROM node:20-alpine AS builder
 WORKDIR /app
